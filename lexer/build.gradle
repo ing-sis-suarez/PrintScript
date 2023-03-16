@@ -1,0 +1,28 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.8.10'
+}
+
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+
+tasks.register('lexerTest', Test) {
+    description = 'Runs lexer tests.'
+    group = 'verification'
+
+
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed"
+    }
+}
+
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+}
