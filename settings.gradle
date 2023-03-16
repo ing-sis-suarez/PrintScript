@@ -11,4 +11,5 @@ rootProject.name = 'PrintScript'
 include('app')
 include 'lexer'
 include 'parser'
+include 'interpreter'
 
