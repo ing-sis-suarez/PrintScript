@@ -9,13 +9,12 @@ repositories {
 }
 
 
-tasks.register('lexerTest', Test) {
+
+test {
     description = 'Runs lexer tests.'
     group = 'verification'
 
-
     useJUnitPlatform()
-
     testLogging {
         events "passed"
     }
