@@ -1,10 +1,14 @@
 package lexer
 
+import utilities.Location
+import utilities.Token
+import utilities.TokenType
+
 
 class RegularLexer(private val tokenReaderList: List<Pair<TokenVerifierFunc, StringToTokenFunc>>) : Lexer {
 
 
-    override fun stringTokenizer(text: String): List<Token>{
+    override fun lex(text: String): List<Token>{
         return generateTokens(text)
     }
 

@@ -1,5 +1,9 @@
 package lexer
 
+import utilities.Location
+import utilities.Token
+import utilities.TokenType
+
 class TokenReadersProvider {
 
     private val commentReader: TokenReader = Pair(

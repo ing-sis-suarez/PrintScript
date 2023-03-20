@@ -33,14 +33,14 @@ class LexerTest {
         val mockText = getResourceAsText("mock_text_with_unclosed_string.txt").toString()
         val tokenMap = TokenReadersProvider().getTokenMap("PrintScript") ?: return
         val lexer: Lexer = RegularLexer(tokenMap)
-        Assertions.assertThrows(MalformedStringException:: class.java){ lexer.stringTokenizer(mockText)}
+        Assertions.assertThrows(MalformedStringException:: class.java){ lexer.lex(mockText)}
     }
 
     private fun printScriptEvaluateText(fileName: String): List<Token>{
         val mockText = getResourceAsText(fileName).toString()
         val tokenMap = TokenReadersProvider().getTokenMap("PrintScript") ?: return emptyList()
         val lexer: Lexer = RegularLexer(tokenMap)
-        return lexer.stringTokenizer(mockText)
+        return lexer.lex(mockText)
     }
     private fun lexerResultsToString(results: List<Token>): String{
         var toString = "["

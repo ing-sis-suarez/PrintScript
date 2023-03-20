@@ -1,5 +1,7 @@
 package lexer
 
+import utilities.Token
+
 interface Lexer {
-    fun stringTokenizer(text: String): List<Token>
+    fun lex(text: String): List<Token>
 }
