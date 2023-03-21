@@ -8,5 +8,6 @@ enum class ASTNodeType {
     DECLARATION,
     OPERATION,
     FUNCTION_CALL,
-    ASSIGNATION
+    ASSIGNATION,
+    EXECUTION
 }

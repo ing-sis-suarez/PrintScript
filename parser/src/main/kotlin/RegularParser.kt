@@ -1,8 +1,9 @@
 import utilities.ASTNode
+import utilities.ASTNodeType
 import utilities.Token
 import utilities.TokenType
 
-class RegularParser: Parser {
+class RegularParser(private val readerList: List<Pair<SyntaxVerifier, ASTTreeConstructor>>): Parser {
 
     override fun parse(tokens: List<Token>): ASTNode {
         val cleanedTokens = takeWhiteSpacesandComments(tokens)
@@ -11,7 +12,33 @@ class RegularParser: Parser {
     }
 
     private fun createTree(statements: List<List<Token>>): ASTNode {
-        TODO("Not yet implemented")
+        val children = generateChildren(statements)
+        return ASTNode(children, null, ASTNodeType.EXECUTION)
+    }
+
+    private fun generateChildren(
+        statements: List<List<Token>>,
+    ): List<ASTNode> {
+        val children = mutableListOf<ASTNode>()
+        for (statement in statements) {
+            addChild(statement, children)
+        }
+        return children
+    }
+
+    private fun addChild(
+        statement: List<Token>,
+        children: MutableList<ASTNode>
+    ) {
+        var match = false
+        for (reader in readerList) {
+            if (reader.first.invoke(statement)) {
+                children.add(reader.second.invoke(statement))
+                match = true
+                break
+            }
+        }
+        if (!match) throw MalformedStructureException("Could not recognize syntax")
     }
 
     private fun takeWhiteSpacesandComments(tokens: List<Token>): List<Token> {

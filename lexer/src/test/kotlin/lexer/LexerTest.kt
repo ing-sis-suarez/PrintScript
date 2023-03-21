@@ -2,6 +2,7 @@ package lexer
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import utilities.Token
 
 
 class LexerTest {

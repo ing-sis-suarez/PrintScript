@@ -6,22 +6,33 @@ import utilities.TokenType
 class StatementParserProvider {
 
 
-    val initializationParser: Pair<SyntaxVerifier, ASTTreeConstructor> = Pair(
+    private val initializationParser: Pair<SyntaxVerifier, ASTTreeConstructor> = Pair(
         this::isInitialization,
         this::createInitializationNode
     )
-    val declarationParser: Pair<SyntaxVerifier, ASTTreeConstructor> = Pair(
+    private val declarationParser: Pair<SyntaxVerifier, ASTTreeConstructor> = Pair(
         this::isDeclaration,
         this::createDeclarationNode
     )
-    val assignationParser: Pair<SyntaxVerifier, ASTTreeConstructor> = Pair(
+    private val assignationParser: Pair<SyntaxVerifier, ASTTreeConstructor> = Pair(
         this::isAssignation,
         this::createAssignationNode
     )
-    val methodCallParser: Pair<SyntaxVerifier, ASTTreeConstructor> = Pair(
+    private val methodCallParser: Pair<SyntaxVerifier, ASTTreeConstructor> = Pair(
         this::isMethodCall,
         this::createMethodNode
     )
+
+    private val printScriptParser = listOf(
+        initializationParser, assignationParser, methodCallParser)
+
+    private val parserMap = mapOf(
+        Pair("printScript", printScriptParser)
+    )
+
+    fun getParserList(name: String): List<Pair<SyntaxVerifier, ASTTreeConstructor>>? {
+        return parserMap[name]
+    }
 
     private fun createMethodNode(statement: List<Token>): ASTNode {
         checkMethodCall(statement)
@@ -84,7 +95,7 @@ class StatementParserProvider {
 
     private fun createValueNode(statement: List<Token>): ASTNode {
         checkValueNode(statement)
-        TODO("Not yet implemented")
+        /*if (statement.size == 1)*/ return ASTNode(listOf(), statement[0], ASTNodeType.TOKEN)
     }
 
 
