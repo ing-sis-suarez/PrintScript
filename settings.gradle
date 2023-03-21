@@ -13,4 +13,6 @@ include 'lexer'
 include 'parser'
 include 'interpreter'
 include 'utilities'
+include 'formater'
+include 'static_code_analyzer'
 
