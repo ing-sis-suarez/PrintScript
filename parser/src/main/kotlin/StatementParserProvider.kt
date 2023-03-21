@@ -6,25 +6,13 @@ import utilities.TokenType
 class StatementParserProvider {
 
 
+    val printScriptReaderList = listOf<ASTTreeConstructor>(
+        this::createInitializationNode,
+        this::createDeclarationNode,
+        this::createAssignationNode,
+        this::createMethodNode)
 
 
-
-    val declarationParser: Pair<SyntaxVerifier, ASTTreeConstructor> = Pair(
-        this::isDeclaration,
-        this::createDeclarationNode
-    )
-    val initializationParser: Pair<SyntaxVerifier, ASTTreeConstructor> = Pair(
-        this::isInitialization,
-        this::createInitializationNode
-    )
-    val assignationParser: Pair<SyntaxVerifier, ASTTreeConstructor> = Pair(
-        this::isAssignation,
-        this::createAssignationNode
-    )
-    val methodCallParser: Pair<SyntaxVerifier, ASTTreeConstructor> = Pair(
-        this::isMethodCall,
-        this::createMethodNode
-    )
 
     private fun createMethodNode(statement: List<Token>): ASTNode {
         val identifier = ASTNode(listOf(), statement[0], ASTNodeType.TOKEN)
@@ -75,9 +63,16 @@ class StatementParserProvider {
                 statement[2].type == TokenType.DOUBLE_DOTS ||
                 isType(statement[3])
     }
-
+    private fun checkIdentifier(token: Token) {
+        if (token.type != TokenType.IDENTIFIER) throw UnexpectedTokenException("Identifier expected at: ${token.location.row}, ${token.location.column}")
+    }
+    private fun isDoubleDots(token: Token): Boolean {
+        if (token.type == TokenType.DOUBLE_DOTS) return true
+        else throw UnexpectedTokenException("Double dots expected at: ${token.location.row}, ${token.location.column}")
+    }
     private fun isType(token: Token): Boolean {
-        return token.type == TokenType.NUMBER_LITERAL || token.type == TokenType.STRING_LITERAL
+        if (token.type == TokenType.NUMBER_LITERAL || token.type == TokenType.STRING_LITERAL) return true
+        else throw UnexpectedTokenException("Type expected at: ${token.location.row}, ${token.location.column}")
     }
 }
 
