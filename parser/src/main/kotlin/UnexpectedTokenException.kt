@@ -1,0 +1,1 @@
+class UnexpectedTokenException(s: String) : Exception(s)

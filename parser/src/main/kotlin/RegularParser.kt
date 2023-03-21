@@ -7,6 +7,11 @@ class RegularParser: Parser {
     override fun parse(tokens: List<Token>): ASTNode {
         val cleanedTokens = takeWhiteSpacesandComments(tokens)
         val statements = breakIntoStatements(cleanedTokens, TokenType.SEMI_COLON)
+        return createTree(statements)
+    }
+
+    private fun createTree(statements: List<List<Token>>): ASTNode {
+        TODO("Not yet implemented")
     }
 
     private fun takeWhiteSpacesandComments(tokens: List<Token>): List<Token> {
