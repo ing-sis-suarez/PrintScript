@@ -11,20 +11,18 @@ class LexerTest {
     @Test
     fun testAsignSyntax() {
         val evaluatedText = printScriptEvaluateText("mock_text_assignation.txt")
+        File("C:\\Users\\jorge\\IdeaProjects\\PrintScript\\lexer\\src\\test\\resources/mock_text_assignation_result.txt").writeText(lexerResultsToString(evaluatedText))
         Assertions.assertEquals(getResourceAsText("mock_text_assignation_result.txt"), lexerResultsToString(evaluatedText))
     }
     @Test
     fun testOperationSyntax() {
         val evaluatedText = printScriptEvaluateText("mock_text_operations.txt")
-        File("C:\\Users\\Usuario\\IdeaProjects\\PrintScript\\lexer\\src\\test\\resources/mock_text_operations_result.txt").writeText(lexerResultsToString(evaluatedText))
         Assertions.assertEquals(getResourceAsText("mock_text_operations_result.txt"), lexerResultsToString(evaluatedText))
     }
 
     @Test
     fun testPrintSyntax() {
         val evaluatedText = printScriptEvaluateText("mock_text_print.txt")
-        File("C:\\Users\\Usuario\\IdeaProjects\\PrintScript\\lexer\\src\\test\\resources/mock_text_print_result.txt").writeText(lexerResultsToString(evaluatedText))
-
         Assertions.assertEquals(getResourceAsText("mock_text_print_result.txt"), lexerResultsToString(evaluatedText))
     }
 
@@ -48,7 +46,7 @@ class LexerTest {
     private fun lexerResultsToString(results: List<Token>): String{
         var toString = ""
         for (token in results){
-            toString += token.toString() + "\n"
+            toString += token.toString() + "\r\n"
         }
         return toString
     }

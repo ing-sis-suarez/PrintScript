@@ -62,12 +62,12 @@ class TokenReadersProvider {
         { id, string, location -> createStringLitPair(id, string, location, '\'')})
 
     private fun createStringLitPair(id: Int, string: String, location: Location, stringChar: Char): Pair<Token, Int>{
-        val token = createToken(id, location, string)
+        val token = createToken(id, location, string, stringChar)
         return Pair(token, token.length() + location.column)
     }
 
-    private fun createToken(id: Int, location: Location, string: String) = try {
-        Token(id, TokenType.STRING_LITERAL, location, curStringLitFromLine(string, location, '\''))
+    private fun createToken(id: Int, location: Location, string: String, stringChar: Char) = try {
+        Token(id, TokenType.STRING_LITERAL, location, curStringLitFromLine(string, location, stringChar))
     } catch (error: MalformedStringException) {
         Token(id, TokenType.ERROR, location, string.substring(location.column, string.length))
     }
