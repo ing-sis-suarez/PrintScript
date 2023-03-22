@@ -1,7 +1,4 @@
-import utilities.ASTNode
-import utilities.ASTNodeType
-import utilities.Token
-import utilities.TokenType
+import utilities.*
 
 class RegularParser(private val readerList: List<Pair<SyntaxVerifier, ASTTreeConstructor>>): Parser {
 
@@ -11,9 +8,9 @@ class RegularParser(private val readerList: List<Pair<SyntaxVerifier, ASTTreeCon
         return createTree(statements)
     }
 
-    private fun createTree(statements: List<List<Token>>): ASTNode {
+    private fun createTree(statements: List<List<Token>>): Execution {
         val children = generateChildren(statements)
-        return ASTNode(children, null, ASTNodeType.EXECUTION)
+        return Execution(children)
     }
 
     private fun generateChildren(

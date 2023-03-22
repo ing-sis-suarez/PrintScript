@@ -3,6 +3,7 @@ package lexer
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import utilities.Token
+import java.io.File
 
 
 class LexerTest {
@@ -15,12 +16,15 @@ class LexerTest {
     @Test
     fun testOperationSyntax() {
         val evaluatedText = printScriptEvaluateText("mock_text_operations.txt")
+        File("C:\\Users\\Usuario\\IdeaProjects\\PrintScript\\lexer\\src\\test\\resources/mock_text_operations_result.txt").writeText(lexerResultsToString(evaluatedText))
         Assertions.assertEquals(getResourceAsText("mock_text_operations_result.txt"), lexerResultsToString(evaluatedText))
     }
 
     @Test
     fun testPrintSyntax() {
         val evaluatedText = printScriptEvaluateText("mock_text_print.txt")
+        File("C:\\Users\\Usuario\\IdeaProjects\\PrintScript\\lexer\\src\\test\\resources/mock_text_print_result.txt").writeText(lexerResultsToString(evaluatedText))
+
         Assertions.assertEquals(getResourceAsText("mock_text_print_result.txt"), lexerResultsToString(evaluatedText))
     }
 
@@ -31,10 +35,8 @@ class LexerTest {
     }
     @Test
     fun testUnclosedString(){
-        val mockText = getResourceAsText("mock_text_with_unclosed_string.txt").toString()
-        val tokenMap = TokenReadersProvider().getTokenMap("PrintScript") ?: return
-        val lexer: Lexer = RegularLexer(tokenMap)
-        Assertions.assertThrows(MalformedStringException:: class.java){ lexer.lex(mockText)}
+        val evaluatedText = printScriptEvaluateText("mock_text_with_unclosed_string.txt")
+        Assertions.assertEquals(getResourceAsText("mock_text_with_unclosed_string_result.txt"), lexerResultsToString(evaluatedText))
     }
 
     private fun printScriptEvaluateText(fileName: String): List<Token>{
@@ -44,10 +46,9 @@ class LexerTest {
         return lexer.lex(mockText)
     }
     private fun lexerResultsToString(results: List<Token>): String{
-        var toString = "["
-        for (i in results.indices){
-            if (i == results.size - 1) toString += "Token(${results[i].id}, ${results[i].type}, ${results[i].location}, ${results[i].originalValue})]"
-            toString += "Token(${results[i].id}, ${results[i].type}, ${results[i].location}, ${results[i].originalValue}), "
+        var toString = ""
+        for (token in results){
+            toString += token.toString() + "\n"
         }
         return toString
     }

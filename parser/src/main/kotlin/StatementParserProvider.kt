@@ -1,7 +1,4 @@
-import utilities.ASTNode
-import utilities.ASTNodeType
-import utilities.Token
-import utilities.TokenType
+import utilities.*
 
 class StatementParserProvider {
 
@@ -34,11 +31,10 @@ class StatementParserProvider {
         return parserMap[name]
     }
 
-    private fun createMethodNode(statement: List<Token>): ASTNode {
+    private fun createMethodNode(statement: List<Token>): MethodCall {
         checkMethodCall(statement)
-        val identifier = ASTNode(listOf(), statement[0], ASTNodeType.TOKEN)
         val parameterValue = createValueNode(statement.subList(2, statement.size))
-        return ASTNode(listOf(identifier, parameterValue), null, ASTNodeType.FUNCTION_CALL)
+        return MethodCall(statement[0], parameterValue)
     }
 
     private fun checkMethodCall(statement: List<Token>) {
@@ -66,11 +62,10 @@ class StatementParserProvider {
         return statement[0].type == TokenType.IDENTIFIER
     }
 
-    private fun createAssignationNode(statement: List<Token>): ASTNode {
+    private fun createAssignationNode(statement: List<Token>): Assignation {
         checkAssignation(statement)
-        val identifier = ASTNode(listOf(), statement[0], ASTNodeType.TOKEN)
         val value = createValueNode(statement.subList(2, statement.size))
-        return ASTNode(listOf(identifier, value), null, ASTNodeType.ASSIGNATION)
+        return Assignation(statement[0], value)
     }
 
     private fun checkAssignation(statement: List<Token>) {
@@ -83,19 +78,19 @@ class StatementParserProvider {
         return statement[1].type == TokenType.ASIGNATION_EQUALS
     }
 
-    private fun createInitializationNode(statement: List<Token>): ASTNode {
+    private fun createInitializationNode(statement: List<Token>): DeclarationInitalization {
         val declaration = createDeclarationNode(statement.subList(0, 4))
         val value = createValueNode(statement.subList(5, statement.size))
-        return ASTNode(listOf(declaration, value), null, ASTNodeType.INITIALIZATION)
+        return DeclarationInitalization(declaration, value)
     }
 
     private fun checkValueNode(statement: List<Token>) {
         TODO("Not yet implemented")
     }
 
-    private fun createValueNode(statement: List<Token>): ASTNode {
+    private fun createValueNode(statement: List<Token>): Value {
         checkValueNode(statement)
-        /*if (statement.size == 1)*/ return ASTNode(listOf(), statement[0], ASTNodeType.TOKEN)
+        /*if (statement.size == 1)*/ return Value(BinaryTokenNode(statement[0], null, null))
     }
 
 
@@ -104,11 +99,9 @@ class StatementParserProvider {
         return statement[4].type == TokenType.ASIGNATION_EQUALS
     }
 
-    private fun createDeclarationNode(statement: List<Token>): ASTNode{
+    private fun createDeclarationNode(statement: List<Token>): Declaration{
         checkDeclaration(statement)
-        val identifier = ASTNode(listOf(), statement[1], ASTNodeType.TOKEN)
-        val type = ASTNode(listOf(), statement[3], ASTNodeType.TOKEN)
-        return ASTNode(listOf(identifier, type), null, ASTNodeType.DECLARATION)
+        return Declaration(statement[1], statement[3])
     }
 
     private fun checkDeclaration(statement: List<Token>) {

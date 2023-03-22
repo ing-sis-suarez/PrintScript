@@ -56,11 +56,21 @@ class TokenReadersProvider {
         { id, string, location -> Pair(Token(id, TokenType.IDENTIFIER, location, cutIdentifierFromLine(string, location)), calculateEndOfIdentifier(string, location.column))})
     private val quotationMarksStringReader: TokenReader = Pair(
         { string, startIndex -> string[startIndex] == '"'},
-        { id, string, location -> Pair(Token(id, TokenType.STRING_LITERAL, location, curStringLitFromLine(string, location, '"')), calculateEndOfString(string, location.column, '"', location))})
+        { id, string, location -> createStringLitPair(id, string, location, '"')})
     private val apostropheStringReader: TokenReader = Pair(
         { string, startIndex -> string[startIndex] == '\''},
-        { id, string, location -> Pair(Token(id, TokenType.STRING_LITERAL, location, curStringLitFromLine(string, location, '\'')), calculateEndOfString(string, location.column, '\'', location))})
+        { id, string, location -> createStringLitPair(id, string, location, '\'')})
 
+    private fun createStringLitPair(id: Int, string: String, location: Location, stringChar: Char): Pair<Token, Int>{
+        val token = createToken(id, location, string)
+        return Pair(token, token.length() + location.column)
+    }
+
+    private fun createToken(id: Int, location: Location, string: String) = try {
+        Token(id, TokenType.STRING_LITERAL, location, curStringLitFromLine(string, location, '\''))
+    } catch (error: MalformedStringException) {
+        Token(id, TokenType.ERROR, location, string.substring(location.column, string.length))
+    }
 
 
     private val printScriptTokenList: MutableList<Pair<TokenVerifierFunc, StringToTokenFunc>> = mutableListOf(

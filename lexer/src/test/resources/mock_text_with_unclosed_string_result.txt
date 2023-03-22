@@ -7,5 +7,4 @@ Token(id=5, type=STRING_KEYWORD, location=Location(row=0, column=12), originalVa
 Token(id=6, type=WHITE_SPACE, location=Location(row=0, column=18), originalValue=)
 Token(id=7, type=ASIGNATION_EQUALS, location=Location(row=0, column=19), originalValue=)
 Token(id=8, type=WHITE_SPACE, location=Location(row=0, column=20), originalValue=)
-Token(id=9, type=STRING_LITERAL, location=Location(row=0, column=21), originalValue="hello")
-Token(id=10, type=SEMI_COLON, location=Location(row=0, column=28), originalValue=)
+Token(id=9, type=ERROR, location=Location(row=0, column=21), originalValue='hello";)

@@ -1,1 +1,0 @@
-[Token(0, IDENTIFIER, Location(row=0, column=0), null)]Token(0, IDENTIFIER, Location(row=0, column=0), null), 

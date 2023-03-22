@@ -1,13 +1,11 @@
 package utilities
 
-data class ASTNode(val children: List<ASTNode>, val token: Token?, val astNodeType: ASTNodeType)
+interface ASTNode
 
-enum class ASTNodeType {
-    TOKEN,
-    INITIALIZATION,
-    DECLARATION,
-    OPERATION,
-    FUNCTION_CALL,
-    ASSIGNATION,
-    EXECUTION
-}
+data class BinaryTokenNode(val token: Token, val right: BinaryTokenNode?, val left: BinaryTokenNode?)
+data class Declaration(val identifier: Token, val type: Token): ASTNode
+data class Value(val tree: BinaryTokenNode): ASTNode
+data class DeclarationInitalization(val declaration: Declaration, val value: Value): ASTNode
+data class MethodCall(val identifier: Token, val arguments: Value): ASTNode
+data class Assignation(val identifier: Token, val value: Value): ASTNode
+data class Execution(val trees: List<ASTNode>): ASTNode
