@@ -3,7 +3,6 @@ package lexer
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import utilities.Token
-import java.io.File
 
 
 class LexerTest {
@@ -11,7 +10,6 @@ class LexerTest {
     @Test
     fun testAsignSyntax() {
         val evaluatedText = printScriptEvaluateText("mock_text_assignation.txt")
-        File("C:\\Users\\jorge\\IdeaProjects\\PrintScript\\lexer\\src\\test\\resources/mock_text_assignation_result.txt").writeText(lexerResultsToString(evaluatedText))
         Assertions.assertEquals(getResourceAsText("mock_text_assignation_result.txt"), lexerResultsToString(evaluatedText))
     }
     @Test
