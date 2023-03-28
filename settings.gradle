@@ -8,9 +8,11 @@
  */
 
 rootProject.name = 'PrintScript'
-include('app')
+include 'app'
 include 'lexer'
 include 'parser'
 include 'interpreter'
 include 'utilities'
+include 'token'
+include 'ASTNode'
 

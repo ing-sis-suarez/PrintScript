@@ -1,8 +1,8 @@
 package lexer
 
-import utilities.Location
-import utilities.Token
-import utilities.TokenType
+import token.Location
+import token.Token
+import token.TokenType
 
 
 class RegularLexer(private val tokenReaderList: List<Pair<TokenVerifierFunc, StringToTokenFunc>>) : Lexer {

@@ -1,4 +1,4 @@
-package utilities
+package token
 
 data class Token(val id: Int, val type: TokenType, val location: Location, val originalValue: String){
     fun actualValue() = if (type == TokenType.STRING_LITERAL) originalValue.trim(originalValue[0]) else originalValue

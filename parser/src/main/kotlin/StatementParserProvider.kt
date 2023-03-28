@@ -1,4 +1,7 @@
-import utilities.*
+import ast_node.*
+import token.Token
+import token.TokenType
+import java.util.*
 
 class StatementParserProvider {
 
@@ -21,7 +24,8 @@ class StatementParserProvider {
     )
 
     private val printScriptParser = listOf(
-        initializationParser, assignationParser, methodCallParser)
+        initializationParser, declarationParser, assignationParser, methodCallParser
+    )
 
     private val parserMap = mapOf(
         Pair("printScript", printScriptParser)
@@ -41,7 +45,7 @@ class StatementParserProvider {
         checkMinLength(statement)
         checkIdentifier(statement[0])
         checkLeftParenthesis(statement[1])
-        checkRightParenthesis(statement[statement.size-1])
+        checkRightParenthesis(statement[statement.size - 1])
     }
 
     private fun checkMinLength(statement: List<Token>) {
@@ -74,14 +78,14 @@ class StatementParserProvider {
     }
 
     private fun isAssignation(statement: List<Token>): Boolean {
-        if(statement.size < 2) return false
+        if (statement.size < 2) return false
         return statement[1].type == TokenType.ASIGNATION_EQUALS
     }
 
-    private fun createInitializationNode(statement: List<Token>): DeclarationInitalization {
+    private fun createInitializationNode(statement: List<Token>): DeclarationInitialization {
         val declaration = createDeclarationNode(statement.subList(0, 4))
         val value = createValueNode(statement.subList(5, statement.size))
-        return DeclarationInitalization(declaration, value)
+        return DeclarationInitialization(declaration, value)
     }
 
     private fun checkValueNode(statement: List<Token>) {
@@ -89,8 +93,56 @@ class StatementParserProvider {
     }
 
     private fun createValueNode(statement: List<Token>): Value {
-        checkValueNode(statement)
-        /*if (statement.size == 1)*/ return Value(BinaryTokenNode(statement[0], null, null))
+        // chequear formato valido
+        val nodeList = statement.map { token -> BinaryTokenNode(token, null, null) }
+        val (stack, queue) = processOperation(nodeList)
+    }
+
+    private fun processOperation(nodeList: List<BinaryTokenNode>): Pair<Stack<BinaryTokenNode>, Queue<BinaryTokenNode>> {
+        val stack: Stack<BinaryTokenNode> = Stack()
+        val queue: Queue<BinaryTokenNode> = LinkedList()
+        for (node in nodeList) {
+            if (isValue(node)) queue.add(node)
+            else if (isLeftParenthesis(node)) stack.push(node)
+            else if (isOperator(node)) {
+                while (!stack.empty() && hasLessPrecedence(node, stack.peek())) {
+                    queue.add(stack.pop())
+                }
+                stack.push(node)
+            } else {
+                while (!isLeftParenthesis(stack.peek())) {
+                    stack.pop()
+                }
+                stack.pop()
+            }
+        }
+        return Pair(stack, queue)
+    }
+
+    private fun hasLessPrecedence(
+        node: BinaryTokenNode,
+        otherNode: BinaryTokenNode
+    ): Boolean {
+        val precedence = listOf(
+            TokenType.OPERATOR_MINUS,
+            TokenType.OPERATOR_PLUS,
+            TokenType.OPERATOR_DIVIDE,
+            TokenType.OPERATOR_TIMES
+        )
+        return precedence.indexOf(node.token.type) < precedence.indexOf(otherNode.token.type)
+    }
+
+    private fun isOperator(node: BinaryTokenNode): Boolean {
+        return node.token.type == TokenType.OPERATOR_PLUS || node.token.type == TokenType.OPERATOR_DIVIDE
+                || node.token.type == TokenType.OPERATOR_MINUS || node.token.type == TokenType.OPERATOR_TIMES
+    }
+
+    private fun isLeftParenthesis(node: BinaryTokenNode): Boolean {
+        return node.token.type == TokenType.LEFT_PARENTHESIS
+    }
+
+    private fun isValue(node: BinaryTokenNode): Boolean {
+        return node.left != null || node.right != null || node.token.type == TokenType.NUMBER_LITERAL || node.token.type == TokenType.STRING_LITERAL
     }
 
 
@@ -99,7 +151,7 @@ class StatementParserProvider {
         return statement[4].type == TokenType.ASIGNATION_EQUALS
     }
 
-    private fun createDeclarationNode(statement: List<Token>): Declaration{
+    private fun createDeclarationNode(statement: List<Token>): Declaration {
         checkDeclaration(statement)
         return Declaration(statement[1], statement[3])
     }
@@ -122,7 +174,7 @@ class StatementParserProvider {
         if (statement.size > correctSize) throw UnexpectedTokenException("Unexpected token at ${statement[4].location.row}, ${statement[4].location.column}")
     }
 
-    private fun isDeclaration(statement: List<Token>): Boolean{
+    private fun isDeclaration(statement: List<Token>): Boolean {
         return statement[0].type == TokenType.LET_KEYWORD
     }
 
@@ -130,10 +182,12 @@ class StatementParserProvider {
         if (token.type != TokenType.IDENTIFIER)
             throw UnexpectedTokenException("Identifier expected at: ${token.location.row}, ${token.location.column}")
     }
+
     private fun checkDoubleDots(token: Token) {
         if (token.type != TokenType.DOUBLE_DOTS)
             throw UnexpectedTokenException("Double dots expected at: ${token.location.row}, ${token.location.column}")
     }
+
     private fun checkType(token: Token) {
         if (token.type != TokenType.NUMBER_LITERAL && token.type != TokenType.STRING_LITERAL)
             throw UnexpectedTokenException("Type expected at: ${token.location.row}, ${token.location.column}")
