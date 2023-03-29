@@ -1,3 +1,7 @@
+package parser
+
+import exceptions.MalformedStructureException
+import exceptions.UnexpectedTokenException
 import ast_node.*
 import token.Token
 import token.TokenType
@@ -34,7 +38,7 @@ class StatementParserProvider {
 
     private fun createMethodNode(statement: List<Token>): MethodCall {
         checkMethodCall(statement)
-        val parameterValue = createValueNode(statement.subList(2, statement.size))
+        val parameterValue = createValueNode(statement.subList(2, statement.size - 1))
         return MethodCall(statement[0], parameterValue)
     }
 
@@ -69,9 +73,15 @@ class StatementParserProvider {
         return Assignation(statement[0], value)
     }
 
+
     private fun checkAssignation(statement: List<Token>) {
         checkIdentifier(statement[0])
-        checkValueNode(statement.subList(2, statement.size))
+        checkEquals(statement[1])
+    }
+
+    private fun checkEquals(token: Token) {
+        if (token.type != TokenType.ASIGNATION_EQUALS)
+            throw UnexpectedTokenException("'=' expected at: ${token.location.row}, ${token.location.column}")
     }
 
     private fun isAssignation(statement: List<Token>): Boolean {
@@ -107,24 +117,29 @@ class StatementParserProvider {
     }
 
     private fun processOperation(nodeList: List<BinaryTokenNode>): Queue<BinaryTokenNode> {
-        val stack: Stack<BinaryTokenNode> = Stack()
+        // do a shunting yard algorithm using binaryTokenNode as nodes and TokenType as The type of operator
         val queue: Queue<BinaryTokenNode> = LinkedList()
+        val stack: Stack<BinaryTokenNode> = Stack()
         for (node in nodeList) {
             if (isValue(node)) queue.add(node)
-            else if (isLeftParenthesis(node)) stack.push(node)
             else if (isOperator(node)) {
-                while (!stack.empty() && hasLessPrecedence(node, stack.peek())) {
+                while (stack.size != 0 && hasLessPrecedence(node, stack.peek())) {
                     queue.add(stack.pop())
                 }
                 stack.push(node)
-            } else {
-                while (!isLeftParenthesis(stack.peek())) {
-                    stack.pop()
+            } else if (isLeftParenthesis(node)) stack.push(node)
+            else if (isRightParenthesis(node)) {
+                while (stack.size != 0 && !isLeftParenthesis(stack.peek())) {
+                    queue.add(stack.pop())
                 }
                 stack.pop()
             }
         }
         return queue
+    }
+
+    private fun isRightParenthesis(node: BinaryTokenNode): Boolean {
+        return node.token.type == TokenType.RIGHT_PARENTHESIS
     }
 
     private fun hasLessPrecedence(
@@ -138,6 +153,7 @@ class StatementParserProvider {
             TokenType.OPERATOR_TIMES
         )
         return precedence.indexOf(node.token.type) < precedence.indexOf(otherNode.token.type)
+                && !isLeftParenthesis(otherNode)
     }
 
     private fun isOperator(node: BinaryTokenNode): Boolean {
@@ -150,7 +166,8 @@ class StatementParserProvider {
     }
 
     private fun isValue(node: BinaryTokenNode): Boolean {
-        return node.left != null || node.right != null || node.token.type == TokenType.NUMBER_LITERAL || node.token.type == TokenType.STRING_LITERAL
+        return node.left != null || node.right != null ||
+                node.token.type == TokenType.NUMBER_LITERAL || node.token.type == TokenType.STRING_LITERAL
     }
 
 
@@ -197,7 +214,7 @@ class StatementParserProvider {
     }
 
     private fun checkType(token: Token) {
-        if (token.type != TokenType.NUMBER_LITERAL && token.type != TokenType.STRING_LITERAL)
+        if (token.type != TokenType.NUMBER_KEYWORD && token.type != TokenType.STRING_KEYWORD)
             throw UnexpectedTokenException("Type expected at: ${token.location.row}, ${token.location.column}")
     }
 }

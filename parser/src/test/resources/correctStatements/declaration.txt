@@ -1,0 +1,7 @@
+Token(id=0, type=LET_KEYWORD, location=Location(row=0, column=0), originalValue=)
+Token(id=1, type=WHITE_SPACE, location=Location(row=0, column=3), originalValue=)
+Token(id=2, type=IDENTIFIER, location=Location(row=0, column=4), originalValue=integer)
+Token(id=3, type=DOUBLE_DOTS, location=Location(row=0, column=11), originalValue=)
+Token(id=4, type=WHITE_SPACE, location=Location(row=0, column=12), originalValue=)
+Token(id=5, type=NUMBER_KEYWORD, location=Location(row=0, column=13), originalValue=)
+Token(id=6, type=SEMI_COLON, location=Location(row=0, column=19), originalValue=)

@@ -10,4 +10,3 @@ data class Value(val tree: BinaryTokenNode): ASTNode
 data class DeclarationInitialization(val declaration: Declaration, val value: Value): ASTNode
 data class MethodCall(val identifier: Token, val arguments: Value): ASTNode
 data class Assignation(val identifier: Token, val value: Value): ASTNode
-data class Execution(val trees: List<ASTNode>): ASTNode

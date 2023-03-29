@@ -1,0 +1,1 @@
+[Declaration(identifier=Token(id=2, type=IDENTIFIER, location=Location(row=0, column=4), originalValue=integer), type=Token(id=5, type=NUMBER_KEYWORD, location=Location(row=0, column=13), originalValue=))]

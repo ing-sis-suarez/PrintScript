@@ -1,0 +1,1 @@
+[Assignation(identifier=Token(id=0, type=IDENTIFIER, location=Location(row=0, column=0), originalValue=a), value=Value(tree=BinaryTokenNode(token=Token(id=4, type=NUMBER_LITERAL, location=Location(row=0, column=4), originalValue=69), right=null, left=null)))]

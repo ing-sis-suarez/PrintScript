@@ -36,8 +36,8 @@ class LexerTest {
     }
     @Test
     fun xd(){
-        val evaluatedText = printScriptEvaluateText("declaration.txt")
-        java.io.File("C:\\Users\\Usuario\\IdeaProjects\\PrintScript\\lexer\\src\\test\\resources\\declaration.txt").writeText(lexerResultsToString(evaluatedText))
+        val evaluatedText = printScriptEvaluateText("correctStatements/operation.txt")
+        java.io.File("C:\\Users\\Usuario\\IdeaProjects\\PrintScript\\lexer\\src\\test\\resources\\operation.txt").writeText(lexerResultsToString(evaluatedText))
     }
 
     private fun printScriptEvaluateText(fileName: String): List<Token>{

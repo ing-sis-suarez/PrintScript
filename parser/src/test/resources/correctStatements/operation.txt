@@ -1,0 +1,7 @@
+Token(id=0, type=IDENTIFIER, location=Location(row=0, column=0), originalValue=var)
+Token(id=1, type=WHITE_SPACE, location=Location(row=0, column=3), originalValue=)
+Token(id=2, type=ASIGNATION_EQUALS, location=Location(row=0, column=4), originalValue=)
+Token(id=3, type=WHITE_SPACE, location=Location(row=0, column=5), originalValue=)
+Token(id=4, type=NUMBER_LITERAL, location=Location(row=0, column=6), originalValue=3)
+Token(id=5, type=OPERATOR_PLUS, location=Location(row=0, column=7), originalValue=)
+Token(id=6, type=NUMBER_LITERAL, location=Location(row=0, column=8), originalValue=2)

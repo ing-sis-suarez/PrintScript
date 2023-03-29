@@ -1,3 +1,6 @@
+package parser
+
+import exceptions.MalformedStructureException
 import ast_node.*
 import token.Token
 import token.TokenType

@@ -15,3 +15,13 @@ dependencies {
     implementation project(':ASTNode')
     implementation project(':utilities')
 }
+
+test{
+    description('Runs parser tests.')
+    group('verification')
+
+    useJUnitPlatform()
+    testLogging {
+        events "passed"
+    }
+}
