@@ -46,8 +46,8 @@ class RegularLexer(private val tokenReaderList: List<Pair<TokenVerifierFunc, Str
         for ((checker, tokenParser) in tokenReaderList) {
             if (checker.invoke(line, i)) {
                 val result = tokenParser.invoke(tokens.size, line, Location(lineNumber, i))
-                tokens.add(result.first)
-                i = result.second
+                tokens.add(result)
+                i += result.length()
                 break
             }
         }

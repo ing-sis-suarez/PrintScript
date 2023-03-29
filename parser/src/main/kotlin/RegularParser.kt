@@ -1,50 +1,35 @@
-import utilities.*
+import ast_node.*
+import token.Token
+import token.TokenType
 
 class RegularParser(private val readerList: List<Pair<SyntaxVerifier, ASTTreeConstructor>>): Parser {
 
-    override fun parse(tokens: List<Token>): ASTNode {
-        val cleanedTokens = takeWhiteSpacesandComments(tokens)
+    override fun parse(tokens: List<Token>): List<ASTNode> {
+        val cleanedTokens = takeWhiteSpacesAndComments(tokens)
         val statements = breakIntoStatements(cleanedTokens, TokenType.SEMI_COLON)
-        return createTree(statements)
+        return generateChildren(statements)
     }
 
-    private fun createTree(statements: List<List<Token>>): Execution {
-        val children = generateChildren(statements)
-        return Execution(children)
+    private fun generateChildren(statements: List<List<Token>>): List<ASTNode> {
+        return statements.map {statement -> createChild(statement)}
     }
 
-    private fun generateChildren(
-        statements: List<List<Token>>,
-    ): List<ASTNode> {
-        val children = mutableListOf<ASTNode>()
-        for (statement in statements) {
-            addChild(statement, children)
-        }
-        return children
-    }
-
-    private fun addChild(
+    private fun createChild(
         statement: List<Token>,
-        children: MutableList<ASTNode>
-    ) {
-        var match = false
+    ): ASTNode {
         for (reader in readerList) {
             if (reader.first.invoke(statement)) {
-                children.add(reader.second.invoke(statement))
-                match = true
-                break
+                return reader.second.invoke(statement)
             }
         }
-        if (!match) throw MalformedStructureException("Could not recognize syntax")
+        throw MalformedStructureException("Could not recognize syntax")
     }
 
-    private fun takeWhiteSpacesandComments(tokens: List<Token>): List<Token> {
-        val cleanedTokens = mutableListOf<Token>()
-        tokens.forEach { token -> if (!(token.type == TokenType.WHITE_SPACE || token.type == TokenType.COMMENT)) cleanedTokens.add(token)}
-        return cleanedTokens
+    private fun takeWhiteSpacesAndComments(tokens: List<Token>): List<Token> {
+        return tokens.filter { token -> !(token.type == TokenType.WHITE_SPACE || token.type == TokenType.COMMENT) }
     }
 
-    fun breakIntoStatements(tokens: List<Token>, separator: TokenType): List<List<Token>>{
+    private fun breakIntoStatements(tokens: List<Token>, separator: TokenType): List<List<Token>>{
         var lastIndex = 0
         val statements: MutableList<List<Token>> = mutableListOf()
         for (i in tokens.indices){

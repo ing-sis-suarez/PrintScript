@@ -1,59 +1,60 @@
 package lexer
 
-import utilities.Location
-import utilities.Token
-import utilities.TokenType
+import token.Location
+import token.Token
+import token.TokenType
+
 
 class TokenReadersProvider {
 
     private val commentReader: TokenReader = Pair(
         {string, startIndex -> isThisString(string, startIndex, "//")},
-        {id, string, location -> Pair(Token(id, TokenType.COMMENT, location, string), string.length)})
+        {id, string, location -> Token(id, TokenType.COMMENT, location, string)})
     private val whiteSpaceReader: TokenReader = Pair(
         {string, startIndex -> isThisString(string, startIndex, " ")},
-        { id, _, location -> Pair(Token(id, TokenType.WHITE_SPACE, location, ""), location.column + 1)})
+        { id, _, location -> Token(id, TokenType.WHITE_SPACE, location, "")})
     private val letKeyWordReader: TokenReader = Pair(
         {string, startIndex -> isThisString(string, startIndex, "let") },
-        { id, _, location -> Pair(Token(id, TokenType.LET_KEYWORD, location, ""), location.column + 3)})
+        { id, _, location -> Token(id, TokenType.LET_KEYWORD, location, "")})
     private val numberKeyWordReader: TokenReader = Pair(
         {string, startIndex -> isThisString(string, startIndex, "number") },
-        { id, _, location -> Pair(Token(id, TokenType.NUMBER_KEYWORD, location, ""), location.column + 6)})
+        { id, _, location -> Token(id, TokenType.NUMBER_KEYWORD, location, "")})
     private val stringKeyWordReader: TokenReader = Pair(
         {string, startIndex -> isThisString(string, startIndex, "string") },
-        { id, _, location -> Pair(Token(id, TokenType.STRING_KEYWORD, location, ""), location.column + 6)})
+        { id, _, location -> Token(id, TokenType.STRING_KEYWORD, location, "")})
     private val doubleDotsReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, ":")},
-        { id, _, location -> Pair(Token(id, TokenType.DOUBLE_DOTS, location, ""), location.column + 1)})
+        { id, _, location -> Token(id, TokenType.DOUBLE_DOTS, location, "")})
     private val semiColonReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, ";")},
-        { id, _, location -> Pair(Token(id, TokenType.SEMI_COLON, location, ""), location.column + 1)})
+        { id, _, location -> Token(id, TokenType.SEMI_COLON, location, "")})
     private val plusReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "+")},
-        { id, _, location -> Pair(Token(id, TokenType.OPERATOR_PLUS, location, ""), location.column + 1)})
+        { id, _, location -> Token(id, TokenType.OPERATOR_PLUS, location, "")})
     private val minusReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "-")},
-        { id, _, location -> Pair(Token(id, TokenType.OPERATOR_MINUS, location, ""), location.column + 1)})
+        { id, _, location -> Token(id, TokenType.OPERATOR_MINUS, location, "")})
     private val divisionReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "/")},
-        { id, _, location -> Pair(Token(id, TokenType.OPERATOR_DIVIDE, location, ""), location.column + 1)})
+        { id, _, location -> Token(id, TokenType.OPERATOR_DIVIDE, location, "")})
     private val timesReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "*")},
-        { id, _, location -> Pair(Token(id, TokenType.OPERATOR_TIMES, location, ""), location.column + 1)})
+        { id, _, location -> Token(id, TokenType.OPERATOR_TIMES, location, "")})
     private val leftParenthesisReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "(")},
-        { id, _, location -> Pair(Token(id, TokenType.LEFT_PARENTHESIS, location, ""), location.column + 1)})
+        { id, _, location -> Token(id, TokenType.LEFT_PARENTHESIS, location, "")})
     private val rightParenthesisReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, ")")},
-        { id, _, location -> Pair(Token(id, TokenType.RIGHT_PARENTHESIS, location, ""), location.column + 1)})
+        { id, _, location -> Token(id, TokenType.RIGHT_PARENTHESIS, location, "")})
     private val equalsReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "=")},
-        { id, _, location -> Pair(Token(id, TokenType.ASIGNATION_EQUALS, location, ""), location.column + 1)})
+        { id, _, location -> Token(id, TokenType.ASIGNATION_EQUALS, location, "")})
     private val numberLiteralReader: TokenReader = Pair(
         { string, startIndex -> string[startIndex].isDigit() },
-        { id, string, location -> Pair(Token(id, TokenType.NUMBER_LITERAL, location, cutNumberFromLine(string, location)), calculateEndOfNumber(string, location.column))})
+        { id, string, location -> Token(id, TokenType.NUMBER_LITERAL, location, cutNumberFromLine(string, location))})
     private val identifierReader: TokenReader = Pair(
         { string, startIndex -> string[startIndex].isLetter() },
-        { id, string, location -> Pair(Token(id, TokenType.IDENTIFIER, location, cutIdentifierFromLine(string, location)), calculateEndOfIdentifier(string, location.column))})
+        { id, string, location -> Token(id, TokenType.IDENTIFIER, location, cutIdentifierFromLine(string, location))})
     private val quotationMarksStringReader: TokenReader = Pair(
         { string, startIndex -> string[startIndex] == '"'},
         { id, string, location -> createStringLitPair(id, string, location, '"')})
@@ -61,9 +62,8 @@ class TokenReadersProvider {
         { string, startIndex -> string[startIndex] == '\''},
         { id, string, location -> createStringLitPair(id, string, location, '\'')})
 
-    private fun createStringLitPair(id: Int, string: String, location: Location, stringChar: Char): Pair<Token, Int>{
-        val token = createToken(id, location, string, stringChar)
-        return Pair(token, token.length() + location.column)
+    private fun createStringLitPair(id: Int, string: String, location: Location, stringChar: Char): Token{
+        return createToken(id, location, string, stringChar)
     }
 
     private fun createToken(id: Int, location: Location, string: String, stringChar: Char) = try {
@@ -141,5 +141,5 @@ class TokenReadersProvider {
 }
 
 typealias TokenVerifierFunc = (line: String, startIndex: Int) -> Boolean
-typealias StringToTokenFunc = (id: Int, line: String, location: Location) -> Pair<Token, Int>
+typealias StringToTokenFunc = (id: Int, line: String, location: Location) -> Token
 typealias TokenReader = Pair<TokenVerifierFunc, StringToTokenFunc>

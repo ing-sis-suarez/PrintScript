@@ -1,5 +1,5 @@
 import ast_node.ASTNode
-import sun.tools.jstat.Token
+import token.Token
 
 interface Parser {
 

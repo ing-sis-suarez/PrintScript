@@ -27,12 +27,9 @@ class StatementParserProvider {
         initializationParser, declarationParser, assignationParser, methodCallParser
     )
 
-    private val parserMap = mapOf(
-        Pair("printScript", printScriptParser)
-    )
 
-    fun getParserList(name: String): List<Pair<SyntaxVerifier, ASTTreeConstructor>>? {
-        return parserMap[name]
+    fun getParserList(): List<Pair<SyntaxVerifier, ASTTreeConstructor>> {
+        return printScriptParser
     }
 
     private fun createMethodNode(statement: List<Token>): MethodCall {
@@ -95,10 +92,21 @@ class StatementParserProvider {
     private fun createValueNode(statement: List<Token>): Value {
         // chequear formato valido
         val nodeList = statement.map { token -> BinaryTokenNode(token, null, null) }
-        val (stack, queue) = processOperation(nodeList)
+        val queue = processOperation(nodeList)
+        return Value(createTree(queue))
     }
 
-    private fun processOperation(nodeList: List<BinaryTokenNode>): Pair<Stack<BinaryTokenNode>, Queue<BinaryTokenNode>> {
+    private fun createTree(queue: Queue<BinaryTokenNode>): BinaryTokenNode {
+        val stack: Stack<BinaryTokenNode> = Stack()
+        while (queue.size != 0){
+            val node = queue.remove()
+            if (isValue(node)) stack.push(node)
+            else stack.push(BinaryTokenNode(node.token, stack.pop(), stack.pop()))
+        }
+        return stack.pop()
+    }
+
+    private fun processOperation(nodeList: List<BinaryTokenNode>): Queue<BinaryTokenNode> {
         val stack: Stack<BinaryTokenNode> = Stack()
         val queue: Queue<BinaryTokenNode> = LinkedList()
         for (node in nodeList) {
@@ -116,7 +124,7 @@ class StatementParserProvider {
                 stack.pop()
             }
         }
-        return Pair(stack, queue)
+        return queue
     }
 
     private fun hasLessPrecedence(

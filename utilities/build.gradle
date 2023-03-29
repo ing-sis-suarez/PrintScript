@@ -10,8 +10,4 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
-    implementation project(':token')
-    implementation project(':ASTNode')
-    implementation project(':utilities')
 }
