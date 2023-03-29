@@ -16,4 +16,6 @@ include 'utilities'
 include 'token'
 include 'ASTNode'
 include 'utilities'
+include 'formater'
+include 'static_code_analyzer'
 

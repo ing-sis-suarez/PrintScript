@@ -14,10 +14,12 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/ASTNode" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/formater" />
             <option value="$PROJECT_DIR$/interpreter" />
             <option value="$PROJECT_DIR$/lexer" />
             <option value="$PROJECT_DIR$/parser" />
             <option value="$PROJECT_DIR$/token" />
+            <option value="$PROJECT_DIR$/static_code_analyzer" />
             <option value="$PROJECT_DIR$/utilities" />
           </set>
         </option>
