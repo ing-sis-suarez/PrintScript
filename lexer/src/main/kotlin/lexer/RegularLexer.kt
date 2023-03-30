@@ -51,7 +51,7 @@ class RegularLexer(private val tokenReaderList: List<Pair<TokenVerifierFunc, Str
         var i = startIndex
         i = calculateToken(line, i, tokens, lineNumber)
         return if (i == startIndex) {
-            tokens.add(Token(tokens.size, TokenType.UNKNOWN, Location(lineNumber, i), line[i].toString()))
+            tokens.add(Token(TokenType.UNKNOWN, Location(lineNumber, i), line[i].toString(), 1))
             i + 1
         } else i
     }
@@ -65,9 +65,9 @@ class RegularLexer(private val tokenReaderList: List<Pair<TokenVerifierFunc, Str
         var i = acutalIndex
         for ((checker, tokenParser) in tokenReaderList) {
             if (checker.invoke(line, i)) {
-                val result = tokenParser.invoke(tokens.size, line, Location(lineNumber, i))
+                val result = tokenParser.invoke(line, Location(lineNumber, i))
                 tokens.add(result)
-                i += result.length()
+                i += result.length
                 break
             }
         }

@@ -34,11 +34,12 @@ class LexerTest {
         val evaluatedText = printScriptEvaluateText("mock_text_with_unclosed_string.txt")
         Assertions.assertEquals(Files.getResourceAsText("mock_text_with_unclosed_string_result.txt"), lexerResultsToString(evaluatedText))
     }
-    @Test
-    fun xd(){
-        val evaluatedText = printScriptEvaluateText("correctStatements/operation.txt")
-        java.io.File("C:\\Users\\Usuario\\IdeaProjects\\PrintScript\\lexer\\src\\test\\resources\\operation.txt").writeText(lexerResultsToString(evaluatedText))
-    }
+
+//    @Test
+//    fun xd(){
+//        val evaluatedText = RegularLexer(TokenReadersProvider().getTokenMap("PrintScript") ?: return).lex("println(\"hey!\");")
+//        java.io.File("C:\\Users\\Usuario\\IdeaProjects\\PrintScript\\parser\\src\\test\\resources\\correctStatements\\methodCall.txt").writeText(lexerResultsToString(evaluatedText))
+//    }
 
     private fun printScriptEvaluateText(fileName: String): List<Token>{
         val mockText = Files.getResourceAsText(fileName).toString()

@@ -3,6 +3,7 @@ package parser
 import exceptions.MalformedStructureException
 import exceptions.UnexpectedTokenException
 import ast_node.*
+import token.Location
 import token.Token
 import token.TokenType
 import java.util.*
@@ -111,32 +112,94 @@ class StatementParserProvider {
         while (queue.size != 0){
             val node = queue.remove()
             if (isValue(node)) stack.push(node)
-            else stack.push(BinaryTokenNode(node.token, stack.pop(), stack.pop()))
+            else stack.push(createOperationTree(node, stack))
         }
         return stack.pop()
     }
 
+    private fun createOperationTree(
+        node: BinaryTokenNode,
+        stack: Stack<BinaryTokenNode>
+    ): BinaryTokenNode{
+        val right = stack.pop()
+        return BinaryTokenNode(
+            node.token,
+            right,
+            if (stack.empty()) createZeroNode(right.token.location) else stack.pop()
+        )
+    }
+
+    private fun createZeroNode(location: Location): BinaryTokenNode {
+        return BinaryTokenNode(Token(TokenType.NUMBER_LITERAL, location, "0", 1), null, null)
+    }
+
     private fun processOperation(nodeList: List<BinaryTokenNode>): Queue<BinaryTokenNode> {
-        // do a shunting yard algorithm using binaryTokenNode as nodes and TokenType as The type of operator
-        val queue: Queue<BinaryTokenNode> = LinkedList()
         val stack: Stack<BinaryTokenNode> = Stack()
+        val queue: Queue<BinaryTokenNode> = LinkedList()
         for (node in nodeList) {
             if (isValue(node)) queue.add(node)
+            else if (isLeftParenthesis(node)) stack.push(node)
             else if (isOperator(node)) {
-                while (stack.size != 0 && hasLessPrecedence(node, stack.peek())) {
+                while (!stack.empty() && hasLessPrecedence(node, stack.peek())) {
                     queue.add(stack.pop())
                 }
                 stack.push(node)
-            } else if (isLeftParenthesis(node)) stack.push(node)
-            else if (isRightParenthesis(node)) {
-                while (stack.size != 0 && !isLeftParenthesis(stack.peek())) {
+            } else {
+                while (!isLeftParenthesis(stack.peek())) {
                     queue.add(stack.pop())
                 }
                 stack.pop()
             }
         }
+        while (!stack.empty()) {
+            queue.add(stack.pop())
+        }
         return queue
     }
+
+//    fun shuntingYard(tokens: List<String>): Node {
+//        val stack = Stack<String>()
+//        val valueQueue: Queue<String> = LinkedList()
+//
+//        for (token in tokens) {
+//            when {
+//                // TODO si es un string, deberia entrar tambien
+//                // token.toDoubleOrNull() != null -> valueQueue.add(token)
+//                token.matches(Regex("[a-zA-Z][a-zA-Z0-9]*|[0-9.]+")) -> valueQueue.add(token)
+//                token in listOf("+", "-", "*", "/") -> {
+//                    while (!stack.isEmpty() && stack.peek() in listOf("*", "/") && stack.peek() != "(") {
+//                        valueQueue.add(stack.pop()!!)
+//                    }
+//                    stack.push(token)
+//                }
+//                token == "(" -> stack.push(token)
+//                token == ")" -> {
+//                    while (stack.peek() != "(") {
+//                        valueQueue.add(stack.pop()!!)
+//                    }
+//                    stack.pop()
+//                }
+//            }
+//        }
+//
+//        while (!stack.isEmpty()) {
+//            valueQueue.add(stack.pop()!!)
+//        }
+//
+//        val treeStack = Stack<TreeNode>()
+//
+//        for (element in valueQueue) {
+//            if (element.matches(Regex("[a-zA-Z][a-zA-Z0-9]*|[0-9.]+"))) {
+//                treeStack.push(TreeNode(element))
+//            } else {
+//                val right = treeStack.pop()
+//                val left = treeStack.pop()
+//                treeStack.push(TreeNode(element, left, right))
+//            }
+//        }
+//
+//        return treeStack.pop()
+//    }
 
     private fun isRightParenthesis(node: BinaryTokenNode): Boolean {
         return node.token.type == TokenType.RIGHT_PARENTHESIS

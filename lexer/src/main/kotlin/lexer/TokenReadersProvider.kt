@@ -9,67 +9,67 @@ class TokenReadersProvider {
 
     private val commentReader: TokenReader = Pair(
         {string, startIndex -> isThisString(string, startIndex, "//")},
-        {id, string, location -> Token(id, TokenType.COMMENT, location, string)})
+        {string, location -> Token(TokenType.COMMENT, location, string, string.length)})
     private val whiteSpaceReader: TokenReader = Pair(
         {string, startIndex -> isThisString(string, startIndex, " ")},
-        { id, _, location -> Token(id, TokenType.WHITE_SPACE, location, "")})
+        { _, location -> Token(TokenType.WHITE_SPACE, location, "", 1)})
     private val letKeyWordReader: TokenReader = Pair(
         {string, startIndex -> isThisString(string, startIndex, "let") },
-        { id, _, location -> Token(id, TokenType.LET_KEYWORD, location, "")})
+        { _, location -> Token(TokenType.LET_KEYWORD, location, "", 3)})
     private val numberKeyWordReader: TokenReader = Pair(
         {string, startIndex -> isThisString(string, startIndex, "number") },
-        { id, _, location -> Token(id, TokenType.NUMBER_KEYWORD, location, "")})
+        { _, location -> Token(TokenType.NUMBER_KEYWORD, location, "", 6)})
     private val stringKeyWordReader: TokenReader = Pair(
         {string, startIndex -> isThisString(string, startIndex, "string") },
-        { id, _, location -> Token(id, TokenType.STRING_KEYWORD, location, "")})
+        { _, location -> Token(TokenType.STRING_KEYWORD, location, "", 6)})
     private val doubleDotsReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, ":")},
-        { id, _, location -> Token(id, TokenType.DOUBLE_DOTS, location, "")})
+        { _, location -> Token(TokenType.DOUBLE_DOTS, location, "", 1)})
     private val semiColonReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, ";")},
-        { id, _, location -> Token(id, TokenType.SEMI_COLON, location, "")})
+        { _, location -> Token(TokenType.SEMI_COLON, location, "", 1)})
     private val plusReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "+")},
-        { id, _, location -> Token(id, TokenType.OPERATOR_PLUS, location, "")})
+        { _, location -> Token(TokenType.OPERATOR_PLUS, location, "", 1)})
     private val minusReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "-")},
-        { id, _, location -> Token(id, TokenType.OPERATOR_MINUS, location, "")})
+        { _, location -> Token(TokenType.OPERATOR_MINUS, location, "", 1)})
     private val divisionReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "/")},
-        { id, _, location -> Token(id, TokenType.OPERATOR_DIVIDE, location, "")})
+        { _, location -> Token(TokenType.OPERATOR_DIVIDE, location, "", 1)})
     private val timesReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "*")},
-        { id, _, location -> Token(id, TokenType.OPERATOR_TIMES, location, "")})
+        { _, location -> Token(TokenType.OPERATOR_TIMES, location, "", 1)})
     private val leftParenthesisReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "(")},
-        { id, _, location -> Token(id, TokenType.LEFT_PARENTHESIS, location, "")})
+        { _, location -> Token(TokenType.LEFT_PARENTHESIS, location, "", 1)})
     private val rightParenthesisReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, ")")},
-        { id, _, location -> Token(id, TokenType.RIGHT_PARENTHESIS, location, "")})
+        { _, location -> Token(TokenType.RIGHT_PARENTHESIS, location, "", 1)})
     private val equalsReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "=")},
-        { id, _, location -> Token(id, TokenType.ASIGNATION_EQUALS, location, "")})
+        { _, location -> Token(TokenType.ASIGNATION_EQUALS, location, "", 1)})
     private val numberLiteralReader: TokenReader = Pair(
         { string, startIndex -> string[startIndex].isDigit() },
-        { id, string, location -> Token(id, TokenType.NUMBER_LITERAL, location, cutNumberFromLine(string, location))})
+        { string, location -> Token(TokenType.NUMBER_LITERAL, location, cutNumberFromLine(string, location), cutNumberFromLine(string, location).length)})
     private val identifierReader: TokenReader = Pair(
         { string, startIndex -> string[startIndex].isLetter() },
-        { id, string, location -> Token(id, TokenType.IDENTIFIER, location, cutIdentifierFromLine(string, location))})
+        { string, location -> Token(TokenType.IDENTIFIER, location, cutIdentifierFromLine(string, location), cutIdentifierFromLine(string, location).length)})
     private val quotationMarksStringReader: TokenReader = Pair(
         { string, startIndex -> string[startIndex] == '"'},
-        { id, string, location -> createStringLitPair(id, string, location, '"')})
+        { string, location -> createStringLitPair(string, location, '"')})
     private val apostropheStringReader: TokenReader = Pair(
         { string, startIndex -> string[startIndex] == '\''},
-        { id, string, location -> createStringLitPair(id, string, location, '\'')})
+        { string, location -> createStringLitPair(string, location, '\'')})
 
-    private fun createStringLitPair(id: Int, string: String, location: Location, stringChar: Char): Token{
-        return createToken(id, location, string, stringChar)
+    private fun createStringLitPair(string: String, location: Location, stringChar: Char): Token{
+        return createToken(location, string, stringChar)
     }
 
-    private fun createToken(id: Int, location: Location, string: String, stringChar: Char) = try {
-        Token(id, TokenType.STRING_LITERAL, location, curStringLitFromLine(string, location, stringChar))
+    private fun createToken(location: Location, string: String, stringChar: Char) = try {
+        Token(TokenType.STRING_LITERAL, location, curStringLitFromLine(string, location, stringChar), curStringLitFromLine(string, location, stringChar).length)
     } catch (error: MalformedStringException) {
-        Token(id, TokenType.ERROR, location, string.substring(location.column, string.length))
+        Token(TokenType.ERROR, location, string.substring(location.column, string.length), string.length - location.column)
     }
 
 
@@ -141,5 +141,5 @@ class TokenReadersProvider {
 }
 
 typealias TokenVerifierFunc = (line: String, startIndex: Int) -> Boolean
-typealias StringToTokenFunc = (id: Int, line: String, location: Location) -> Token
+typealias StringToTokenFunc = (line: String, location: Location) -> Token
 typealias TokenReader = Pair<TokenVerifierFunc, StringToTokenFunc>

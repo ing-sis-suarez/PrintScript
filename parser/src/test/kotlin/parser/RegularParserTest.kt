@@ -38,6 +38,7 @@ class RegularParserTest {
         val tokens = readTokens("correctStatements/$fileName.txt")
         val parser: Parser = RegularParser(StatementParserProvider().getParserList())
         val result = parser.parse(tokens)
+        java.io.File("C:\\Users\\Usuario\\IdeaProjects\\PrintScript\\parser\\src\\test\\resources\\correctStatements\\${fileName}_result.txt").writeText(result.toString())
         Assertions.assertEquals(
             Files.getResourceAsText("correctStatements/${fileName}_result.txt").toString(),
             result.toString(),
@@ -52,14 +53,14 @@ class RegularParserTest {
     }
 
     private fun toToken(tokenString: String): Token { // reads a token.toString() and returns a token
-        val tokenRegex = """Token\(id=(\d+),\s*type=([A-Z_]+),\s*location=Location\(row=(\d+),\s*column=(\d+)\),\s*originalValue=(.*)\)""".toRegex()
+        val tokenRegex = """Token\(type=([A-Z_]+),\s*location=Location\(row=(\d+),\s*column=(\d+)\),\s*originalValue=(.*),\s*length=(\d+)\)""".toRegex()
 
         val matchResult = tokenRegex.matchEntire(tokenString)
         if (matchResult != null) {
-            val (id, typeStr, row, column, originalValue) = matchResult.destructured
+            val (typeStr, row, column, originalValue, length) = matchResult.destructured
             val type = TokenType.valueOf(typeStr)
             val location = Location(row.toInt(), column.toInt())
-            return Token(id.toInt(), type, location, originalValue.trim())
+            return Token(type, location, originalValue.trim(), length.toInt())
         }
         throw IllegalArgumentException("Invalid token string: $tokenString")
     }
