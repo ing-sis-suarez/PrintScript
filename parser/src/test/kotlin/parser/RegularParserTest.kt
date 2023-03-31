@@ -38,7 +38,6 @@ class RegularParserTest {
         val tokens = readTokens("correctStatements/$fileName.txt")
         val parser: Parser = RegularParser(StatementParserProvider().getParserList())
         val result = parser.parse(tokens)
-        java.io.File("C:\\Users\\Usuario\\IdeaProjects\\PrintScript\\parser\\src\\test\\resources\\correctStatements\\${fileName}_result.txt").writeText(result.toString())
         Assertions.assertEquals(
             Files.getResourceAsText("correctStatements/${fileName}_result.txt").toString(),
             result.toString(),

@@ -157,50 +157,6 @@ class StatementParserProvider {
         return queue
     }
 
-//    fun shuntingYard(tokens: List<String>): Node {
-//        val stack = Stack<String>()
-//        val valueQueue: Queue<String> = LinkedList()
-//
-//        for (token in tokens) {
-//            when {
-//                // TODO si es un string, deberia entrar tambien
-//                // token.toDoubleOrNull() != null -> valueQueue.add(token)
-//                token.matches(Regex("[a-zA-Z][a-zA-Z0-9]*|[0-9.]+")) -> valueQueue.add(token)
-//                token in listOf("+", "-", "*", "/") -> {
-//                    while (!stack.isEmpty() && stack.peek() in listOf("*", "/") && stack.peek() != "(") {
-//                        valueQueue.add(stack.pop()!!)
-//                    }
-//                    stack.push(token)
-//                }
-//                token == "(" -> stack.push(token)
-//                token == ")" -> {
-//                    while (stack.peek() != "(") {
-//                        valueQueue.add(stack.pop()!!)
-//                    }
-//                    stack.pop()
-//                }
-//            }
-//        }
-//
-//        while (!stack.isEmpty()) {
-//            valueQueue.add(stack.pop()!!)
-//        }
-//
-//        val treeStack = Stack<TreeNode>()
-//
-//        for (element in valueQueue) {
-//            if (element.matches(Regex("[a-zA-Z][a-zA-Z0-9]*|[0-9.]+"))) {
-//                treeStack.push(TreeNode(element))
-//            } else {
-//                val right = treeStack.pop()
-//                val left = treeStack.pop()
-//                treeStack.push(TreeNode(element, left, right))
-//            }
-//        }
-//
-//        return treeStack.pop()
-//    }
-
     private fun isRightParenthesis(node: BinaryTokenNode): Boolean {
         return node.token.type == TokenType.RIGHT_PARENTHESIS
     }
