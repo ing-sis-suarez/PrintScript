@@ -10,7 +10,7 @@ class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>): Pars
 
     override fun parse(tokens: List<Token>): List<ASTNode> {
         val cleanedTokens = takeWhiteSpacesAndComments(tokens)
-        val statements = breakIntoStatements(cleanedTokens, TokenType.SEMI_COLON)
+        val statements = breakIntoStatements(cleanedTokens)
         return generateChildren(statements)
     }
 
@@ -33,11 +33,11 @@ class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>): Pars
         return tokens.filter { token -> !(token.type == TokenType.WHITE_SPACE || token.type == TokenType.COMMENT) }
     }
 
-    private fun breakIntoStatements(tokens: List<Token>, separator: TokenType): List<List<Token>>{
+    private fun breakIntoStatements(tokens: List<Token>): List<List<Token>>{
         var lastIndex = 0
         val statements: MutableList<List<Token>> = mutableListOf()
         for (i in tokens.indices){
-            if (tokens[i].type == separator){
+            if (tokens[i].type == TokenType.SEMICOLON){
                 statements.add(tokens.subList(lastIndex, i))
                 lastIndex = i + 1
             }

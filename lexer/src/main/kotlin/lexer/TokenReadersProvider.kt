@@ -27,7 +27,7 @@ class TokenReadersProvider {
         { _, location -> Token(TokenType.DOUBLE_DOTS, location, "", 1)})
     private val semiColonReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, ";")},
-        { _, location -> Token(TokenType.SEMI_COLON, location, "", 1)})
+        { _, location -> Token(TokenType.SEMICOLON, location, "", 1)})
     private val plusReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "+")},
         { _, location -> Token(TokenType.OPERATOR_PLUS, location, "", 1)})
