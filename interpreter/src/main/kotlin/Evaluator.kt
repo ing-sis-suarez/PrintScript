@@ -1,4 +1,5 @@
-import utilities.*
+import ast_node.*
+import token.*
 import java.util.HashMap
 
 class Evaluator {
@@ -10,7 +11,7 @@ class Evaluator {
         variables[declarator.identifier.actualValue()] = Pair(declarator.type.actualValue(), null)
     }
 
-    fun evaluate(declarationInitalization: DeclarationInitalization) {
+    fun evaluate(declarationInitalization: DeclarationInitialization) {
         variables[declarationInitalization.declaration.identifier.actualValue()] = Pair(
             declarationInitalization.declaration.type.actualValue(),
             binaryOperatorReader.evaluate(declarationInitalization.value.tree).toString())
@@ -37,11 +38,10 @@ class Evaluator {
     private fun evaluate(ast: ASTNode) {
         when(ast){
             is Declaration -> evaluate(ast)
-            is DeclarationInitalization -> evaluate(ast)
+            is DeclarationInitialization -> evaluate(ast)
             is Value -> evaluate(ast)
             is Assignation -> evaluate(ast)
             is MethodCall -> evaluate(ast)
-            is Declaration -> evaluate(ast)
         }
     }
 
