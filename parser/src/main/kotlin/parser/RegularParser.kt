@@ -1,11 +1,12 @@
 package parser
 
+import astBuilders.*
 import exceptions.MalformedStructureException
 import ast_node.*
 import token.Token
 import token.TokenType
 
-class RegularParser(private val readerList: List<Pair<SyntaxVerifier, ASTTreeConstructor>>): Parser {
+class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>): Parser {
 
     override fun parse(tokens: List<Token>): List<ASTNode> {
         val cleanedTokens = takeWhiteSpacesAndComments(tokens)
@@ -20,9 +21,9 @@ class RegularParser(private val readerList: List<Pair<SyntaxVerifier, ASTTreeCon
     private fun createChild(
         statement: List<Token>,
     ): ASTNode {
-        for (reader in readerList) {
-            if (reader.first.invoke(statement)) {
-                return reader.second.invoke(statement)
+        for (builder in astBuilderList) {
+            if (builder.isApplicable(statement)) {
+                return builder.buildAST(statement)
             }
         }
         throw MalformedStructureException("Could not recognize syntax")
@@ -42,5 +43,16 @@ class RegularParser(private val readerList: List<Pair<SyntaxVerifier, ASTTreeCon
             }
         }
         return statements
+    }
+
+    companion object{
+        fun createDefaultParser(): RegularParser {
+            return RegularParser(listOf(
+                DeclarationInitializationASTBuilder(),
+                MethodCallASTBuilder(),
+                AssignationASTBuilder(),
+                DeclarationASTBuilder()
+            ))
+        }
     }
 }

@@ -1,0 +1,4 @@
+Token(type=IDENTIFIER, location=Location(row=0, column=0), originalValue=println, length=7)
+Token(type=LEFT_PARENTHESIS, location=Location(row=0, column=7), originalValue=, length=1)
+Token(type=RIGHT_PARENTHESIS, location=Location(row=0, column=14), originalValue=, length=1)
+Token(type=SEMI_COLON, location=Location(row=0, column=15), originalValue=, length=1)
