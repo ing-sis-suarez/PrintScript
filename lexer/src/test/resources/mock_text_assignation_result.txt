@@ -8,4 +8,4 @@ Token(type=WHITE_SPACE, location=Location(row=0, column=18), originalValue=, len
 Token(type=ASIGNATION_EQUALS, location=Location(row=0, column=19), originalValue=, length=1)
 Token(type=WHITE_SPACE, location=Location(row=0, column=20), originalValue=, length=1)
 Token(type=STRING_LITERAL, location=Location(row=0, column=21), originalValue="hello", length=7)
-Token(type=SEMI_COLON, location=Location(row=0, column=28), originalValue=, length=1)
+Token(type=SEMICOLON, location=Location(row=0, column=28), originalValue=, length=1)

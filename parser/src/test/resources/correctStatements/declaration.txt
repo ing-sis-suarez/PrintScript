@@ -4,4 +4,4 @@ Token(type=IDENTIFIER, location=Location(row=0, column=4), originalValue=var, le
 Token(type=DOUBLE_DOTS, location=Location(row=0, column=7), originalValue=, length=1)
 Token(type=WHITE_SPACE, location=Location(row=0, column=8), originalValue=, length=1)
 Token(type=NUMBER_KEYWORD, location=Location(row=0, column=9), originalValue=, length=6)
-Token(type=SEMI_COLON, location=Location(row=0, column=15), originalValue=, length=1)
+Token(type=SEMICOLON, location=Location(row=0, column=15), originalValue=, length=1)
