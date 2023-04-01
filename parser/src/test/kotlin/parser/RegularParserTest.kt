@@ -10,63 +10,96 @@ import token.Token
 import token.TokenType
 
 class RegularParserTest {
-    
+
     @Test
-    fun declarationInitializationTest(){
+    fun declarationInitializationTest() {
         runCorrectResultTest("declarationInitialization")
     }
 
     @Test
-    fun declarationTest(){
+    fun declarationTest() {
         runCorrectResultTest("declaration")
     }
 
     @Test
-    fun methodCallTest(){
+    fun methodCallTest() {
         runCorrectResultTest("methodCall")
     }
 
     @Test
-    fun assignationTest(){
+    fun assignationTest() {
         runCorrectResultTest("assignation")
     }
 
     @Test
-    fun operationTest(){
+    fun operationTest() {
         runCorrectResultTest("operation")
     }
 
     @Test
-    fun twoOperatorsTogetherTest(){
-        runIncorrectResultTest("two_operator_together",UnexpectedTokenException::class.java, "Unexpected token at: 0, 24")
+    fun twoOperatorsTogetherTest() {
+        runIncorrectResultTest(
+            "two_operator_together",
+            UnexpectedTokenException::class.java,
+            "Unexpected token at: 0, 24"
+        )
     }
 
     @Test
-    fun unclosedParenthesisTest(){
-        runIncorrectResultTest("unclosed_parenthesis", UnexpectedTokenException::class.java, "Unclosed parenthesis at: 0")
-        runIncorrectResultTest("extra_right_parenthesis", UnexpectedTokenException::class.java, "Unexpected token at: 0, 22")
+    fun unclosedParenthesisTest() {
+        runIncorrectResultTest(
+            "unclosed_parenthesis",
+            UnexpectedTokenException::class.java,
+            "Unclosed parenthesis at: 0"
+        )
+        runIncorrectResultTest(
+            "extra_right_parenthesis",
+            UnexpectedTokenException::class.java,
+            "Unexpected token at: 0, 22"
+        )
     }
 
     @Test
-    fun invalidDeclarationInitializationSyntaxTest(){
-        runIncorrectResultTest("invalid_declarationInitialization_syntax", UnexpectedTokenException::class.java, "Unexpected token at: 0, 10")
+    fun invalidDeclarationInitializationSyntaxTest() {
+        runIncorrectResultTest(
+            "invalid_declarationInitialization_syntax",
+            UnexpectedTokenException::class.java,
+            "Unexpected token at: 0, 10"
+        )
     }
 
     @Test
-    fun invalidDeclarationSyntaxTest(){
-        runIncorrectResultTest("invalid_declaration_syntax", UnexpectedTokenException::class.java, "Unexpected token at: 0, 10")
+    fun invalidDeclarationSyntaxTest() {
+        runIncorrectResultTest(
+            "invalid_declaration_syntax",
+            UnexpectedTokenException::class.java,
+            "Unexpected token at: 0, 10"
+        )
     }
 
     @Test
-    fun invalidAssignationSyntaxTest(){
-        runIncorrectResultTest("invalid_assignation_syntax", MalformedStructureException::class.java, "Could not recognize syntax")
+    fun invalidAssignationSyntaxTest() {
+        runIncorrectResultTest(
+            "invalid_assignation_syntax",
+            MalformedStructureException::class.java,
+            "Could not recognize syntax"
+        )
     }
 
     @Test
-    fun invalidMethodCallSyntaxTest(){
-        runIncorrectResultTest("invalid_methodCall_syntax", MalformedStructureException::class.java, "Missing arguments at line: 0")
+    fun invalidMethodCallSyntaxTest() {
+        runIncorrectResultTest(
+            "invalid_methodCall_syntax",
+            MalformedStructureException::class.java,
+            "Missing arguments at line: 0"
+        )
     }
-    private fun <T: Exception> runIncorrectResultTest(fileName: String, exceptionType: Class<T>, errorMesaage: String) {
+
+    private fun <T : Exception> runIncorrectResultTest(
+        fileName: String,
+        exceptionType: Class<T>,
+        errorMesaage: String
+    ) {
         val tokens = readTokens("incorrectStatements/$fileName.txt")
         val parser: Parser = RegularParser.createDefaultParser()
         val exception = Assertions.assertThrows(exceptionType) {
@@ -93,7 +126,8 @@ class RegularParserTest {
     }
 
     private fun toToken(tokenString: String): Token { // reads a token.toString() and returns a token
-        val tokenRegex = """Token\(type=([A-Z_]+),\s*location=Location\(row=(\d+),\s*column=(\d+)\),\s*originalValue=(.*),\s*length=(\d+)\)""".toRegex()
+        val tokenRegex =
+            """Token\(type=([A-Z_]+),\s*location=Location\(row=(\d+),\s*column=(\d+)\),\s*originalValue=(.*),\s*length=(\d+)\)""".toRegex()
 
         val matchResult = tokenRegex.matchEntire(tokenString)
         if (matchResult != null) {

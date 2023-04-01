@@ -1,12 +1,11 @@
 package astBuilders
 
-import astBuilders.ASTBuilder.Companion.checkEquals
+import astBuilders.ASTBuilder.Companion.checkTokenType
 import ast_node.Assignation
-import astBuilders.ASTBuilder.Companion.checkIdentifier
 import token.Token
 import token.TokenType
 
-class AssignationASTBuilder: ASTBuilder<Assignation> {
+class AssignationASTBuilder : ASTBuilder<Assignation> {
 
     private val valueBuilder = ValueASTBuilder()
     override fun isApplicable(statement: List<Token>): Boolean {
@@ -21,7 +20,7 @@ class AssignationASTBuilder: ASTBuilder<Assignation> {
     }
 
     private fun checkAssignation(statement: List<Token>) {
-        checkIdentifier(statement[0])
-        checkEquals(statement[1])
+        checkTokenType(statement[0], "Identifier", listOf(TokenType.IDENTIFIER))
+        checkTokenType(statement[1], "=", listOf(TokenType.ASIGNATION_EQUALS))
     }
 }

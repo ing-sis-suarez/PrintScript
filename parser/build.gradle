@@ -16,7 +16,7 @@ dependencies {
     implementation project(':utilities')
 }
 
-test{
+test {
     description('Runs parser tests.')
     group('verification')
 

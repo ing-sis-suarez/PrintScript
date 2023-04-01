@@ -8,7 +8,7 @@ import token.Token
 import token.TokenType
 import java.util.*
 
-class ValueASTBuilder: ASTBuilder<Value> {
+class ValueASTBuilder : ASTBuilder<Value> {
     override fun isApplicable(statement: List<Token>): Boolean {
         return statement.isNotEmpty()
     }
@@ -20,7 +20,7 @@ class ValueASTBuilder: ASTBuilder<Value> {
         return Value(createTree(queue))
     }
 
-    private fun checkValueNode(statement: List<Token>){
+    private fun checkValueNode(statement: List<Token>) {
         var state = SyntaxState.START
         checkcloseParenthesis(statement)
 
@@ -32,27 +32,32 @@ class ValueASTBuilder: ASTBuilder<Value> {
                     TokenType.OPERATOR_MINUS, TokenType.OPERATOR_PLUS -> SyntaxState.MINUS_OPERATOR_OR_OPERAND
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
                 }
+
                 SyntaxState.OPERAND -> when (token.type) {
                     TokenType.OPERATOR_PLUS, TokenType.OPERATOR_MINUS, TokenType.OPERATOR_TIMES, TokenType.OPERATOR_DIVIDE -> SyntaxState.OPERATOR
                     TokenType.RIGHT_PARENTHESIS -> SyntaxState.RIGHT_PARENTHESIS
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
                 }
+
                 SyntaxState.LEFT_PARENTHESIS -> when (token.type) {
                     TokenType.NUMBER_LITERAL, TokenType.IDENTIFIER, TokenType.STRING_LITERAL -> SyntaxState.OPERAND
                     TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
                     TokenType.OPERATOR_MINUS -> SyntaxState.MINUS_OPERATOR_OR_OPERAND
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
                 }
+
                 SyntaxState.MINUS_OPERATOR_OR_OPERAND -> when (token.type) {
                     TokenType.NUMBER_LITERAL, TokenType.IDENTIFIER, TokenType.STRING_LITERAL -> SyntaxState.OPERAND
                     TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
                 }
+
                 SyntaxState.OPERATOR -> when (token.type) {
                     TokenType.NUMBER_LITERAL, TokenType.IDENTIFIER, TokenType.STRING_LITERAL -> SyntaxState.OPERAND
                     TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
                 }
+
                 SyntaxState.RIGHT_PARENTHESIS -> when (token.type) {
                     TokenType.OPERATOR_PLUS, TokenType.OPERATOR_MINUS, TokenType.OPERATOR_TIMES, TokenType.OPERATOR_DIVIDE -> SyntaxState.OPERATOR
                     TokenType.RIGHT_PARENTHESIS -> SyntaxState.RIGHT_PARENTHESIS
@@ -136,7 +141,7 @@ class ValueASTBuilder: ASTBuilder<Value> {
 
     private fun createTree(queue: Queue<BinaryTokenNode>): BinaryTokenNode {
         val stack: Stack<BinaryTokenNode> = Stack()
-        while (queue.size != 0){
+        while (queue.size != 0) {
             val node = queue.remove()
             if (isValue(node)) stack.push(node)
             else stack.push(createOperationTree(node, stack))
@@ -147,7 +152,7 @@ class ValueASTBuilder: ASTBuilder<Value> {
     private fun createOperationTree(
         node: BinaryTokenNode,
         stack: Stack<BinaryTokenNode>
-    ): BinaryTokenNode{
+    ): BinaryTokenNode {
         val right = stack.pop()
         return BinaryTokenNode(
             node.token,

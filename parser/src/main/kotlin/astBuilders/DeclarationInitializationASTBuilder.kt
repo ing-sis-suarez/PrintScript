@@ -4,7 +4,7 @@ import ast_node.DeclarationInitialization
 import token.Token
 import token.TokenType
 
-class DeclarationInitializationASTBuilder: ASTBuilder<DeclarationInitialization> {
+class DeclarationInitializationASTBuilder : ASTBuilder<DeclarationInitialization> {
 
     private val declarationBuilder = DeclarationASTBuilder()
     private val valueBuilder = ValueASTBuilder()

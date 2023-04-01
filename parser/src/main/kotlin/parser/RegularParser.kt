@@ -1,12 +1,12 @@
 package parser
 
 import astBuilders.*
+import ast_node.ASTNode
 import exceptions.MalformedStructureException
-import ast_node.*
 import token.Token
 import token.TokenType
 
-class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>): Parser {
+class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>) : Parser {
 
     override fun parse(tokens: List<Token>): List<ASTNode> {
         val cleanedTokens = takeWhiteSpacesAndComments(tokens)
@@ -15,7 +15,7 @@ class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>): Pars
     }
 
     private fun generateChildren(statements: List<List<Token>>): List<ASTNode> {
-        return statements.map {statement -> createChild(statement)}
+        return statements.map { statement -> createChild(statement) }
     }
 
     private fun createChild(
@@ -33,11 +33,11 @@ class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>): Pars
         return tokens.filter { token -> !(token.type == TokenType.WHITE_SPACE || token.type == TokenType.COMMENT) }
     }
 
-    private fun breakIntoStatements(tokens: List<Token>): List<List<Token>>{
+    private fun breakIntoStatements(tokens: List<Token>): List<List<Token>> {
         var lastIndex = 0
         val statements: MutableList<List<Token>> = mutableListOf()
-        for (i in tokens.indices){
-            if (tokens[i].type == TokenType.SEMICOLON){
+        for (i in tokens.indices) {
+            if (tokens[i].type == TokenType.SEMICOLON) {
                 statements.add(tokens.subList(lastIndex, i))
                 lastIndex = i + 1
             }
@@ -45,14 +45,16 @@ class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>): Pars
         return statements
     }
 
-    companion object{
+    companion object {
         fun createDefaultParser(): RegularParser {
-            return RegularParser(listOf(
-                DeclarationInitializationASTBuilder(),
-                MethodCallASTBuilder(),
-                AssignationASTBuilder(),
-                DeclarationASTBuilder()
-            ))
+            return RegularParser(
+                listOf(
+                    DeclarationInitializationASTBuilder(),
+                    MethodCallASTBuilder(),
+                    AssignationASTBuilder(),
+                    DeclarationASTBuilder()
+                )
+            )
         }
     }
 }
