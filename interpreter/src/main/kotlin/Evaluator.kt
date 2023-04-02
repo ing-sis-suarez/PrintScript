@@ -7,26 +7,26 @@ class Evaluator {
     val binaryOperatorReader: BinaryOperatorReader = BinaryOperatorReader(variables)
 
 
-    fun evaluate(declarator: Declaration) {
+    fun evaluateDeclaration(declarator: Declaration) {
         variables[declarator.identifier.actualValue()] = Pair(declarator.type.actualValue(), null)
     }
 
-    fun evaluate(declarationInitalization: DeclarationInitialization) {
+    fun evaluateDeclarationInitalization(declarationInitalization: DeclarationInitialization) {
         variables[declarationInitalization.declaration.identifier.actualValue()] = Pair(
             declarationInitalization.declaration.type.actualValue(),
-            binaryOperatorReader.evaluate(declarationInitalization.value.tree).toString())
+            binaryOperatorReader.evaluate(declarationInitalization.value.tree).actualValue())
     }
 
-    fun evaluate(assignation: Assignation) {
+    fun evaluateAssignation(assignation: Assignation) {
         if (variables.containsKey(assignation.identifier.actualValue())){
             variables.replace(assignation.identifier.actualValue(), Pair(
                 variables.get(assignation.identifier.actualValue())!!.first,
-                binaryOperatorReader.evaluate(assignation.value.tree).toString()))
+                binaryOperatorReader.evaluate(assignation.value.tree).actualValue()))
         }
     }
 
-    fun evaluate(methodCall: MethodCall){
-        println(binaryOperatorReader.evaluate(methodCall.arguments.tree))
+    fun evaluateMethodCall(methodCall: MethodCall){
+        println(binaryOperatorReader.evaluate(methodCall.arguments.tree).actualValue())
     }
 
     fun executionReader(execution: Execution){
@@ -37,11 +37,10 @@ class Evaluator {
 
     private fun evaluate(ast: ASTNode) {
         when(ast){
-            is Declaration -> evaluate(ast)
-            is DeclarationInitialization -> evaluate(ast)
-            is Value -> evaluate(ast)
-            is Assignation -> evaluate(ast)
-            is MethodCall -> evaluate(ast)
+            is Declaration -> evaluateDeclaration(ast)
+            is DeclarationInitialization -> evaluateDeclarationInitalization(ast)
+            is Assignation -> evaluateAssignation(ast)
+            is MethodCall -> evaluateMethodCall(ast)
         }
     }
 
