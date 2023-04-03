@@ -1,8 +1,8 @@
 package astBuilders
 
+import ast.node.Declaration
 import astBuilders.ASTBuilder.Companion.checkLength
 import astBuilders.ASTBuilder.Companion.checkTokenType
-import ast_node.Declaration
 import token.Token
 import token.TokenType
 
@@ -23,6 +23,4 @@ class DeclarationASTBuilder : ASTBuilder<Declaration> {
         checkTokenType(statement[2], "Double dots", listOf(TokenType.DOUBLE_DOTS))
         checkTokenType(statement[3], "Type", listOf(TokenType.NUMBER_KEYWORD, TokenType.STRING_KEYWORD))
     }
-
-
 }

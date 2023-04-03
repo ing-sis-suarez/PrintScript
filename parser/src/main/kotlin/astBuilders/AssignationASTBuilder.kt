@@ -1,7 +1,7 @@
 package astBuilders
 
+import ast.node.Assignation
 import astBuilders.ASTBuilder.Companion.checkTokenType
-import ast_node.Assignation
 import token.Token
 import token.TokenType
 

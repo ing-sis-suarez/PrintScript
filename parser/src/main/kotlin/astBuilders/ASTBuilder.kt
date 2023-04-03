@@ -1,12 +1,12 @@
 package astBuilders
 
-import ast_node.ASTNode
+import ast.node.ASTNode
 import exceptions.MalformedStructureException
 import exceptions.UnexpectedTokenException
 import token.Token
 import token.TokenType
 
-interface ASTBuilder<out T: ASTNode> {
+interface ASTBuilder<out T : ASTNode> {
 
     fun isApplicable(statement: List<Token>): Boolean
 
@@ -19,8 +19,9 @@ interface ASTBuilder<out T: ASTNode> {
         }
 
         fun checkTokenType(token: Token, s: String, types: List<TokenType>) {
-            if (!types.contains(token.type))
+            if (!types.contains(token.type)) {
                 throw UnexpectedTokenException("$s expected at: ${token.location.row}, ${token.location.column}")
+            }
         }
 
         fun checkMinLength(statement: List<Token>) {

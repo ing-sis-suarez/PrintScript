@@ -1,7 +1,7 @@
 package astBuilders
 
-import ast_node.BinaryTokenNode
-import ast_node.Value
+import ast.node.BinaryTokenNode
+import ast.node.Value
 import exceptions.UnexpectedTokenException
 import token.Location
 import token.Token
@@ -75,7 +75,7 @@ class ValueASTBuilder : ASTBuilder<Value> {
         OPERATOR,
         LEFT_PARENTHESIS,
         OPERAND,
-        RIGHT_PARENTHESIS,
+        RIGHT_PARENTHESIS
     }
 
     private fun checkcloseParenthesis(statement: List<Token>) {
@@ -92,9 +92,11 @@ class ValueASTBuilder : ASTBuilder<Value> {
         val stack: Stack<BinaryTokenNode> = Stack()
         val queue: Queue<BinaryTokenNode> = LinkedList()
         for (node in nodeList) {
-            if (isValue(node)) queue.add(node)
-            else if (isLeftParenthesis(node)) stack.push(node)
-            else if (isOperator(node)) {
+            if (isValue(node)) {
+                queue.add(node)
+            } else if (isLeftParenthesis(node)) {
+                stack.push(node)
+            } else if (isOperator(node)) {
                 while (!stack.empty() && hasLessPrecedence(node, stack.peek())) {
                     queue.add(stack.pop())
                 }
@@ -121,8 +123,8 @@ class ValueASTBuilder : ASTBuilder<Value> {
     }
 
     private fun isOperator(node: BinaryTokenNode): Boolean {
-        return node.token.type == TokenType.OPERATOR_PLUS || node.token.type == TokenType.OPERATOR_DIVIDE
-                || node.token.type == TokenType.OPERATOR_MINUS || node.token.type == TokenType.OPERATOR_TIMES
+        return node.token.type == TokenType.OPERATOR_PLUS || node.token.type == TokenType.OPERATOR_DIVIDE ||
+            node.token.type == TokenType.OPERATOR_MINUS || node.token.type == TokenType.OPERATOR_TIMES
     }
 
     private fun hasLessPrecedence(
@@ -135,16 +137,19 @@ class ValueASTBuilder : ASTBuilder<Value> {
             TokenType.OPERATOR_DIVIDE,
             TokenType.OPERATOR_TIMES
         )
-        return precedence.indexOf(node.token.type) < precedence.indexOf(otherNode.token.type)
-                && !isLeftParenthesis(otherNode)
+        return precedence.indexOf(node.token.type) < precedence.indexOf(otherNode.token.type) &&
+            !isLeftParenthesis(otherNode)
     }
 
     private fun createTree(queue: Queue<BinaryTokenNode>): BinaryTokenNode {
         val stack: Stack<BinaryTokenNode> = Stack()
         while (queue.size != 0) {
             val node = queue.remove()
-            if (isValue(node)) stack.push(node)
-            else stack.push(createOperationTree(node, stack))
+            if (isValue(node)) {
+                stack.push(node)
+            } else {
+                stack.push(createOperationTree(node, stack))
+            }
         }
         return stack.pop()
     }
@@ -164,5 +169,4 @@ class ValueASTBuilder : ASTBuilder<Value> {
     private fun createZeroNode(location: Location): BinaryTokenNode {
         return BinaryTokenNode(Token(TokenType.NUMBER_LITERAL, location, "0", 1), null, null)
     }
-
 }
