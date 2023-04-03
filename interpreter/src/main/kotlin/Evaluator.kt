@@ -1,5 +1,6 @@
 import ast_node.*
 import token.*
+import java.lang.IllegalArgumentException
 import java.util.HashMap
 
 class Evaluator {
@@ -12,21 +13,29 @@ class Evaluator {
     }
 
     fun evaluateDeclarationInitalization(declarationInitalization: DeclarationInitialization) {
+        if (declarationInitalization.declaration.type.actualValue().equals(
+                binaryOperatorReader.getValueType(declarationInitalization.value.tree))){
+            throw IllegalArgumentException("")
+        }
         variables[declarationInitalization.declaration.identifier.actualValue()] = Pair(
             declarationInitalization.declaration.type.actualValue(),
-            binaryOperatorReader.evaluate(declarationInitalization.value.tree).actualValue())
+            binaryOperatorReader.evaluate(declarationInitalization.value.tree).toString())
     }
 
-    fun evaluateAssignation(assignation: Assignation) {
+    private fun evaluateAssignation(assignation: Assignation) {
         if (variables.containsKey(assignation.identifier.actualValue())){
+            if (variables.get(assignation.identifier.actualValue())!!.first.equals(
+                    binaryOperatorReader.getValueType(assignation.value.tree))){
+                throw IllegalArgumentException("")
+            }
             variables.replace(assignation.identifier.actualValue(), Pair(
                 variables.get(assignation.identifier.actualValue())!!.first,
-                binaryOperatorReader.evaluate(assignation.value.tree).actualValue()))
+                binaryOperatorReader.evaluate(assignation.value.tree).toString()))
         }
     }
 
-    fun evaluateMethodCall(methodCall: MethodCall){
-        println(binaryOperatorReader.evaluate(methodCall.arguments.tree).actualValue())
+    private fun evaluateMethodCall(methodCall: MethodCall){
+        println(binaryOperatorReader.evaluate(methodCall.arguments.tree).toString())
     }
 
     fun executionReader(execution: Execution){
