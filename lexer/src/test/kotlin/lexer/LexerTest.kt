@@ -9,7 +9,6 @@ class LexerTest {
     @Test
     fun testAsignSyntax() {
         val evaluatedText = printScriptEvaluateText("mock_text_assignation.txt")
-        println(evaluatedText.toString())
         Assertions.assertEquals(Files.getResourceAsText("mock_text_assignation_result.txt"), lexerResultsToString(evaluatedText))
     }
 
