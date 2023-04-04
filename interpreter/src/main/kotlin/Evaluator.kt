@@ -15,7 +15,7 @@ class Evaluator {
     fun evaluateDeclarationInitalization(declarationInitalization: DeclarationInitialization) {
         if (!declarationInitalization.declaration.type.actualValue().equals(
                 binaryOperatorReader.getValueType(declarationInitalization.value.tree))){
-            throw IllegalArgumentException("")
+            throw IlligalTypeException("Invalid Assignation in line ${declarationInitalization.declaration.identifier.location.row} ${declarationInitalization.declaration.identifier.location.column}")
         }
         variables[declarationInitalization.declaration.identifier.actualValue()] = Pair(
             declarationInitalization.declaration.type.actualValue(),
@@ -26,11 +26,13 @@ class Evaluator {
         if (variables.containsKey(assignation.identifier.actualValue())){
             if (!variables.get(assignation.identifier.actualValue())!!.first.equals(
                     binaryOperatorReader.getValueType(assignation.value.tree))){
-                throw IllegalArgumentException("")
+                throw IlligalTypeException("Invalid Assignation in line ${assignation.identifier.location.row} ${assignation.identifier.location.column}")
             }
             variables.replace(assignation.identifier.actualValue(), Pair(
                 variables.get(assignation.identifier.actualValue())!!.first,
                 binaryOperatorReader.evaluate(assignation.value.tree).toString()))
+        }else{
+            throw VariableDontExistException("Variable ${assignation.identifier.actualValue()} not found in line ${assignation.identifier.location.row} ${assignation.identifier.location.column}")
         }
     }
 

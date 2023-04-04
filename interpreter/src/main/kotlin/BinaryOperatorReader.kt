@@ -31,27 +31,27 @@ class BinaryOperatorReader(val variables: MutableMap<String, Pair<String, String
         val leftValue = evaluate(binary.left!!)
         val rightValue = evaluate(binary.right!!)
         return when {
-            leftValue is String || rightValue is String -> operationString(leftValue.toString(), rightValue.toString(), binary.token.type)
-            leftValue is Int && rightValue is Int -> operation(leftValue, rightValue, binary.token.type)
+            leftValue is String || rightValue is String -> operationString(leftValue.toString(), rightValue.toString(), binary.token.type, binary.token.location)
+            leftValue is Int && rightValue is Int -> operation(leftValue, rightValue, binary.token.type, binary.token.location)
             else -> throw IllegalArgumentException("Tipos incompatibles: $leftValue, $rightValue")
         }
     }
 
-    fun operation(left: Int, right: Int, op: TokenType) : Int{
+    fun operation(left: Int, right: Int, op: TokenType, location: Location) : Int{
         return when{
             op == TokenType.OPERATOR_PLUS -> left + right
             op == TokenType.OPERATOR_MINUS -> left - right
             op == TokenType.OPERATOR_TIMES -> left * right
             op == TokenType.OPERATOR_DIVIDE -> left / right
 
-            else -> throw IllegalArgumentException("Error")
+            else -> throw InvalidTypeException("${op} is invalid with Number operations in line ${location.row} ${location.column}")
         }
     }
 
-    fun operationString(left: String, right: String, op: TokenType) : String{
+    fun operationString(left: String, right: String, op: TokenType, location: Location) : String{
         return when{
             op == TokenType.OPERATOR_PLUS -> left + right
-            else -> throw IllegalArgumentException("Error")
+            else -> throw InvalidTypeException("${op} is invalid with Number operations in line ${location.row} ${location.column}")
         }
     }
 
