@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "guthub-actions" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "github-actions" ]
 
 permissions:
   contents: read
