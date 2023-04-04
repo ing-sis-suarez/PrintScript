@@ -1,12 +1,12 @@
-package Analizers
+package Analyzers
 
-import Analizer
+import Analyzer
 import ast_node.ASTNode
 import ast_node.Declaration
 import ast_node.DeclarationInitialization
 
-class SnakeCaseFormat: Analizer {
-    override fun analize(astNode: ASTNode) {
+class SnakeCaseFormat: Analyzer {
+    override fun analyze(astNode: ASTNode) {
         when(astNode){
             is Declaration -> analize(astNode.identifier.actualValue())
             is DeclarationInitialization -> analize(astNode.declaration.identifier.actualValue())

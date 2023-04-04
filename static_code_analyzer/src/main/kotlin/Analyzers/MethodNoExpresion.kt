@@ -1,14 +1,14 @@
-package Analizers
+package Analyzers
 
-import Analizer
+import Analyzer
 import ast_node.ASTNode
 import ast_node.MethodCall
 import ast_node.Value
 
-class MethodNoExpresion: Analizer {
-    override fun analize(astNode: ASTNode) {
+class MethodNoExpresion: Analyzer {
+    override fun analyze(astNode: ASTNode) {
         when{
-            astNode is MethodCall -> analize(astNode)
+            astNode is MethodCall -> analyze(astNode)
         }
     }
 
