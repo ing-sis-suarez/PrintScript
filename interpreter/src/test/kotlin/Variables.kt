@@ -13,7 +13,7 @@ class Variables {
 
     fun variable3(): MutableMap<String, Pair<String, String?>> {
         val variables: MutableMap<String, Pair<String,String?>> = HashMap()
-        variables.put("val1", Pair("String", "1010"))
+        variables.put("val1", Pair("String", "110"))
         return variables
     }
 }

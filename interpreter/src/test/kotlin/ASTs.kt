@@ -7,7 +7,7 @@ import java.io.FileWriter
 class ASTs {
 
     public fun ast1(): List<ASTNode>{
-        val ast: ArrayList<ASTNode> = arrayListOf(Declaration(Token(1, TokenType.IDENTIFIER, Location(0,1), "val1"), Token(1, TokenType.NUMBER_KEYWORD, Location(0,2), "Number")))
+        val ast: List<ASTNode> = arrayListOf(Declaration(Token(1, TokenType.IDENTIFIER, Location(0,1), "val1"), Token(1, TokenType.NUMBER_KEYWORD, Location(0,2), "Number")))
         return ast
     }
 
@@ -32,13 +32,17 @@ class ASTs {
     }
 
     fun ast4(): List<ASTNode>{
-        val ast: ArrayList<ASTNode> = arrayListOf(Declaration(Token(1, TokenType.IDENTIFIER, Location(0,1), "val1"),
-                Token(1, TokenType.STRING_KEYWORD, Location(0,2), "String")),
-                Assignation(Token(1, TokenType.IDENTIFIER, Location(1,0), "val1"),
+        val ast: ArrayList<ASTNode> = arrayListOf(
+            Declaration(Token(1, TokenType.IDENTIFIER, Location(0,1), "val1"),
+                Token(1, TokenType.STRING_KEYWORD, Location(0,2), "")),
+            Assignation(
+                Token(1, TokenType.IDENTIFIER, Location(1,0), "val1"),
                 Value(BinaryTokenNode(
-                Token(1, TokenType.OPERATOR_PLUS, Location(0,4), "+"),
-                BinaryTokenNode(Token(1, TokenType.STRING_LITERAL, Location(0,3), "10"), null, null),
-                BinaryTokenNode(Token(1, TokenType.STRING_LITERAL, Location(0,5), "10"), null, null)))))
+                        Token(1, TokenType.OPERATOR_PLUS, Location(0,4), "+"),
+                        BinaryTokenNode(Token(1, TokenType.OPERATOR_DIVIDE, Location(0,3), "10"),
+                            BinaryTokenNode(Token(1, TokenType.NUMBER_LITERAL, Location(0,5), "10"), null, null),
+                            BinaryTokenNode(Token(1, TokenType.NUMBER_LITERAL, Location(0,5), "10"), null, null),),
+                        BinaryTokenNode(Token(1, TokenType.STRING_LITERAL, Location(0,5), "10"), null, null)))))
         return ast
     }
 

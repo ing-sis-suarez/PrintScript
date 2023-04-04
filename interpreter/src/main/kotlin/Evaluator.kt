@@ -9,11 +9,11 @@ class Evaluator {
 
 
     fun evaluateDeclaration(declarator: Declaration) {
-        variables[declarator.identifier.actualValue()] = Pair(declarator.type.actualValue(), null)
+        variables[declarator.identifier.actualValue()] = Pair(getStringType(declarator.type.type), null)
     }
 
     fun evaluateDeclarationInitalization(declarationInitalization: DeclarationInitialization) {
-        if (!declarationInitalization.declaration.type.actualValue().equals(
+        if (!getStringType(declarationInitalization.declaration.type.type).equals(
                 binaryOperatorReader.getValueType(declarationInitalization.value.tree))){
             throw IlligalTypeException("Invalid Assignation in line ${declarationInitalization.declaration.identifier.location.row} ${declarationInitalization.declaration.identifier.location.column}")
         }
@@ -53,7 +53,18 @@ class Evaluator {
             is Assignation -> evaluateAssignation(ast)
             is MethodCall -> evaluateMethodCall(ast)
         }
+
+
     }
 
+    private fun getStringType(tokenType: TokenType): String {
+        return when{
+            tokenType == TokenType.NUMBER_KEYWORD -> "Number"
+            tokenType == TokenType.STRING_KEYWORD -> "String"
+            else -> {
+                return ""
+            }
+        }
+    }
 
 }
