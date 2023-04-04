@@ -1,4 +1,6 @@
-import ast_node.ASTNode
+package parser
+
+import ast.node.ASTNode
 import token.Token
 
 interface Parser {
