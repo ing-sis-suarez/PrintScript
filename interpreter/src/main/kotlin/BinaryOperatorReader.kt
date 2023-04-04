@@ -8,8 +8,8 @@ class BinaryOperatorReader(val variables: MutableMap<String, Pair<String, String
     }
     fun getValue(token: Token) : Any{
          return when{
-            token.type == TokenType.NUMBER_KEYWORD -> token.originalValue.toInt()
-            token.type == TokenType.STRING_KEYWORD -> token.originalValue
+            token.type == TokenType.NUMBER_LITERAL -> token.originalValue.toInt()
+            token.type == TokenType.STRING_LITERAL -> token.originalValue
             token.type == TokenType.IDENTIFIER ->{
                 if (variables.containsKey(token.actualValue()) && variables.get(token.actualValue())!!.second != null){
                     return if (variables.get(token.actualValue())!!.first.equals("String")){
@@ -59,7 +59,7 @@ class BinaryOperatorReader(val variables: MutableMap<String, Pair<String, String
         var valueType: String = "Number"
         fun dfs(value: BinaryTokenNode){
             if (isLeaf(value)){
-                if (value.token.type != TokenType.NUMBER_KEYWORD){
+                if (value.token.type != TokenType.NUMBER_LITERAL){
                     valueType = "String"
                     return
                 }

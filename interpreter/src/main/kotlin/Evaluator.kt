@@ -13,7 +13,7 @@ class Evaluator {
     }
 
     fun evaluateDeclarationInitalization(declarationInitalization: DeclarationInitialization) {
-        if (declarationInitalization.declaration.type.actualValue().equals(
+        if (!declarationInitalization.declaration.type.actualValue().equals(
                 binaryOperatorReader.getValueType(declarationInitalization.value.tree))){
             throw IllegalArgumentException("")
         }
@@ -24,7 +24,7 @@ class Evaluator {
 
     private fun evaluateAssignation(assignation: Assignation) {
         if (variables.containsKey(assignation.identifier.actualValue())){
-            if (variables.get(assignation.identifier.actualValue())!!.first.equals(
+            if (!variables.get(assignation.identifier.actualValue())!!.first.equals(
                     binaryOperatorReader.getValueType(assignation.value.tree))){
                 throw IllegalArgumentException("")
             }
@@ -38,8 +38,8 @@ class Evaluator {
         println(binaryOperatorReader.evaluate(methodCall.arguments.tree).toString())
     }
 
-    fun executionReader(execution: Execution){
-        for (ast in execution.trees){
+    fun executionReader(execution: List<ASTNode>){
+        for (ast in execution){
             evaluate(ast)
         }
     }
