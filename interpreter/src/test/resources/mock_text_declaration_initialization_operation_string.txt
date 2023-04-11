@@ -1,0 +1,1 @@
+let people: string = "algo " + (2 * 5);

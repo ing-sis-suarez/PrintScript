@@ -6,20 +6,20 @@ class Evaluator {
     val variables: MutableMap<String, Pair<String, String?>> = HashMap()
     private val binaryOperatorReader: BinaryOperatorReader = BinaryOperatorReader(variables)
     private fun evaluateDeclaration(declarator: Declaration) {
-        variables[declarator.identifier.actualValue()] = Pair(getStringType(declarator.type.type), null)
+        variables[declarator.identifier.actualValue()] = Pair(getStringType(declarator.type), null)
     }
     private fun evaluateDeclarationInitalization(declarationInitalization: DeclarationInitialization) {
-        if (getStringType(declarationInitalization.declaration.type.type) != binaryOperatorReader.getValueType(declarationInitalization.value.tree)) {
+        if (getStringType(declarationInitalization.declaration.type) != binaryOperatorReader.getValueType(declarationInitalization.value.tree, variables)) {
             throw IlligalTypeException("Invalid Assignation in line ${declarationInitalization.declaration.identifier.location.row} ${declarationInitalization.declaration.identifier.location.column}")
         }
         variables[declarationInitalization.declaration.identifier.actualValue()] = Pair(
-            declarationInitalization.declaration.type.actualValue(),
+            getStringType(declarationInitalization.declaration.type),
             binaryOperatorReader.evaluate(declarationInitalization.value.tree).toString()
         )
     }
     private fun evaluateAssignation(assignation: Assignation) {
         if (variables.containsKey(assignation.identifier.actualValue())) {
-            if (variables[assignation.identifier.actualValue()]!!.first != binaryOperatorReader.getValueType(assignation.value.tree)) {
+            if (variables[assignation.identifier.actualValue()]!!.first != binaryOperatorReader.getValueType(assignation.value.tree, variables)) {
                 throw IlligalTypeException("Invalid Assignation in line ${assignation.identifier.location.row} ${assignation.identifier.location.column}")
             }
             variables.replace(
@@ -49,10 +49,11 @@ class Evaluator {
             is MethodCall -> evaluateMethodCall(ast)
         }
     }
-    private fun getStringType(tokenType: TokenType): String {
-        return when (tokenType) {
+    private fun getStringType(token: Token): String {
+        return when (token.type) {
             TokenType.NUMBER_KEYWORD -> "Number"
             TokenType.STRING_KEYWORD -> "String"
+            TokenType.IDENTIFIER -> variables[token.actualValue()]!!.second!!
             else -> {
                 return ""
             }

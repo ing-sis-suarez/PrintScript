@@ -9,8 +9,8 @@ class BinaryOperatorReader(private val variables: MutableMap<String, Pair<String
     }
     fun getValue(token: Token): Any {
         return when (token.type) {
-            TokenType.NUMBER_LITERAL -> token.originalValue.toInt()
-            TokenType.STRING_LITERAL -> token.originalValue
+            TokenType.NUMBER_LITERAL -> token.actualValue().toInt()
+            TokenType.STRING_LITERAL -> token.actualValue()
             TokenType.IDENTIFIER -> {
                 if (variables.containsKey(token.actualValue()) && variables[token.actualValue()]!!.second != null) {
                     return if (variables[token.actualValue()]!!.first == "String") {
@@ -52,11 +52,15 @@ class BinaryOperatorReader(private val variables: MutableMap<String, Pair<String
             else -> throw InvalidTypeException("$op is invalid with Number operations in line ${location.row} ${location.column}")
         }
     }
-    fun getValueType(value: BinaryTokenNode): String {
+    fun getValueType(value: BinaryTokenNode, variables: Map<String, Pair<String, String?>>): String {
         var valueType = "Number"
         fun dfs(value: BinaryTokenNode) {
             if (isLeaf(value)) {
-                if (value.token.type != TokenType.NUMBER_LITERAL) {
+                if (value.token.type == TokenType.IDENTIFIER && variables.containsKey(value.token.actualValue()) && variables[value.token.actualValue()]!!.second!! == "String"){
+                    valueType = "String"
+                    return
+                }
+                if (value.token.type == TokenType.STRING_LITERAL){
                     valueType = "String"
                     return
                 }
