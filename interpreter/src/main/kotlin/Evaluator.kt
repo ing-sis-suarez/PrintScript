@@ -9,35 +9,40 @@ class Evaluator {
         variables[declarator.identifier.actualValue()] = Pair(getStringType(declarator.type.type), null)
     }
     private fun evaluateDeclarationInitalization(declarationInitalization: DeclarationInitialization) {
-        if (getStringType(declarationInitalization.declaration.type.type) != binaryOperatorReader.getValueType(declarationInitalization.value.tree)){
+        if (getStringType(declarationInitalization.declaration.type.type) != binaryOperatorReader.getValueType(declarationInitalization.value.tree)) {
             throw IlligalTypeException("Invalid Assignation in line ${declarationInitalization.declaration.identifier.location.row} ${declarationInitalization.declaration.identifier.location.column}")
         }
         variables[declarationInitalization.declaration.identifier.actualValue()] = Pair(
             declarationInitalization.declaration.type.actualValue(),
-            binaryOperatorReader.evaluate(declarationInitalization.value.tree).toString())
+            binaryOperatorReader.evaluate(declarationInitalization.value.tree).toString()
+        )
     }
     private fun evaluateAssignation(assignation: Assignation) {
-        if (variables.containsKey(assignation.identifier.actualValue())){
-            if (variables[assignation.identifier.actualValue()]!!.first != binaryOperatorReader.getValueType(assignation.value.tree)){
+        if (variables.containsKey(assignation.identifier.actualValue())) {
+            if (variables[assignation.identifier.actualValue()]!!.first != binaryOperatorReader.getValueType(assignation.value.tree)) {
                 throw IlligalTypeException("Invalid Assignation in line ${assignation.identifier.location.row} ${assignation.identifier.location.column}")
             }
-            variables.replace(assignation.identifier.actualValue(), Pair(
-                variables[assignation.identifier.actualValue()]!!.first,
-                binaryOperatorReader.evaluate(assignation.value.tree).toString()))
-        }else{
+            variables.replace(
+                assignation.identifier.actualValue(),
+                Pair(
+                    variables[assignation.identifier.actualValue()]!!.first,
+                    binaryOperatorReader.evaluate(assignation.value.tree).toString()
+                )
+            )
+        } else {
             throw VariableDontExistException("Variable ${assignation.identifier.actualValue()} not found in line ${assignation.identifier.location.row} ${assignation.identifier.location.column}")
         }
     }
-    private fun evaluateMethodCall(methodCall: MethodCall){
+    private fun evaluateMethodCall(methodCall: MethodCall) {
         println(binaryOperatorReader.evaluate(methodCall.arguments.tree).toString())
     }
-    fun executionReader(execution: List<ASTNode>){
-        for (ast in execution){
+    fun executionReader(execution: List<ASTNode>) {
+        for (ast in execution) {
             evaluate(ast)
         }
     }
     private fun evaluate(ast: ASTNode) {
-        when(ast){
+        when (ast) {
             is Declaration -> evaluateDeclaration(ast)
             is DeclarationInitialization -> evaluateDeclarationInitalization(ast)
             is Assignation -> evaluateAssignation(ast)
