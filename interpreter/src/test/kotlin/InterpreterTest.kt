@@ -59,14 +59,6 @@ class InterpreterTest {
         evaluator.executionReader(astList)
         Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_initialization_operation_variable_result.txt"))
     }
-
-    private fun mapToString(map: Map<String, Pair<String, String?>>){
-        var string = ""
-        for ((key,value) in map) {
-            string += "key" + key + "value" + value.first + " " + value.second
-        }
-    }
-
     @Test
     fun assignationTest(){
         val statement =  readtxt("mock_text_declaration_initialization.txt")
@@ -88,7 +80,7 @@ class InterpreterTest {
         return lexer.lex(statement)
     }
 
-    private fun readtxt(fileName: String): String{
+    private fun readtxt(fileName: String): String {
         return Files.getResourceAsText(fileName).toString()
     }
 }
