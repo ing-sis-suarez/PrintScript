@@ -52,7 +52,7 @@ class LexerTest {
     private fun lexerResultsToString(results: List<Token>): String {
         var toString = ""
         for (token in results) {
-            toString += token.toString() + "\r\n"
+            toString += token.toString() + System.lineSeparator()
         }
         return toString
     }
