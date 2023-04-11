@@ -1,31 +1,32 @@
-import token.*
-import ast_node.*
+import ast.node.BinaryTokenNode
+import token.Location
+import token.Token
+import token.TokenType
 
-class BinaryOperatorReader(val variables: MutableMap<String, Pair<String, String?>>){
-
-    fun isLeaf(binary: BinaryTokenNode): Boolean{
+class BinaryOperatorReader(private val variables: MutableMap<String, Pair<String, String?>>) {
+    private fun isLeaf(binary: BinaryTokenNode): Boolean {
         return binary.left == null && binary.right == null
     }
-    fun getValue(token: Token) : Any{
-         return when{
-            token.type == TokenType.NUMBER_LITERAL -> token.originalValue.toInt()
-            token.type == TokenType.STRING_LITERAL -> token.originalValue
-            token.type == TokenType.IDENTIFIER ->{
-                if (variables.containsKey(token.actualValue()) && variables.get(token.actualValue())!!.second != null){
-                    return if (variables.get(token.actualValue())!!.first.equals("String")){
-                        variables.get(token.actualValue())!!.second!!
+    fun getValue(token: Token): Any {
+        return when (token.type) {
+            TokenType.NUMBER_LITERAL -> token.originalValue.toInt()
+            TokenType.STRING_LITERAL -> token.originalValue
+            TokenType.IDENTIFIER -> {
+                if (variables.containsKey(token.actualValue()) && variables[token.actualValue()]!!.second != null) {
+                    return if (variables[token.actualValue()]!!.first == "String") {
+                        variables[token.actualValue()]!!.second!!
                     } else {
-                        variables.get(token.actualValue())!!.second!!.toInt()
+                        variables[token.actualValue()]!!.second!!.toInt()
                     }
-                }else{
+                } else {
                     throw java.lang.IllegalArgumentException("")
                 }
             }
-            else -> {throw IllegalArgumentException("Error")}
+            else -> { throw IllegalArgumentException("Error") }
         }
     }
-    public fun evaluate(binary: BinaryTokenNode): Any{
-        if (isLeaf(binary)){
+    fun evaluate(binary: BinaryTokenNode): Any {
+        if (isLeaf(binary)) {
             return getValue(binary.token)
         }
         val leftValue = evaluate(binary.left!!)
@@ -36,40 +37,35 @@ class BinaryOperatorReader(val variables: MutableMap<String, Pair<String, String
             else -> throw IllegalArgumentException("Tipos incompatibles: $leftValue, $rightValue")
         }
     }
-
-    fun operation(left: Int, right: Int, op: TokenType, location: Location) : Int{
-        return when{
-            op == TokenType.OPERATOR_PLUS -> left + right
-            op == TokenType.OPERATOR_MINUS -> left - right
-            op == TokenType.OPERATOR_TIMES -> left * right
-            op == TokenType.OPERATOR_DIVIDE -> left / right
-
-            else -> throw InvalidTypeException("${op} is invalid with Number operations in line ${location.row} ${location.column}")
+    private fun operation(left: Int, right: Int, op: TokenType, location: Location): Int {
+        return when (op) {
+            TokenType.OPERATOR_PLUS -> left + right
+            TokenType.OPERATOR_MINUS -> left - right
+            TokenType.OPERATOR_TIMES -> left * right
+            TokenType.OPERATOR_DIVIDE -> left / right
+            else -> throw InvalidTypeException("$op is invalid with Number operations in line ${location.row} ${location.column}")
         }
     }
-
-    fun operationString(left: String, right: String, op: TokenType, location: Location) : String{
-        return when{
-            op == TokenType.OPERATOR_PLUS -> left + right
-            else -> throw InvalidTypeException("${op} is invalid with Number operations in line ${location.row} ${location.column}")
+    private fun operationString(left: String, right: String, op: TokenType, location: Location): String {
+        return when (op) {
+            TokenType.OPERATOR_PLUS -> left + right
+            else -> throw InvalidTypeException("$op is invalid with Number operations in line ${location.row} ${location.column}")
         }
     }
-
-    fun getValueType(value: BinaryTokenNode): String{
-        var valueType: String = "Number"
-        fun dfs(value: BinaryTokenNode){
-            if (isLeaf(value)){
-                if (value.token.type != TokenType.NUMBER_LITERAL){
+    fun getValueType(value: BinaryTokenNode): String {
+        var valueType = "Number"
+        fun dfs(value: BinaryTokenNode) {
+            if (isLeaf(value)) {
+                if (value.token.type != TokenType.NUMBER_LITERAL) {
                     valueType = "String"
                     return
                 }
-            }else{
+            } else {
                 dfs(value.left!!)
                 dfs(value.right!!)
             }
         }
         dfs(value)
-        return  valueType
+        return valueType
     }
-
 }
