@@ -2,6 +2,8 @@
 
 echo "***** Running pre-commit ******"
 
+chmod +x ./gradlew
+
 # Stash the changes
 git stash -q --keep-index
 
