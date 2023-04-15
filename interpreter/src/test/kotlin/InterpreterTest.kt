@@ -9,10 +9,9 @@ import parser.RegularParser
 import token.Token
 
 class InterpreterTest {
-    
     @Test
-    fun declarationTest(){
-        val statement =  readtxt("mock_text_declaration.txt")
+    fun declarationTest() {
+        val statement = readtxt("mock_text_declaration.txt")
         val tokenList = lex(statement)
         val astList = parse(tokenList)
         val evaluator = Evaluator()
@@ -21,8 +20,8 @@ class InterpreterTest {
     }
 
     @Test
-    fun declarationinitializationOperationTest(){
-        val statement =  readtxt("mock_text_declaration_initialization.txt")
+    fun declarationinitializationOperationTest() {
+        val statement = readtxt("mock_text_declaration_initialization.txt")
         val tokenList = lex(statement)
         val astList = parse(tokenList)
         val evaluator = Evaluator()
@@ -31,8 +30,8 @@ class InterpreterTest {
     }
 
     @Test
-    fun declarationinitializationOperationOperationTest(){
-        val statement =  readtxt("mock_text_declaration_initialization_operation.txt")
+    fun declarationinitializationOperationOperationTest() {
+        val statement = readtxt("mock_text_declaration_initialization_operation.txt")
         val tokenList = lex(statement)
         val astList = parse(tokenList)
         val evaluator = Evaluator()
@@ -41,8 +40,8 @@ class InterpreterTest {
     }
 
     @Test
-    fun declarationinitializationOperationOperationStrtingTest(){
-        val statement =  readtxt("mock_text_declaration_initialization_operation_string.txt")
+    fun declarationinitializationOperationOperationStrtingTest() {
+        val statement = readtxt("mock_text_declaration_initialization_operation_string.txt")
         val tokenList = lex(statement)
         val astList = parse(tokenList)
         val evaluator = Evaluator()
@@ -51,17 +50,18 @@ class InterpreterTest {
     }
 
     @Test
-    fun declarationinitializationOperationOperationVariableTest(){
-        val statement =  readtxt("mock_text_declaration_initialization_operation_variable.txt")
+    fun declarationinitializationOperationOperationVariableTest() {
+        val statement = readtxt("mock_text_declaration_initialization_operation_variable.txt")
         val tokenList = lex(statement)
         val astList = parse(tokenList)
         val evaluator = Evaluator()
         evaluator.executionReader(astList)
         Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_initialization_operation_variable_result.txt"))
     }
+
     @Test
-    fun assignationTest(){
-        val statement =  readtxt("mock_text_declaration_initialization.txt")
+    fun assignationTest() {
+        val statement = readtxt("mock_text_declaration_initialization.txt")
         val tokenList = lex(statement)
         val astList = parse(tokenList)
         val evaluator = Evaluator()
