@@ -1,7 +1,11 @@
 package parser
 
-import astBuilders.*
-import ast_node.ASTNode
+import ast.node.ASTNode
+import astBuilders.ASTBuilder
+import astBuilders.AssignationASTBuilder
+import astBuilders.DeclarationASTBuilder
+import astBuilders.DeclarationInitializationASTBuilder
+import astBuilders.MethodCallASTBuilder
 import exceptions.MalformedStructureException
 import token.Token
 import token.TokenType
@@ -19,7 +23,7 @@ class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>) : Par
     }
 
     private fun createChild(
-        statement: List<Token>,
+        statement: List<Token>
     ): ASTNode {
         for (builder in astBuilderList) {
             if (builder.isApplicable(statement)) {

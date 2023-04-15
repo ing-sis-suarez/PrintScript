@@ -1,8 +1,8 @@
 package astBuilders
 
+import ast.node.MethodCall
 import astBuilders.ASTBuilder.Companion.checkMinLength
 import astBuilders.ASTBuilder.Companion.checkTokenType
-import ast_node.MethodCall
 import token.Token
 import token.TokenType
 
@@ -11,8 +11,8 @@ class MethodCallASTBuilder : ASTBuilder<MethodCall> {
     private val valueBuilder = ValueASTBuilder()
     override fun isApplicable(statement: List<Token>): Boolean {
         return statement[0].type == TokenType.IDENTIFIER &&
-                statement[1].type == TokenType.LEFT_PARENTHESIS &&
-                statement[statement.size - 1].type == TokenType.RIGHT_PARENTHESIS
+            statement[1].type == TokenType.LEFT_PARENTHESIS &&
+            statement[statement.size - 1].type == TokenType.RIGHT_PARENTHESIS
     }
 
     override fun buildAST(statement: List<Token>): MethodCall {

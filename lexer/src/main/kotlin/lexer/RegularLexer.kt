@@ -4,15 +4,13 @@ import token.Location
 import token.Token
 import token.TokenType
 
-
 class RegularLexer(private val tokenReaderList: List<Pair<TokenVerifierFunc, StringToTokenFunc>>) : Lexer {
 
-
-    override fun lex(text: String): List<Token>{
+    override fun lex(text: String): List<Token> {
         return generateTokens(text)
     }
 
-    private fun breakIntoLines(text: String): List<String>{
+    private fun breakIntoLines(text: String): List<String> {
         return text.trim().split(System.lineSeparator())
     }
 
@@ -53,7 +51,9 @@ class RegularLexer(private val tokenReaderList: List<Pair<TokenVerifierFunc, Str
         return if (i == startIndex) {
             tokens.add(Token(TokenType.UNKNOWN, Location(lineNumber, i), line[i].toString(), 1))
             i + 1
-        } else i
+        } else {
+            i
+        }
     }
 
     private fun calculateToken(
@@ -74,4 +74,3 @@ class RegularLexer(private val tokenReaderList: List<Pair<TokenVerifierFunc, Str
         return i
     }
 }
-

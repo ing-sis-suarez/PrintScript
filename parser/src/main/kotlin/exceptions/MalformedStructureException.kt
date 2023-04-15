@@ -1,5 +1,3 @@
 package exceptions
 
-class MalformedStructureException(s: String) : Exception(s) {
-
-}
+class MalformedStructureException(s: String) : Exception(s)

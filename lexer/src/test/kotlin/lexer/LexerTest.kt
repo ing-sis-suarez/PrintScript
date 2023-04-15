@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import token.Token
 
-
 class LexerTest {
 
     @Test
@@ -12,6 +11,7 @@ class LexerTest {
         val evaluatedText = printScriptEvaluateText("mock_text_assignation.txt")
         Assertions.assertEquals(Files.getResourceAsText("mock_text_assignation_result.txt"), lexerResultsToString(evaluatedText))
     }
+
     @Test
     fun testOperationSyntax() {
         val evaluatedText = printScriptEvaluateText("mock_text_operations.txt")
@@ -25,12 +25,13 @@ class LexerTest {
     }
 
     @Test
-    fun testInvalidTokens(){
+    fun testInvalidTokens() {
         val evaluatedText = printScriptEvaluateText("mock_text_with_invalid_char.txt")
         Assertions.assertEquals(Files.getResourceAsText("mock_text_with_invalid_char_result.txt"), lexerResultsToString(evaluatedText))
     }
+
     @Test
-    fun testUnclosedString(){
+    fun testUnclosedString() {
         val evaluatedText = printScriptEvaluateText("mock_text_with_unclosed_string.txt")
         Assertions.assertEquals(Files.getResourceAsText("mock_text_with_unclosed_string_result.txt"), lexerResultsToString(evaluatedText))
     }
@@ -41,17 +42,17 @@ class LexerTest {
 //        java.io.File("C:\\Users\\Usuario\\IdeaProjects\\PrintScript\\parser\\src\\test\\resources\\correctStatements\\methodCall.txt").writeText(lexerResultsToString(evaluatedText))
 //    }
 
-    private fun printScriptEvaluateText(fileName: String): List<Token>{
+    private fun printScriptEvaluateText(fileName: String): List<Token> {
         val mockText = Files.getResourceAsText(fileName).toString()
         val tokenMap = TokenReadersProvider().getTokenMap("PrintScript") ?: return emptyList()
         val lexer: Lexer = RegularLexer(tokenMap)
         return lexer.lex(mockText)
     }
 
-    private fun lexerResultsToString(results: List<Token>): String{
+    private fun lexerResultsToString(results: List<Token>): String {
         var toString = ""
-        for (token in results){
-            toString += token.toString() + "\r\n"
+        for (token in results) {
+            toString += token.toString() + System.lineSeparator()
         }
         return toString
     }

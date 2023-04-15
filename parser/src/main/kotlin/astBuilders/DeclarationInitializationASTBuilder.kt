@@ -1,6 +1,6 @@
 package astBuilders
 
-import ast_node.DeclarationInitialization
+import ast.node.DeclarationInitialization
 import token.Token
 import token.TokenType
 

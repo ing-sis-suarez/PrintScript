@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+echo "***** Running pre-commit ******"
+
+chmod +x ./gradlew
+
+# Stash the changes
+git stash -q --keep-index
+
+# Run ktlintFormat
+./gradlew ktlintFormat
+
+# Run the tests
+./gradlew test
+
+# Capture the exit status
+status=$?
+
+# Pop the stash
+git stash pop -q
+
+if [ $status -eq 0 ]
+then
+    echo "***** Done with pre-commit ******"
+    exit 0
+else
+    echo "***** pre-commit failed. Please fix the above issues before committing again ******"
+    exit 1
+fi
