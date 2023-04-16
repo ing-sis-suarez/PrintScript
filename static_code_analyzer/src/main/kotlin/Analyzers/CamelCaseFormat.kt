@@ -2,9 +2,9 @@ package Analyzers
 
 import Analyzer
 import InvalidFormatException
-import ast_node.ASTNode
-import ast_node.Declaration
-import ast_node.DeclarationInitialization
+import ast.node.ASTNode
+import ast.node.Declaration
+import ast.node.DeclarationInitialization
 import token.Location
 
 class CamelCaseFormat(): Analyzer{

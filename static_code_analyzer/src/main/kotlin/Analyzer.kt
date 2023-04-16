@@ -1,4 +1,4 @@
-import ast_node.ASTNode
+import ast.node.ASTNode
 
 interface Analyzer {
     fun analyze(astNode: ASTNode)
