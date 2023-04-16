@@ -1,14 +1,5 @@
 package parser
 
-import Files
-import exceptions.MalformedStructureException
-import exceptions.UnexpectedTokenException
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
-import token.Location
-import token.Token
-import token.TokenType
-
 class RegularParserTest {
 
 //    @Test
