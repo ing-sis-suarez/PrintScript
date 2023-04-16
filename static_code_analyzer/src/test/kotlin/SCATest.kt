@@ -11,43 +11,43 @@ import token.Token
 class SCATest {
 
     @Test
-    fun camelCaseTest(){
+    fun camelCaseTest() {
         try {
-            val statement =  readtxt("mock_text_declaration_Camel_Case.txt")
+            val statement = readtxt("mock_text_declaration_Camel_Case.txt")
             val tokenList = lex(statement)
             val astList = parse(tokenList)
             val sca = StaticCodeAnalyzer(readtxt("camelCase.json"))
             sca.analyze(astList)
             Assertions.assertNull(null)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             Assertions.fail(e)
         }
     }
 
     @Test
-    fun snakeCaseTest(){
+    fun snakeCaseTest() {
         try {
-            val statement =  readtxt("mock_text_declaration_Snake_Case.txt")
+            val statement = readtxt("mock_text_declaration_Snake_Case.txt")
             val tokenList = lex(statement)
             val astList = parse(tokenList)
             val sca = StaticCodeAnalyzer(readtxt("snakeCase.json"))
             sca.analyze(astList)
             Assertions.assertNull(null)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             Assertions.fail(e)
         }
     }
 
     @Test
-    fun methodNoExpressionTest(){
+    fun methodNoExpressionTest() {
         try {
-            val statement =  readtxt("mock_text_declaration_Method_No_Expresion.txt")
+            val statement = readtxt("mock_text_declaration_Method_No_Expresion.txt")
             val tokenList = lex(statement)
             val astList = parse(tokenList)
             val sca = StaticCodeAnalyzer(readtxt("methodNoExpresion.json"))
             sca.analyze(astList)
             Assertions.assertNull(null)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             Assertions.fail(e)
         }
     }
