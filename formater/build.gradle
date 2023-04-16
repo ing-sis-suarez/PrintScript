@@ -8,6 +8,23 @@ repositories {
     mavenCentral()
 }
 
+test {
+    description = 'Runs formatter tests.'
+    group = 'verification'
+
+    useJUnitPlatform()
+    testLogging {
+        events "passed"
+    }
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    implementation project(':ASTNode')
+    implementation project(':token')
+    implementation project(':lexer')
+    implementation project(':parser')
+    implementation project(':utilities')
+    implementation group: 'org.json', name: 'json', version: '20090211'
 }
