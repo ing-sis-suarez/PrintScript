@@ -33,7 +33,7 @@ class App {
                 try {
                     interpreter.evaluate(parser.parse(listOfTokensInLine))
                     listOfTokensInLine.clear()
-                }catch (exception: Exception){
+                } catch (exception: Exception) {
                     handler.reportError(exception.message)
                 }
             }

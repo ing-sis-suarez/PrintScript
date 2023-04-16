@@ -1,13 +1,4 @@
-import ast.node.ASTNode
-import lexer.Lexer
-import lexer.RegularLexer
-import lexer.TokenReadersProvider
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
-import parser.Parser
-import parser.RegularParser
-import token.Token
-import java.io.File
+
 
 class InterpreterTest {
 //    @Test

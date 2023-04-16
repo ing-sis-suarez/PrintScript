@@ -17,7 +17,6 @@ class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>) : Par
         return createChild(cleanedTokens)
     }
 
-
     private fun createChild(
         statement: List<Token>
     ): ASTNode {
@@ -30,9 +29,13 @@ class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>) : Par
     }
 
     private fun takeWhiteSpacesCommentsAndSemiColon(tokens: List<Token>): List<Token> {
-        return tokens.filter { token -> !(token.type == TokenType.WHITE_SPACE
-                || token.type == TokenType.COMMENT
-                || token.type == TokenType.SEMICOLON) }
+        return tokens.filter { token ->
+            !(
+                token.type == TokenType.WHITE_SPACE ||
+                    token.type == TokenType.COMMENT ||
+                    token.type == TokenType.SEMICOLON
+                )
+        }
     }
 
     private fun breakIntoStatements(tokens: List<Token>): List<List<Token>> {

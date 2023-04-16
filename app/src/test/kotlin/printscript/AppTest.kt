@@ -8,11 +8,13 @@ import kotlin.test.Test
 
 class AppTest {
     @Test
-    fun testBasic(){
-        App().execute(File("/home/jorge/IdeaProjects/PrintScript/app/src/test/resources/basic_test.pr"),
+    fun testBasic() {
+        App().execute(
+            File("/home/jorge/IdeaProjects/PrintScript/app/src/test/resources/basic_test.pr"),
             "1.0",
             Emitter(),
             ErrorHandle(),
-            Scanner())
+            Scanner()
+        )
     }
 }

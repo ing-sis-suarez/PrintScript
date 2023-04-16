@@ -4,16 +4,15 @@ import token.Location
 import token.Token
 import token.TokenType
 import java.io.File
-import java.io.InputStreamReader
 import java.util.*
 
 class RegularLexer(private val tokenReaderList: List<Pair<TokenVerifierFunc, StringToTokenFunc>>) : Lexer {
 
-    override fun lex(src: File){
+    override fun lex(src: File) {
         val scanner = Scanner(src)
         var currentLineNumber = 1
         val fileToWrite = File("Tokens.txt")
-        while (scanner.hasNextLine()){
+        while (scanner.hasNextLine()) {
             val actualLine = scanner.nextLine()
             val lineTokenList = evaluateLine(actualLine, currentLineNumber, mutableListOf())
             currentLineNumber++

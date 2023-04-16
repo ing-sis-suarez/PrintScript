@@ -1,13 +1,6 @@
 package lexer
 
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
-import token.Token
-import java.io.File
-
 class LexerTest {
-
-
 
 //    @Test
 //    fun testAsignSyntax() {
