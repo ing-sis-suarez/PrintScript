@@ -3,7 +3,6 @@ import Analyzers.MethodNoExpresion
 import ast.node.ASTNode
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.io.File
 
 class StaticCodeAnalyzer(json: String) {
     val analizersList: ArrayList<Analyzer> = ArrayList()

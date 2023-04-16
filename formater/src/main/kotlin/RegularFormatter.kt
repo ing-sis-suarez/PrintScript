@@ -25,33 +25,36 @@ class RegularFormatter() : Formatter {
     // let x:Number;
     private fun formatDeclaration(node: Declaration): String {
         return LET_KEYWORD + getBlankSpaces(spacesBetweenTokens) +
-                getStringValue(node.identifier) + DOUBLE_DOTS + getStringValue(node.type)
+            getStringValue(node.identifier) + DOUBLE_DOTS + getStringValue(node.type)
     }
 
-    //let x:Number = 4 + 5
+    // let x:Number = 4 + 5
     private fun formatInitialization(node: DeclarationInitialization): String {
         return formatDeclaration(node.declaration) + getBlankSpaces(spacesBetweenTokens) +
-                EQUALS + getBlankSpaces(spacesBetweenTokens) + formatValue(node.value)
+            EQUALS + getBlankSpaces(spacesBetweenTokens) + formatValue(node.value)
     }
 
     // x = 5;
     private fun formatAssignation(node: Assignation): String {
         return getStringValue(node.identifier) + getBlankSpaces(spacesBetweenTokens) +
-                EQUALS + getBlankSpaces(spacesBetweenTokens) + formatValue(node.value)
+            EQUALS + getBlankSpaces(spacesBetweenTokens) + formatValue(node.value)
     }
 
-    //println("hello");
+    // println("hello");
     private fun formatMethodCall(node: MethodCall): String {
         return getStringValue(node.identifier) + LEFT_PARENTHESIS + formatValue(node.arguments) + RIGHT_PARENTHESIS
     }
 
     private fun formatValue(node: Value): String {
-        return if (node.tokenList.isEmpty()) return ""
-        else node.tokenList.joinToString(getBlankSpaces(spacesBetweenTokens)) { getStringValue(it) }
+        return if (node.tokenList.isEmpty()) {
+            return ""
+        } else {
+            node.tokenList.joinToString(getBlankSpaces(spacesBetweenTokens)) { getStringValue(it) }
+        }
     }
 
-    private fun getStringValue(token: Token):String {
-        return when(token.type){
+    private fun getStringValue(token: Token): String {
+        return when (token.type) {
             TokenType.NUMBER_KEYWORD -> "Number"
             TokenType.STRING_KEYWORD -> "String"
             TokenType.OPERATOR_PLUS -> "+"

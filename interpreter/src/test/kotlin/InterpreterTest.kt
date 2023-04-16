@@ -14,7 +14,7 @@ class InterpreterTest {
         val statement = readtxt("mock_text_declaration.txt")
         val tokenList = lex(statement)
         val astList = parse(tokenList)
-        println( astList.first().toString())
+        println(astList.first().toString())
         val evaluator = Evaluator()
         evaluator.executionReader(astList)
         Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_result.txt"))

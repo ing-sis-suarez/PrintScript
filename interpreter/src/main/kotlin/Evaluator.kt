@@ -1,5 +1,10 @@
-import ast.node.*
-import token.*
+import ast.node.ASTNode
+import ast.node.Assignation
+import ast.node.Declaration
+import ast.node.DeclarationInitialization
+import ast.node.MethodCall
+import token.Token
+import token.TokenType
 import java.util.HashMap
 
 class Evaluator {

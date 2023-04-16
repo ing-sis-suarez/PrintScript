@@ -1,3 +1,4 @@
+
 import ast.node.ASTNode
 import lexer.Lexer
 import lexer.RegularLexer
@@ -18,7 +19,6 @@ class RegularFormatterTest {
         val result = formatter.format(astList.first())
         println(result)
     }
-
 
     private fun parse(tokenList: List<Token>): List<ASTNode> {
         val parser: Parser = RegularParser.createDefaultParser()

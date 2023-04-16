@@ -16,5 +16,4 @@ class SnakeCaseFormat : Analyzer {
             throw InvalidFormatException("Invalid typing format in row ${location.row} ${location.column}")
         }
     }
-
 }
