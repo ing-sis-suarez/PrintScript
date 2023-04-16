@@ -97,7 +97,7 @@ class TokenReadersProvider {
     )
 
     private val tokenListMap: MutableMap<String, List<Pair<TokenVerifierFunc, StringToTokenFunc>>> = mutableMapOf(
-        Pair("PrintScript", printScriptTokenList)
+        Pair("1.0", printScriptTokenList)
     )
 
     fun getTokenMap(languageName: String): List<Pair<TokenVerifierFunc, StringToTokenFunc>>? {

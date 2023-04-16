@@ -36,12 +36,7 @@ class Evaluator {
     private fun evaluateMethodCall(methodCall: MethodCall) {
         println(binaryOperatorReader.evaluate(methodCall.arguments.tree).toString())
     }
-    fun executionReader(execution: List<ASTNode>) {
-        for (ast in execution) {
-            evaluate(ast)
-        }
-    }
-    private fun evaluate(ast: ASTNode) {
+    fun evaluate(ast: ASTNode) {
         when (ast) {
             is Declaration -> evaluateDeclaration(ast)
             is DeclarationInitialization -> evaluateDeclarationInitalization(ast)

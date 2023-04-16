@@ -1,0 +1,3 @@
+let a: number = 4 + 5;
+let juan: number =  8 + t;
+println("hello " + juan);

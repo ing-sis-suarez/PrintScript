@@ -3,41 +3,35 @@ package lexer
 import token.Location
 import token.Token
 import token.TokenType
+import java.io.File
+import java.io.InputStreamReader
+import java.util.*
 
 class RegularLexer(private val tokenReaderList: List<Pair<TokenVerifierFunc, StringToTokenFunc>>) : Lexer {
 
-    override fun lex(text: String): List<Token> {
-        return generateTokens(text)
-    }
-
-    private fun breakIntoLines(text: String): List<String> {
-        return text.trim().split(System.lineSeparator())
-    }
-
-    private fun generateTokens(text: String): List<Token> {
-        val lines = breakIntoLines(text)
-        return evaluateLines(lines, mutableListOf())
-    }
-
-    private fun evaluateLines(
-        lines: List<String>,
-        tokens: MutableList<Token>
-    ): List<Token> {
-        for (j in lines.indices) {
-            evaluateLine(lines[j], j, tokens)
+    override fun lex(src: File){
+        val scanner = Scanner(src)
+        var currentLineNumber = 1
+        val fileToWrite = File("Tokens.txt")
+        while (scanner.hasNextLine()){
+            val actualLine = scanner.nextLine()
+            val lineTokenList = evaluateLine(actualLine, currentLineNumber, mutableListOf())
+            currentLineNumber++
+            fileToWrite.appendText(lineTokenList.joinToString("\n") { it.toString() })
+            fileToWrite.appendText("\n")
         }
-        return tokens
     }
 
     private fun evaluateLine(
         line: String,
         lineNumber: Int,
         tokens: MutableList<Token>
-    ) {
+    ): MutableList<Token> {
         var i = 0
         while (i < line.length) {
             i = matchWord(line, i, tokens, lineNumber)
         }
+        return tokens
     }
 
     private fun matchWord(

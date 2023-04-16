@@ -9,17 +9,17 @@ class BinaryOperatorReader(private val variables: MutableMap<String, Pair<String
     }
     fun getValue(token: Token): Any {
         return when (token.type) {
-            TokenType.NUMBER_LITERAL -> token.actualValue().toInt()
+            TokenType.NUMBER_LITERAL -> token.actualValue().toDouble()
             TokenType.STRING_LITERAL -> token.actualValue()
             TokenType.IDENTIFIER -> {
                 if (variables.containsKey(token.actualValue()) && variables[token.actualValue()]!!.second != null) {
                     return if (variables[token.actualValue()]!!.first == "String") {
                         variables[token.actualValue()]!!.second!!
                     } else {
-                        variables[token.actualValue()]!!.second!!.toInt()
+                        variables[token.actualValue()]!!.second!!.toDouble()
                     }
                 } else {
-                    throw java.lang.IllegalArgumentException("")
+                    throw java.lang.IllegalArgumentException("Variable not initialized")
                 }
             }
             else -> { throw IllegalArgumentException("Error") }
@@ -33,11 +33,11 @@ class BinaryOperatorReader(private val variables: MutableMap<String, Pair<String
         val rightValue = evaluate(binary.right!!)
         return when {
             leftValue is String || rightValue is String -> operationString(leftValue.toString(), rightValue.toString(), binary.token.type, binary.token.location)
-            leftValue is Int && rightValue is Int -> operation(leftValue, rightValue, binary.token.type, binary.token.location)
+            leftValue is Double && rightValue is Double -> operation(leftValue, rightValue, binary.token.type, binary.token.location)
             else -> throw IllegalArgumentException("Tipos incompatibles: $leftValue, $rightValue")
         }
     }
-    private fun operation(left: Int, right: Int, op: TokenType, location: Location): Int {
+    private fun operation(left: Double, right: Double, op: TokenType, location: Location): Double {
         return when (op) {
             TokenType.OPERATOR_PLUS -> left + right
             TokenType.OPERATOR_MINUS -> left - right
