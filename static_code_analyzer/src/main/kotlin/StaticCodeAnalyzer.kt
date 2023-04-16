@@ -5,16 +5,15 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
 
-class StaticCodeAnalyzer(rout: String) {
+class StaticCodeAnalyzer(json: String) {
     val analizersList: ArrayList<Analyzer> = ArrayList()
 
     init {
-        buildSCA(rout)
+        buildSCA(json)
     }
 
-    private fun buildSCA(route: String) {
-        val jsonFile = File(route)
-        val objectBoolMap: Map<String, Boolean> = Gson().fromJson(jsonFile.readText(), object : TypeToken<Map<String, Boolean>>() {}.type)
+    private fun buildSCA(json: String) {
+        val objectBoolMap: Map<String, Boolean> = Gson().fromJson(json, object : TypeToken<Map<String, Boolean>>() {}.type)
 
         objectBoolMap.forEach { (nombre, valor) ->
             addAnalizer(nombre, valor)

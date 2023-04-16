@@ -12,10 +12,9 @@ class SnakeCaseFormat : Analyzer {
     }
 
     private fun analize(str: String, location: Location) {
-        if (!str.matches("^[a-z]+(_[a-z]+)*$".toRegex())) {
-            return
-        } else {
+        if (!Regex("[a-z]+(?:_[a-z]+)*").matches(str)) {
             throw InvalidFormatException("Invalid typing format in row ${location.row} ${location.column}")
         }
     }
+
 }

@@ -16,9 +16,7 @@ class CamelCaseFormat(): Analyzer{
     }
 
     private fun analyze(str: String, location: Location){
-        if (!str.matches("^[a-zA-Z]+(([A-Z][a-z])|[a-z0-9]+)*$".toRegex())) {
-            return
-        }else{
+        if (!Regex("[a-z]+(?:[A-Z][a-z]*)*").matches(str)) {
             throw InvalidFormatException("Invalid typing format in row ${location.row} ${location.column}")
         }
     }
