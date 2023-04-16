@@ -56,11 +56,11 @@ class BinaryOperatorReader(private val variables: MutableMap<String, Pair<String
         var valueType = "Number"
         fun dfs(value: BinaryTokenNode) {
             if (isLeaf(value)) {
-                if (value.token.type == TokenType.IDENTIFIER && variables.containsKey(value.token.actualValue()) && variables[value.token.actualValue()]!!.second!! == "String"){
+                if (value.token.type == TokenType.IDENTIFIER && variables.containsKey(value.token.actualValue()) && variables[value.token.actualValue()]!!.second!! == "String") {
                     valueType = "String"
                     return
                 }
-                if (value.token.type == TokenType.STRING_LITERAL){
+                if (value.token.type == TokenType.STRING_LITERAL) {
                     valueType = "String"
                     return
                 }
