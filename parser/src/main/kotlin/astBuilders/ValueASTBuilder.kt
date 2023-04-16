@@ -17,23 +17,7 @@ class ValueASTBuilder : ASTBuilder<Value> {
         checkValueNode(statement)
         val nodeList = statement.map { token -> BinaryTokenNode(token, null, null) }
         val queue = processOperation(nodeList)
-        return Value(createTree(queue), listOf(
-            Token(type=TokenType.NUMBER_LITERAL, location=Location(row=0, column=4), originalValue="69", length=2),
-            Token(type=TokenType.OPERATOR_TIMES, location=Location(row=0, column=6), originalValue="", length=1),
-            Token(type=TokenType.NUMBER_LITERAL, location=Location(row=0, column=7), originalValue="420", length=3),
-            Token(type=TokenType.OPERATOR_DIVIDE, location=Location(row=0, column=10), originalValue="", length=1),
-            Token(type=TokenType.LEFT_PARENTHESIS, location=Location(row=0, column=11), originalValue="", length=1),
-            Token(type=TokenType.NUMBER_LITERAL, location=Location(row=0, column=12), originalValue="2", length=1),
-            Token(type=TokenType.OPERATOR_TIMES, location=Location(row=0, column=13), originalValue="", length=1),
-            Token(type=TokenType.NUMBER_LITERAL, location=Location(row=0, column=14), originalValue="3", length=4),
-            Token(type=TokenType.OPERATOR_TIMES, location=Location(row=0, column=18), originalValue="", length=1),
-            Token(type=TokenType.NUMBER_LITERAL, location=Location(row=0, column=19), originalValue="6", length=1),
-            Token(type=TokenType.OPERATOR_DIVIDE, location=Location(row=0, column=20), originalValue="", length=1),
-            Token(type=TokenType.NUMBER_LITERAL, location=Location(row=0, column=21), originalValue="9", length=1),
-            Token(type=TokenType.RIGHT_PARENTHESIS, location=Location(row=0, column=22), originalValue="", length=1),
-            Token(type=TokenType.OPERATOR_PLUS, location=Location(row=0, column=23), originalValue="", length=1),
-            Token(type=TokenType.NUMBER_LITERAL, location=Location(row=0, column=24), originalValue="6", length=1)
-        ))
+        return Value(createTree(queue), listOf())
         // 69 * 420 / ( 2 * 3 * 6 / 9 ) + 6
     }
 
