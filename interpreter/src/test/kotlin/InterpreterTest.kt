@@ -3,8 +3,10 @@
 class InterpreterTest {
 //    @Test
 //    fun declarationTest() {
-//        val tokenList = lex(File(this::class.java.classLoader.getResource("mock_text_declaration.txt")!!.path))
+//        val statement = readtxt("mock_text_declaration.txt")
+//        val tokenList = lex(statement)
 //        val astList = parse(tokenList)
+//        println(astList.first().toString())
 //        val evaluator = Evaluator()
 //        evaluator.evaluate(astList)
 //        Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_result.txt"))
@@ -16,7 +18,7 @@ class InterpreterTest {
 //        val tokenList = lex(statement)
 //        val astList = parse(tokenList)
 //        val evaluator = Evaluator()
-//        evaluator.executionReader(astList)
+//        evaluator.evaluate(astList)
 //        Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_initialization_result.txt"))
 //    }
 //
@@ -26,7 +28,7 @@ class InterpreterTest {
 //        val tokenList = lex(statement)
 //        val astList = parse(tokenList)
 //        val evaluator = Evaluator()
-//        evaluator.executionReader(astList)
+//        evaluator.evaluate(astList)
 //        Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_initialization_operation_result.txt"))
 //    }
 //
@@ -36,7 +38,7 @@ class InterpreterTest {
 //        val tokenList = lex(statement)
 //        val astList = parse(tokenList)
 //        val evaluator = Evaluator()
-//        evaluator.executionReader(astList)
+//        evaluator.evaluate(astList)
 //        Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_initialization_operation_string_result.txt"))
 //    }
 //
@@ -46,7 +48,7 @@ class InterpreterTest {
 //        val tokenList = lex(statement)
 //        val astList = parse(tokenList)
 //        val evaluator = Evaluator()
-//        evaluator.executionReader(astList)
+//        evaluator.evaluate(astList)
 //        Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_initialization_operation_variable_result.txt"))
 //    }
 //
@@ -56,7 +58,7 @@ class InterpreterTest {
 //        val tokenList = lex(statement)
 //        val astList = parse(tokenList)
 //        val evaluator = Evaluator()
-//        evaluator.executionReader(astList)
+//        evaluator.evaluate(astList)
 //        Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_initialization_result.txt"))
 //    }
 //
@@ -65,10 +67,10 @@ class InterpreterTest {
 //        return parser.parse(tokenList)
 //    }
 //
-//    private fun lex(src: File) {
-//        val tokenMap = TokenReadersProvider().getTokenMap("1.0")!!
+//    private fun lex(statement: String): List<Token> {
+//        val tokenMap = TokenReadersProvider().getTokenMap("PrintScript") ?: return emptyList()
 //        val lexer: Lexer = RegularLexer(tokenMap)
-//        lexer.lex(src)
+//        return lexer.lex(statement)
 //    }
 //
 //    private fun readtxt(fileName: String): String {

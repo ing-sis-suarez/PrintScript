@@ -2,22 +2,29 @@ package astBuilders
 
 import ast.node.BinaryTokenNode
 import ast.node.Value
+import astBuilders.ASTBuilder.Companion.takeWhiteSpacesCommentsAndSemiColon
 import exceptions.UnexpectedTokenException
 import token.Location
 import token.Token
 import token.TokenType
-import java.util.*
+import java.util.Queue
+import java.util.Stack
+import java.util.LinkedList
+
 
 class ValueASTBuilder : ASTBuilder<Value> {
     override fun isApplicable(statement: List<Token>): Boolean {
-        return statement.isNotEmpty()
+        val parsedStatements = takeWhiteSpacesCommentsAndSemiColon(statement)
+        return parsedStatements.isNotEmpty()
     }
 
     override fun buildAST(statement: List<Token>): Value {
-        checkValueNode(statement)
-        val nodeList = statement.map { token -> BinaryTokenNode(token, null, null) }
+        val parsedStatements = takeWhiteSpacesCommentsAndSemiColon(statement)
+        checkValueNode(parsedStatements)
+        val nodeList = parsedStatements.map { token -> BinaryTokenNode(token, null, null) }
         val queue = processOperation(nodeList)
-        return Value(createTree(queue))
+        return Value(createTree(queue), statement)
+        // 69 * 420 / ( 2 * 3 * 6 / 9 ) + 6
     }
 
     private fun checkValueNode(statement: List<Token>) {

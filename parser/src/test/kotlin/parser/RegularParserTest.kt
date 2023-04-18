@@ -1,6 +1,5 @@
 package parser
 
-import Files
 import exceptions.MalformedStructureException
 import exceptions.UnexpectedTokenException
 import org.junit.jupiter.api.Assertions
@@ -98,14 +97,14 @@ class RegularParserTest {
     private fun <T : Exception> runIncorrectResultTest(
         fileName: String,
         exceptionType: Class<T>,
-        errorMesaage: String
+        errorMessage: String
     ) {
         val tokens = readTokens("incorrectStatements/$fileName.txt")
         val parser: Parser = RegularParser.createDefaultParser()
         val exception = Assertions.assertThrows(exceptionType) {
             parser.parse(tokens)
         }
-        Assertions.assertEquals(errorMesaage, exception.message)
+        Assertions.assertEquals(errorMessage, exception.message)
     }
 
     private fun runCorrectResultTest(fileName: String) {

@@ -1,5 +1,10 @@
-import ast.node.*
-import token.*
+import ast.node.ASTNode
+import ast.node.Assignation
+import ast.node.Declaration
+import ast.node.DeclarationInitialization
+import ast.node.MethodCall
+import token.Token
+import token.TokenType
 import java.util.HashMap
 
 class Evaluator {
@@ -34,7 +39,8 @@ class Evaluator {
         }
     }
     private fun evaluateMethodCall(methodCall: MethodCall) {
-        println(binaryOperatorReader.evaluate(methodCall.arguments.tree).toString())
+        val valueString: String = binaryOperatorReader.evaluate(methodCall.arguments.tree).toString()
+        println(valueString.replace(".0", ""))
     }
     fun evaluate(ast: ASTNode) {
         when (ast) {

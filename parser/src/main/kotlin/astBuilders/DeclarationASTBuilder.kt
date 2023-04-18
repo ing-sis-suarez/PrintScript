@@ -3,17 +3,21 @@ package astBuilders
 import ast.node.Declaration
 import astBuilders.ASTBuilder.Companion.checkLength
 import astBuilders.ASTBuilder.Companion.checkTokenType
+import astBuilders.ASTBuilder.Companion.takeWhiteSpacesCommentsAndSemiColon
 import token.Token
 import token.TokenType
 
+
 class DeclarationASTBuilder : ASTBuilder<Declaration> {
     override fun isApplicable(statement: List<Token>): Boolean {
-        return statement[0].type == TokenType.LET_KEYWORD || statement[2].type == TokenType.DOUBLE_DOTS
+        val parsedStatements = takeWhiteSpacesCommentsAndSemiColon(statement)
+        return parsedStatements[0].type == TokenType.LET_KEYWORD || parsedStatements[2].type == TokenType.DOUBLE_DOTS
     }
 
     override fun buildAST(statement: List<Token>): Declaration {
-        checkDeclaration(statement)
-        return Declaration(statement[1], statement[3])
+        val parsedStatements = takeWhiteSpacesCommentsAndSemiColon(statement)
+        checkDeclaration(parsedStatements)
+        return Declaration(parsedStatements[1], parsedStatements[3])
     }
 
     private fun checkDeclaration(statement: List<Token>) {

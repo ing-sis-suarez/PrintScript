@@ -13,8 +13,7 @@ import token.TokenType
 class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>) : Parser {
 
     override fun parse(tokens: List<Token>): ASTNode {
-        val cleanedTokens = takeWhiteSpacesCommentsAndSemiColon(tokens)
-        return createChild(cleanedTokens)
+        return createChild(tokens)
     }
 
     private fun createChild(
@@ -26,16 +25,6 @@ class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>) : Par
             }
         }
         throw MalformedStructureException("Could not recognize syntax")
-    }
-
-    private fun takeWhiteSpacesCommentsAndSemiColon(tokens: List<Token>): List<Token> {
-        return tokens.filter { token ->
-            !(
-                token.type == TokenType.WHITE_SPACE ||
-                    token.type == TokenType.COMMENT ||
-                    token.type == TokenType.SEMICOLON
-                )
-        }
     }
 
     private fun breakIntoStatements(tokens: List<Token>): List<List<Token>> {

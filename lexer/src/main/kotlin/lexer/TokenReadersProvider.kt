@@ -114,7 +114,7 @@ class TokenReadersProvider {
 
     private fun calculateEndOfIdentifier(line: String, startIndex: Int): Int {
         for (i in startIndex + 1 until line.length) {
-            if (isAplhanumeric(line[i])) {
+            if (isAplhanumeric(line[i]) || line[i] == '_') {
                 continue
             } else {
                 return i
