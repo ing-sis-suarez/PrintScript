@@ -8,15 +8,16 @@ import parser.RegularParser
 import things.ErrorHandler
 import things.InputProvider
 import things.PrintEmitter
+import things.PrintScriptInterpreter
 import token.Location
 import token.Token
 import token.TokenType
 import java.io.File
 import java.util.*
 
-class App {
+class App : PrintScriptInterpreter{
 
-    fun execute(src: File, version: String, emitter: PrintEmitter, handler: ErrorHandler, provider: InputProvider) {
+    override fun execute(src: File, version: String, emitter: PrintEmitter, handler: ErrorHandler, provider: InputProvider) {
         val file = File("Tokens.txt")
         file.delete()
         RegularLexer(TokenReadersProvider().getTokenMap("1.0")!!).lex(src)
@@ -35,6 +36,7 @@ class App {
                     listOfTokensInLine.clear()
                 } catch (exception: Exception) {
                     handler.reportError(exception.message)
+                    return
                 }
             }
             if (!scanner.hasNextLine() && token.type != TokenType.SEMICOLON) {

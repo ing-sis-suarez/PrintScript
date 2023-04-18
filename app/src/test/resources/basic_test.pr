@@ -1,3 +1,4 @@
-let a: number = 4 + 5;
-let juan: number =  8 + t;
-println("hello " + juan);
+let a: number;
+let nombre: string = "a"; let a: string = "b";
+println(nombre+a);
+println(a);
