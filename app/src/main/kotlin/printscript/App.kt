@@ -15,7 +15,7 @@ import token.TokenType
 import java.io.File
 import java.util.*
 
-class App : PrintScriptInterpreter{
+class App : PrintScriptInterpreter {
 
     override fun execute(src: File, version: String, emitter: PrintEmitter, handler: ErrorHandler, provider: InputProvider) {
         val file = File("Tokens.txt")
