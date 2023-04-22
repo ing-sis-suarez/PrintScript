@@ -6,10 +6,10 @@ import parser.Parser
 import token.Token
 import token.TokenType
 
-class ASTNodeProvider(
+class ASTNodeProviderImpl(
     private val tokenProvider: TokenProvider,
     private val parser: Parser
-) : ASTNProvider {
+) : ASTNodeProvider {
 
     override fun readASTNode(): ASTNProviderResponse {
         val tokenList = mutableListOf<Token>()

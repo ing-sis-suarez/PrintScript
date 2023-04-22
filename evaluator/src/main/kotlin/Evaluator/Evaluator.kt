@@ -6,12 +6,12 @@ import ast.node.Declaration
 import ast.node.DeclarationInitialization
 import ast.node.MethodCall
 import interpreter.Interpreter
-import node.ASTNProvider
+import node.ASTNodeProvider
 import token.Token
 import token.TokenType
 import java.util.HashMap
 
-class Evaluator(astProvider: ASTNProvider) : Interpreter {
+class Evaluator(astProvider: ASTNodeProvider) : Interpreter {
     val variables: MutableMap<String, Pair<String, String?>> = HashMap()
     private val binaryOperatorReader: BinaryOperatorReader = BinaryOperatorReader(variables)
     private fun evaluateDeclaration(declarator: Declaration) {

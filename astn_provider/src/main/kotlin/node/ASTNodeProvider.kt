@@ -2,9 +2,9 @@ package node
 
 import ast.node.ASTNode
 
-interface ASTNProvider {
+interface ASTNodeProvider {
 
-    fun readASTNode() : ASTNProviderResponse
+    fun readASTNode(): ASTNProviderResponse
 }
 
 interface ASTNProviderResponse

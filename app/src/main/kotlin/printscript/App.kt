@@ -3,12 +3,10 @@ package printscript
 import Evaluator.Evaluator
 import FileTokenProvider
 import interpreter.Interpreter
-import lexer.Lexer
 import lexer.RegularLexer
 import lexer.TokenReadersProvider
-import parser.Parser
 import parser.RegularParser
-import provider.ASTNodeProvider
+import provider.ASTNodeProviderImpl
 import things.ErrorHandler
 import things.InputProvider
 import things.PrintEmitter
@@ -17,7 +15,6 @@ import token.Location
 import token.Token
 import token.TokenType
 import java.io.File
-import java.util.*
 
 class App : PrintScriptInterpreter {
 
@@ -25,17 +22,15 @@ class App : PrintScriptInterpreter {
         val tokenMap = TokenReadersProvider().getTokenMap(version)
         if (tokenMap == null) handler.reportError("Unsupported version")
         val tokenProvider = FileTokenProvider(src, RegularLexer(tokenMap!!))
-        val astProvider = ASTNodeProvider(tokenProvider, RegularParser.createDefaultParser())
+        val astProvider = ASTNodeProviderImpl(tokenProvider, RegularParser.createDefaultParser())
         val interpreter: Interpreter = Evaluator(astProvider)
-
     }
 
     private fun runInterpretation(interpreter: Interpreter, handler: ErrorHandler) {
-
     }
 
     private fun interpret(interpreter: Interpreter) {
-            interpreter.interpret()
+        interpreter.interpret()
     }
 
     private fun toToken(tokenString: String): Token { // reads a token.toString() and returns a token

@@ -1,7 +1,6 @@
 package lexer
 
 import FileTokenProvider
-import main.kotlin.token_provider.NoMoreTokensException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import token.Token
@@ -46,11 +45,8 @@ private fun printScriptEvaluateText(file: File): List<Token> {
     val tokenProvider = FileTokenProvider(file, lexer)
     val tokenList = mutableListOf<Token>()
     while (true) {
-        try {
-            tokenList.add(tokenProvider.readToken())
-        } catch (e: NoMoreTokensException) {
-            break
-        }
+        val token = tokenProvider.readToken() ?: break
+        tokenList.add(token)
     }
     return tokenList
 }

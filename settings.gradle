@@ -21,4 +21,5 @@ include 'static_code_analyzer'
 include 'token_provider'
 include 'astn_provider'
 include 'interpreter'
+include 'cli'
 
