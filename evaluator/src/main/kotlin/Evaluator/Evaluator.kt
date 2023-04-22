@@ -1,13 +1,17 @@
+package Evaluator
+
 import ast.node.ASTNode
 import ast.node.Assignation
 import ast.node.Declaration
 import ast.node.DeclarationInitialization
 import ast.node.MethodCall
+import interpreter.Interpreter
+import node.ASTNProvider
 import token.Token
 import token.TokenType
 import java.util.HashMap
 
-class Evaluator {
+class Evaluator(astProvider: ASTNProvider) : Interpreter {
     val variables: MutableMap<String, Pair<String, String?>> = HashMap()
     private val binaryOperatorReader: BinaryOperatorReader = BinaryOperatorReader(variables)
     private fun evaluateDeclaration(declarator: Declaration) {
@@ -39,14 +43,10 @@ class Evaluator {
         }
     }
     private fun evaluateMethodCall(methodCall: MethodCall) {
-        println(binaryOperatorReader.evaluate(methodCall.arguments.tree).toString())
+        val valueString: String = binaryOperatorReader.evaluate(methodCall.arguments.tree).toString()
+        println(valueString.replace(".0", ""))
     }
-    fun executionReader(execution: List<ASTNode>) {
-        for (ast in execution) {
-            evaluate(ast)
-        }
-    }
-    private fun evaluate(ast: ASTNode) {
+    fun evaluate(ast: ASTNode) {
         when (ast) {
             is Declaration -> evaluateDeclaration(ast)
             is DeclarationInitialization -> evaluateDeclarationInitalization(ast)

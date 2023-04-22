@@ -13,6 +13,16 @@ interface ASTBuilder<out T : ASTNode> {
     fun buildAST(statement: List<Token>): T
 
     companion object {
+        fun takeWhiteSpacesCommentsAndSemiColon(tokens: List<Token>): List<Token> {
+            return tokens.filter { token ->
+                !(
+                        token.type == TokenType.WHITE_SPACE ||
+                                token.type == TokenType.COMMENT ||
+                                token.type == TokenType.SEMICOLON
+                        )
+            }
+        }
+
         fun checkLength(statement: List<Token>, correctSize: Int, structureName: String) {
             if (statement.size < correctSize) throw MalformedStructureException("Malformed $structureName at ${statement[0].location.row} ")
             if (statement.size > correctSize) throw UnexpectedTokenException("Unexpected token at: ${statement[correctSize].location.row}, ${statement[correctSize].location.column}")

@@ -1,7 +1,8 @@
 package lexer
 
 import token.Token
+import java.io.File
 
 interface Lexer {
-    fun lex(text: String): List<Token>
+    fun lex(line: String, startIndex: Int, lineNumber: Int): Pair<Token, Int>
 }

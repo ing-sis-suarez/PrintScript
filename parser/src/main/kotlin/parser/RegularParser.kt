@@ -12,14 +12,8 @@ import token.TokenType
 
 class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>) : Parser {
 
-    override fun parse(tokens: List<Token>): List<ASTNode> {
-        val cleanedTokens = takeWhiteSpacesAndComments(tokens)
-        val statements = breakIntoStatements(cleanedTokens)
-        return generateChildren(statements)
-    }
-
-    private fun generateChildren(statements: List<List<Token>>): List<ASTNode> {
-        return statements.map { statement -> createChild(statement) }
+    override fun parse(tokens: List<Token>): ASTNode {
+        return createChild(tokens)
     }
 
     private fun createChild(
@@ -31,10 +25,6 @@ class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>) : Par
             }
         }
         throw MalformedStructureException("Could not recognize syntax")
-    }
-
-    private fun takeWhiteSpacesAndComments(tokens: List<Token>): List<Token> {
-        return tokens.filter { token -> !(token.type == TokenType.WHITE_SPACE || token.type == TokenType.COMMENT) }
     }
 
     private fun breakIntoStatements(tokens: List<Token>): List<List<Token>> {

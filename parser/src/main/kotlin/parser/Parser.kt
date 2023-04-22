@@ -5,5 +5,5 @@ import token.Token
 
 interface Parser {
 
-    fun parse(tokens: List<Token>): List<ASTNode>
+    fun parse(tokens: List<Token>): ASTNode
 }

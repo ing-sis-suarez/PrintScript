@@ -21,7 +21,7 @@ test {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
-    implementation project(':ASTNode')
+    implementation project(':astn')
     implementation project(':token')
     implementation project(':lexer')
     implementation project(':parser')

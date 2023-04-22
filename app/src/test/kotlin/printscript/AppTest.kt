@@ -3,12 +3,18 @@
  */
 package printscript
 
+import java.io.File
 import kotlin.test.Test
-import kotlin.test.assertNotNull
 
 class AppTest {
-    @Test fun appHasAGreeting() {
-        val classUnderTest = App()
-        assertNotNull(classUnderTest.greeting, "app should have a greeting")
+    @Test
+    fun testBasic() {
+        App().execute(
+            File("/home/jorge/IdeaProjects/PrintScript/app/src/test/resources/basic_test.pr"),
+            "1.0",
+            Emitter(),
+            ErrorHandle(),
+            Scanner()
+        )
     }
 }
