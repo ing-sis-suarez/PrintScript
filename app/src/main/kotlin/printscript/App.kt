@@ -1,10 +1,14 @@
 package printscript
 
-import Evaluator
+import Evaluator.Evaluator
+import FileTokenProvider
+import interpreter.Interpreter
+import lexer.Lexer
 import lexer.RegularLexer
 import lexer.TokenReadersProvider
 import parser.Parser
 import parser.RegularParser
+import provider.ASTNodeProvider
 import things.ErrorHandler
 import things.InputProvider
 import things.PrintEmitter
@@ -18,31 +22,20 @@ import java.util.*
 class App : PrintScriptInterpreter {
 
     override fun execute(src: File, version: String, emitter: PrintEmitter, handler: ErrorHandler, provider: InputProvider) {
-        val file = File("Tokens.txt")
-        file.delete()
-        RegularLexer(TokenReadersProvider().getTokenMap("1.0")!!).lex(src)
+        val tokenMap = TokenReadersProvider().getTokenMap(version)
+        if (tokenMap == null) handler.reportError("Unsupported version")
+        val tokenProvider = FileTokenProvider(src, RegularLexer(tokenMap!!))
+        val astProvider = ASTNodeProvider(tokenProvider, RegularParser.createDefaultParser())
+        val interpreter: Interpreter = Evaluator(astProvider)
 
-        val listOfTokensInLine = mutableListOf<Token>()
-        val scanner = Scanner(file)
-        val interpreter = Evaluator()
-        val parser: Parser = RegularParser.createDefaultParser()
-        while (scanner.hasNextLine()) {
-            val token = toToken(scanner.nextLine())
-            listOfTokensInLine.add(token)
+    }
 
-            if (token.type == TokenType.SEMICOLON) {
-                try {
-                    interpreter.evaluate(parser.parse(listOfTokensInLine))
-                    listOfTokensInLine.clear()
-                } catch (exception: Exception) {
-                    handler.reportError(exception.message)
-                    return
-                }
-            }
-            if (!scanner.hasNextLine() && token.type != TokenType.SEMICOLON) {
-                throw java.lang.Exception("There is a semicolon missing in the last line of the file")
-            }
-        }
+    private fun runInterpretation(interpreter: Interpreter, handler: ErrorHandler) {
+
+    }
+
+    private fun interpret(interpreter: Interpreter) {
+            interpreter.interpret()
     }
 
     private fun toToken(tokenString: String): Token { // reads a token.toString() and returns a token

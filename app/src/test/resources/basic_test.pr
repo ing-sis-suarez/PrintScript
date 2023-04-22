@@ -1,2 +1,4 @@
-let a: number = 2 + 3;
-println(a);
+let lette: number = 2 + 3 / 4 * 5;
+let b: number;
+b = a + 3;
+println(a+ "hola");

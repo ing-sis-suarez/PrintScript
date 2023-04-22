@@ -21,9 +21,12 @@ repositories {
 dependencies {
     implementation project(':lexer')
     implementation project(':parser')
-    implementation project(':interpreter')
+    implementation project(':evaluator')
     implementation project(':token')
-    implementation project(":ASTNode")
+    implementation project(":astn")
+    implementation project(":astn_provider")
+    implementation project(":token_provider")
+    implementation project(":interpreter")
     // Use the Kotlin JUnit 5 integration.
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
 

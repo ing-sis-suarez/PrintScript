@@ -1,3 +1,5 @@
+package Evaluator
+
 import ast.node.BinaryTokenNode
 import token.Location
 import token.Token
