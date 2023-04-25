@@ -1,3 +1,0 @@
-[90m/Users/juancruzdelorenzo/workspace/printscript/develop/formater/src/main/kotlin/[0mRegularFormatter.kt[90m:[0m1[90m:1:[0m Wildcard import [90m(no-wildcard-imports)[0m
-[90m/Users/juancruzdelorenzo/workspace/printscript/develop/formater/src/main/kotlin/[0mRegularFormatter.kt[90m:[0m77[90m:38:[0m Missing spacing after ":" [90m(colon-spacing)[0m
-[90m/Users/juancruzdelorenzo/workspace/printscript/develop/formater/src/main/kotlin/[0mRegularFormatter.kt[90m:[0m77[90m:45:[0m Missing spacing before "{" [90m(curly-spacing)[0m

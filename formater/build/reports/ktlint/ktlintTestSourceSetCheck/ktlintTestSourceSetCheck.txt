@@ -1,2 +1,0 @@
-[90m/Users/juancruzdelorenzo/workspace/printscript/develop/formater/src/test/kotlin/[0mRegularFormatterTest.kt[90m:[0m1[90m:1:[0m File must end with a newline (\n) [90m(final-newline)[0m
-[90m/Users/juancruzdelorenzo/workspace/printscript/develop/formater/src/test/kotlin/[0mRegularFormatterTest.kt[90m:[0m22[90m:1:[0m Needless blank line(s) [90m(no-consecutive-blank-lines)[0m
