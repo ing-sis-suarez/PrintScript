@@ -1,0 +1,4 @@
+let people: string = "hello";
+let three: number = 2 + 1;
+let a: string = "";
+a = people + three + "hey!";

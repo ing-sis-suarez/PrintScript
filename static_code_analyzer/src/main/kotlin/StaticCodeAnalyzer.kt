@@ -1,8 +1,8 @@
 import Analyzers.CamelCaseFormat
 import Analyzers.MethodNoExpresion
-import ast.node.ASTNode
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import node.ASTNode
 
 class StaticCodeAnalyzer(json: String) {
     val analizersList: ArrayList<Analyzer> = ArrayList()

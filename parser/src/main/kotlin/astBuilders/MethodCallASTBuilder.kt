@@ -1,9 +1,9 @@
 package astBuilders
 
-import ast.node.MethodCall
 import astBuilders.ASTBuilder.Companion.checkMinLength
 import astBuilders.ASTBuilder.Companion.checkTokenType
 import astBuilders.ASTBuilder.Companion.takeWhiteSpacesCommentsAndSemiColon
+import node.MethodCall
 import token.Token
 import token.TokenType
 
@@ -13,8 +13,8 @@ class MethodCallASTBuilder : ASTBuilder<MethodCall> {
     override fun isApplicable(statement: List<Token>): Boolean {
         val parsedStatements = takeWhiteSpacesCommentsAndSemiColon(statement)
         return parsedStatements[0].type == TokenType.IDENTIFIER &&
-                parsedStatements[1].type == TokenType.LEFT_PARENTHESIS &&
-                parsedStatements[parsedStatements.size - 1].type == TokenType.RIGHT_PARENTHESIS
+            parsedStatements[1].type == TokenType.LEFT_PARENTHESIS &&
+            parsedStatements[parsedStatements.size - 1].type == TokenType.RIGHT_PARENTHESIS
     }
 
     override fun buildAST(statement: List<Token>): MethodCall {

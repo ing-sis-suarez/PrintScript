@@ -22,4 +22,5 @@ include 'token_provider'
 include 'astn_provider'
 include 'interpreter'
 include 'cli'
+include 'consumer'
 

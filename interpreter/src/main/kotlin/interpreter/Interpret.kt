@@ -1,12 +1,12 @@
 package interpreter
 
-import ast.node.Assignation
-import ast.node.Declaration
-import ast.node.DeclarationInitialization
-import ast.node.MethodCall
-import node.ASTNProviderResponseError
-import node.ASTNProviderResponseSuccess
-import node.ASTNodeProvider
+import node.Assignation
+import node.Declaration
+import node.DeclarationInitialization
+import node.MethodCall
+import provider.ASTNProviderResponseError
+import provider.ASTNProviderResponseSuccess
+import provider.ASTNodeProvider
 import token.Token
 import token.TokenType
 import java.util.HashMap
@@ -23,9 +23,9 @@ class Interpret(private val astProvider: ASTNodeProvider) : Interpreter {
             return InterpreterFailResponse("Invalid Assignation in line ${declarationInitalization.declaration.identifier.location.row} ${declarationInitalization.declaration.identifier.location.column}")
         }
         val value = binaryOperatorReader.evaluate(declarationInitalization.value.tree)
-        return if (value is InterpreterFailResponse){
+        return if (value is InterpreterFailResponse) {
             value
-        }else{
+        } else {
             variables[declarationInitalization.declaration.identifier.actualValue()] = Pair(
                 getStringType(declarationInitalization.declaration.type),
                 value.toString()
@@ -39,9 +39,9 @@ class Interpret(private val astProvider: ASTNodeProvider) : Interpreter {
                 return InterpreterFailResponse("Invalid Assignation in line ${assignation.identifier.location.row} ${assignation.identifier.location.column}")
             }
             val value = binaryOperatorReader.evaluate(assignation.value.tree)
-            return if (value is InterpreterFailResponse){
+            return if (value is InterpreterFailResponse) {
                 value
-            }else{
+            } else {
                 variables.replace(
                     assignation.identifier.actualValue(),
                     Pair(
@@ -51,17 +51,15 @@ class Interpret(private val astProvider: ASTNodeProvider) : Interpreter {
                 )
                 InterpreterSuccessResponse(null)
             }
-
-
         } else {
             return InterpreterFailResponse("Variable ${assignation.identifier.actualValue()} not found in line ${assignation.identifier.location.row} ${assignation.identifier.location.column}")
         }
     }
     private fun evaluateMethodCall(methodCall: MethodCall): InterpreterResponse {
         val value = binaryOperatorReader.evaluate(methodCall.arguments.tree)
-        return if (value is InterpreterFailResponse){
+        return if (value is InterpreterFailResponse) {
             value
-        }else{
+        } else {
             InterpreterSuccessResponse(value.toString().replace(".0", ""))
         }
     }
@@ -78,7 +76,7 @@ class Interpret(private val astProvider: ASTNodeProvider) : Interpreter {
 
     override fun interpret(): InterpreterResponse {
         val ast = astProvider.readASTNode()
-        if (ast is ASTNProviderResponseSuccess){
+        if (ast is ASTNProviderResponseSuccess) {
             return when (ast.astNode) {
                 is Declaration -> evaluateDeclaration(ast.astNode as Declaration)
                 is DeclarationInitialization -> evaluateDeclarationInitalization(ast.astNode as DeclarationInitialization)
@@ -89,9 +87,9 @@ class Interpret(private val astProvider: ASTNodeProvider) : Interpreter {
                 }
             }
         }
-        return if (ast is ASTNProviderResponseError){
+        return if (ast is ASTNProviderResponseError) {
             InterpreterFailResponse(ast.error)
-        }else{
+        } else {
             InterpreterEndResponse()
         }
     }

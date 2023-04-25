@@ -5,6 +5,6 @@ interface Interpreter {
 }
 interface InterpreterResponse
 
-data class InterpreterSuccessResponse(val message: String?): InterpreterResponse
-data class InterpreterFailResponse(val error: String): InterpreterResponse
-class InterpreterEndResponse: InterpreterResponse
+data class InterpreterSuccessResponse(val message: String?) : InterpreterResponse
+data class InterpreterFailResponse(val error: String) : InterpreterResponse
+class InterpreterEndResponse : InterpreterResponse

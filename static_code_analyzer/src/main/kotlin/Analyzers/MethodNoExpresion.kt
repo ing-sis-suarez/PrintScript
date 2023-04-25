@@ -2,9 +2,9 @@ package Analyzers
 
 import Analyzer
 import InvalidInputException
-import ast.node.ASTNode
-import ast.node.MethodCall
-import ast.node.Value
+import node.ASTNode
+import node.MethodCall
+import node.Value
 import token.Location
 
 class MethodNoExpresion : Analyzer {

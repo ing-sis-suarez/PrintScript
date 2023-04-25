@@ -7,7 +7,7 @@ class Files {
             return this::class.java.classLoader.getResource(path)?.readText()
         }
 
-        fun getResouceAsFile(path: String): File?{
+        fun getResourceAsFile(path: String): File? {
             return this::class.java.classLoader.getResource(path)?.file?.let { File(it) }
         }
     }

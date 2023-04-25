@@ -1,16 +1,15 @@
 package astBuilders
 
-import ast.node.BinaryTokenNode
-import ast.node.Value
 import astBuilders.ASTBuilder.Companion.takeWhiteSpacesCommentsAndSemiColon
 import exceptions.UnexpectedTokenException
+import node.BinaryTokenNode
+import node.Value
 import token.Location
 import token.Token
 import token.TokenType
+import java.util.LinkedList
 import java.util.Queue
 import java.util.Stack
-import java.util.LinkedList
-
 
 class ValueASTBuilder : ASTBuilder<Value> {
     override fun isApplicable(statement: List<Token>): Boolean {

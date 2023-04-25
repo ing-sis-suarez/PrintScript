@@ -1,6 +1,6 @@
 package interpreter
 
-import ast.node.BinaryTokenNode
+import node.BinaryTokenNode
 import token.Token
 import token.TokenType
 
@@ -34,19 +34,20 @@ class BinaryOperatorReader(private val variables: MutableMap<String, Pair<String
         val rightValue = evaluate(binary.right!!)
         return when {
             leftValue is String || rightValue is String -> {
-                if (binary.token.type == TokenType.OPERATOR_PLUS){
+                if (binary.token.type == TokenType.OPERATOR_PLUS) {
                     operationString(leftValue.toString(), rightValue.toString(), binary.token.type)
-                }else{
-                    InterpreterFailResponse("${binary.token.type} is invalid with Number operations in line ${binary.token.location.row} ${binary.token.location.column}")
-                }            }
-            leftValue is Double && rightValue is Double -> {
-                if (binary.token.type == TokenType.OPERATOR_PLUS || binary.token.type == TokenType.OPERATOR_MINUS  || binary.token.type == TokenType.OPERATOR_TIMES || binary.token.type == TokenType.OPERATOR_DIVIDE){
-                    operation(leftValue, rightValue, binary.token.type)
-                }else{
+                } else {
                     InterpreterFailResponse("${binary.token.type} is invalid with Number operations in line ${binary.token.location.row} ${binary.token.location.column}")
                 }
             }
-            else -> {return InterpreterFailResponse("unexpected exception")}
+            leftValue is Double && rightValue is Double -> {
+                if (binary.token.type == TokenType.OPERATOR_PLUS || binary.token.type == TokenType.OPERATOR_MINUS || binary.token.type == TokenType.OPERATOR_TIMES || binary.token.type == TokenType.OPERATOR_DIVIDE) {
+                    operation(leftValue, rightValue, binary.token.type)
+                } else {
+                    InterpreterFailResponse("${binary.token.type} is invalid with Number operations in line ${binary.token.location.row} ${binary.token.location.column}")
+                }
+            }
+            else -> { return InterpreterFailResponse("unexpected exception") }
         }
     }
     private fun operation(left: Double, right: Double, op: TokenType): Double {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="lexer.LexerTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2023-04-25T20:22:10" hostname="Juans-MacBook-Air.local" time="0.114">
+  <properties/>
+  <testcase name="testOperationSyntax()" classname="lexer.LexerTest" time="0.086"/>
+  <testcase name="testPrintSyntax()" classname="lexer.LexerTest" time="0.003"/>
+  <testcase name="testAsignSyntax()" classname="lexer.LexerTest" time="0.006"/>
+  <testcase name="testUnclosedString()" classname="lexer.LexerTest" time="0.008"/>
+  <testcase name="testInvalidTokens()" classname="lexer.LexerTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,4 +1,4 @@
-import ast.node.BinaryTokenNode
+import node.BinaryTokenNode
 import token.TokenType
 
 class ValueTypeReader {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="InterpreterTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2023-04-16T23:03:52" hostname="Juans-MacBook-Air.local" time="0.13">
+  <properties/>
+  <testcase name="declarationinitializationOperationOperationTest()" classname="InterpreterTest" time="0.063"/>
+  <testcase name="declarationinitializationOperationOperationStrtingTest()" classname="InterpreterTest" time="0.009"/>
+  <testcase name="declarationTest()" classname="InterpreterTest" time="0.035"/>
+  <testcase name="declarationinitializationOperationOperationVariableTest()" classname="InterpreterTest" time="0.001"/>
+  <testcase name="declarationinitializationOperationTest()" classname="InterpreterTest" time="0.005"/>
+  <testcase name="assignationTest()" classname="InterpreterTest" time="0.002"/>
+  <system-out><![CDATA[Declaration(identifier=Token(type=IDENTIFIER, location=Location(row=0, column=4), originalValue=people, length=6), type=Token(type=STRING_KEYWORD, location=Location(row=0, column=12), originalValue=, length=6))
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
