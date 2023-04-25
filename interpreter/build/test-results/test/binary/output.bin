@@ -1,1 +1,0 @@
-ÓDeclaration(identifier=Token(type=IDENTIFIER, location=Location(row=0, column=4), originalValue=people, length=6), type=Token(type=STRING_KEYWORD, location=Location(row=0, column=12), originalValue=, length=6))
