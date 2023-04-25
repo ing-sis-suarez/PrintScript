@@ -1,0 +1,2 @@
+let people: string = "hello";
+println(people);

@@ -1,3 +1,0 @@
-package Evaluator
-
-class Example

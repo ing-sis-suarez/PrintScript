@@ -1,0 +1,3 @@
+let people: number = 2;
+let morepeople: number = people + 3;
+println(morepeolple);

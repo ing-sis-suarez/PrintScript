@@ -1,6 +1,6 @@
 package printscript
 
-import Evaluator.Evaluator
+// import Evaluator.Evaluator
 import FileTokenProvider
 import interpreter.Interpreter
 import lexer.RegularLexer
@@ -23,7 +23,7 @@ class App : PrintScriptInterpreter {
         if (tokenMap == null) handler.reportError("Unsupported version")
         val tokenProvider = FileTokenProvider(src, RegularLexer(tokenMap!!))
         val astProvider = ASTNodeProviderImpl(tokenProvider, RegularParser.createDefaultParser())
-        val interpreter: Interpreter = Evaluator(astProvider)
+        // val interpreter: Interpreter = Evaluator(astProvider)
     }
 
     private fun runInterpretation(interpreter: Interpreter, handler: ErrorHandler) {

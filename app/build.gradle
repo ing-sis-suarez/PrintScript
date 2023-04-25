@@ -21,7 +21,6 @@ repositories {
 dependencies {
     implementation project(':lexer')
     implementation project(':parser')
-    implementation project(':evaluator')
     implementation project(':token')
     implementation project(":astn")
     implementation project(":astn_provider")

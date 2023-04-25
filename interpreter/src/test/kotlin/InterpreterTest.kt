@@ -1,87 +1,42 @@
-import ast.node.ASTNode
-import lexer.Lexer
+import interpreter.Interpret
+import interpreter.Interpreter
+import interpreter.InterpreterSuccessResponse
 import lexer.RegularLexer
 import lexer.TokenReadersProvider
+import node.ASTNodeProvider
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import parser.Parser
 import parser.RegularParser
-import token.Token
+import provider.ASTNodeProviderImpl
+import java.io.File
+
 
 class InterpreterTest {
     @Test
-    fun declarationTest() {
-        val statement = readtxt("mock_text_declaration.txt")
-        val tokenList = lex(statement)
-        val astList = parse(tokenList)
-        println(astList.first().toString())
-        val evaluator = Evaluator()
-        evaluator.executionReader(astList)
-        Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_result.txt"))
-    }
+    fun declarationinitializationTest() {
+        val interpret: Interpreter = Interpret(setup(Files.getResouceAsFile("mock_text_declaration_initialization.txt")!!))
+        var result = interpret.interpret()
+        while (result is InterpreterSuccessResponse && result.message == null){
+            result = interpret.interpret()
+        }
 
-    @Test
-    fun declarationinitializationOperationTest() {
-        val statement = readtxt("mock_text_declaration_initialization.txt")
-        val tokenList = lex(statement)
-        val astList = parse(tokenList)
-        val evaluator = Evaluator()
-        evaluator.executionReader(astList)
-        Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_initialization_result.txt"))
+        Assertions.assertEquals(result, InterpreterSuccessResponse(Files.getResourceAsText("mock_text_declaration_initialization_result.txt").toString()))
     }
-
     @Test
     fun declarationinitializationOperationOperationTest() {
-        val statement = readtxt("mock_text_declaration_initialization_operation.txt")
-        val tokenList = lex(statement)
-        val astList = parse(tokenList)
-        val evaluator = Evaluator()
-        evaluator.executionReader(astList)
-        Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_initialization_operation_result.txt"))
+        val interpret: Interpreter = Interpret(setup(Files.getResouceAsFile("mock_text_declaration_initialization_operation.txt")!!))
+        var result = interpret.interpret()
+        while (result is InterpreterSuccessResponse && result.message == null){
+            result = interpret.interpret()
+        }
+
+        Assertions.assertEquals(result, InterpreterSuccessResponse(Files.getResourceAsText("mock_text_declaration_initialization_operation_result.txt").toString()))
     }
 
-    @Test
-    fun declarationinitializationOperationOperationStrtingTest() {
-        val statement = readtxt("mock_text_declaration_initialization_operation_string.txt")
-        val tokenList = lex(statement)
-        val astList = parse(tokenList)
-        val evaluator = Evaluator()
-        evaluator.executionReader(astList)
-        Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_initialization_operation_string_result.txt"))
-    }
 
-    @Test
-    fun declarationinitializationOperationOperationVariableTest() {
-        val statement = readtxt("mock_text_declaration_initialization_operation_variable.txt")
-        val tokenList = lex(statement)
-        val astList = parse(tokenList)
-        val evaluator = Evaluator()
-        evaluator.executionReader(astList)
-        Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_initialization_operation_variable_result.txt"))
-    }
-
-    @Test
-    fun assignationTest() {
-        val statement = readtxt("mock_text_declaration_initialization.txt")
-        val tokenList = lex(statement)
-        val astList = parse(tokenList)
-        val evaluator = Evaluator()
-        evaluator.executionReader(astList)
-        Assertions.assertEquals(evaluator.variables.toString(), readtxt("mock_text_declaration_initialization_result.txt"))
-    }
-
-    private fun parse(tokenList: List<Token>): List<ASTNode> {
-        val parser: Parser = RegularParser.createDefaultParser()
-        return parser.parse(tokenList)
-    }
-
-    private fun lex(statement: String): List<Token> {
-        val tokenMap = TokenReadersProvider().getTokenMap("PrintScript") ?: return emptyList()
-        val lexer: Lexer = RegularLexer(tokenMap)
-        return lexer.lex(statement)
-    }
-
-    private fun readtxt(fileName: String): String {
-        return Files.getResourceAsText(fileName).toString()
+    private fun setup(src: File): ASTNodeProvider {
+        val tokenMap = TokenReadersProvider().getTokenMap("1.0")
+        val tokenProvider = FileTokenProvider(src, RegularLexer(tokenMap!!))
+        return ASTNodeProviderImpl(tokenProvider, RegularParser.createDefaultParser())
     }
 }

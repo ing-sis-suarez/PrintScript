@@ -1,7 +1,6 @@
-package Evaluator
+package interpreter
 
 import ast.node.BinaryTokenNode
-import token.Location
 import token.Token
 import token.TokenType
 
@@ -9,7 +8,7 @@ class BinaryOperatorReader(private val variables: MutableMap<String, Pair<String
     private fun isLeaf(binary: BinaryTokenNode): Boolean {
         return binary.left == null && binary.right == null
     }
-    fun getValue(token: Token): Any {
+    private fun getValue(token: Token): Any {
         return when (token.type) {
             TokenType.NUMBER_LITERAL -> token.actualValue().toDouble()
             TokenType.STRING_LITERAL -> token.actualValue()
@@ -21,10 +20,10 @@ class BinaryOperatorReader(private val variables: MutableMap<String, Pair<String
                         variables[token.actualValue()]!!.second!!.toDouble()
                     }
                 } else {
-                    throw java.lang.IllegalArgumentException("Variable not initialized")
+                    return InterpreterFailResponse("Variable not initialized")
                 }
             }
-            else -> { throw IllegalArgumentException("Error") }
+            else -> { return InterpreterFailResponse("unexpected exception") }
         }
     }
     fun evaluate(binary: BinaryTokenNode): Any {
@@ -34,24 +33,35 @@ class BinaryOperatorReader(private val variables: MutableMap<String, Pair<String
         val leftValue = evaluate(binary.left!!)
         val rightValue = evaluate(binary.right!!)
         return when {
-            leftValue is String || rightValue is String -> operationString(leftValue.toString(), rightValue.toString(), binary.token.type, binary.token.location)
-            leftValue is Double && rightValue is Double -> operation(leftValue, rightValue, binary.token.type, binary.token.location)
-            else -> throw IllegalArgumentException("Tipos incompatibles: $leftValue, $rightValue")
+            leftValue is String || rightValue is String -> {
+                if (binary.token.type == TokenType.OPERATOR_PLUS){
+                    operationString(leftValue.toString(), rightValue.toString(), binary.token.type)
+                }else{
+                    InterpreterFailResponse("${binary.token.type} is invalid with Number operations in line ${binary.token.location.row} ${binary.token.location.column}")
+                }            }
+            leftValue is Double && rightValue is Double -> {
+                if (binary.token.type == TokenType.OPERATOR_PLUS || binary.token.type == TokenType.OPERATOR_MINUS  || binary.token.type == TokenType.OPERATOR_TIMES || binary.token.type == TokenType.OPERATOR_DIVIDE){
+                    operation(leftValue, rightValue, binary.token.type)
+                }else{
+                    InterpreterFailResponse("${binary.token.type} is invalid with Number operations in line ${binary.token.location.row} ${binary.token.location.column}")
+                }
+            }
+            else -> {return InterpreterFailResponse("unexpected exception")}
         }
     }
-    private fun operation(left: Double, right: Double, op: TokenType, location: Location): Double {
+    private fun operation(left: Double, right: Double, op: TokenType): Double {
         return when (op) {
             TokenType.OPERATOR_PLUS -> left + right
             TokenType.OPERATOR_MINUS -> left - right
             TokenType.OPERATOR_TIMES -> left * right
             TokenType.OPERATOR_DIVIDE -> left / right
-            else -> throw InvalidTypeException("$op is invalid with Number operations in line ${location.row} ${location.column}")
+            else -> throw Exception("unexpected")
         }
     }
-    private fun operationString(left: String, right: String, op: TokenType, location: Location): String {
+    private fun operationString(left: String, right: String, op: TokenType): String {
         return when (op) {
             TokenType.OPERATOR_PLUS -> left + right
-            else -> throw InvalidTypeException("$op is invalid with Number operations in line ${location.row} ${location.column}")
+            else -> throw Exception("unexpected")
         }
     }
     fun getValueType(value: BinaryTokenNode, variables: Map<String, Pair<String, String?>>): String {

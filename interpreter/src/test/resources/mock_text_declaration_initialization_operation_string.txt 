@@ -1,0 +1,2 @@
+let people: string = "algo " + (2 * 5);
+println(people);

@@ -1,2 +1,0 @@
-let people: number;
-people = 4 + 5;

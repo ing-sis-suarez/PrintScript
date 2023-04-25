@@ -1,1 +1,0 @@
-let people: number = (2 + 5) * 9;
