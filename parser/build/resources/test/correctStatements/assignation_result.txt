@@ -1,1 +1,0 @@
-Assignation(identifier=Token(type=IDENTIFIER, location=Location(row=0, column=0), originalValue=x, length=1), value=Value(tree=BinaryTokenNode(token=Token(type=NUMBER_LITERAL, location=Location(row=0, column=4), originalValue=1, length=1), right=null, left=null), tokenList=[Token(type=NUMBER_LITERAL, location=Location(row=0, column=4), originalValue=1, length=1)]))

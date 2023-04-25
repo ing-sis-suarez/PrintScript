@@ -1,8 +1,0 @@
-Token(type=LET_KEYWORD, location=Location(row=0, column=0), originalValue=, length=3)
-Token(type=WHITE_SPACE, location=Location(row=0, column=3), originalValue=, length=1)
-Token(type=IDENTIFIER, location=Location(row=0, column=4), originalValue=var, length=3)
-Token(type=DOUBLE_DOTS, location=Location(row=0, column=7), originalValue=, length=1)
-Token(type=WHITE_SPACE, location=Location(row=0, column=8), originalValue=, length=1)
-Token(type=NUMBER_KEYWORD, location=Location(row=0, column=9), originalValue=, length=6)
-Token(type=NUMBER_LITERAL, location=Location(row=0, column=10), originalValue=4, length=1)
-Token(type=SEMICOLON, location=Location(row=0, column=16), originalValue=, length=1)

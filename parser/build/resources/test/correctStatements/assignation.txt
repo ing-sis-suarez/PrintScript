@@ -1,6 +1,0 @@
-Token(type=IDENTIFIER, location=Location(row=0, column=0), originalValue=x, length=1)
-Token(type=WHITE_SPACE, location=Location(row=0, column=1), originalValue=, length=1)
-Token(type=ASIGNATION_EQUALS, location=Location(row=0, column=2), originalValue=, length=1)
-Token(type=WHITE_SPACE, location=Location(row=0, column=3), originalValue=, length=1)
-Token(type=NUMBER_LITERAL, location=Location(row=0, column=4), originalValue=1, length=1)
-Token(type=SEMICOLON, location=Location(row=0, column=5), originalValue=, length=1)
