@@ -15,7 +15,7 @@ class RegularFormatterTest {
     @Test
     fun declarationTest() {
         val formatter = RegularFormatter(setup(Files.getResourceAsFile("mock_text_declaration.txt")!!), FormatterConfig())
-        val result = formatter.consume(formatter.readNode()) as ConsumerResponseSuccess
+        val result = formatter.consume() as ConsumerResponseSuccess
 
         assertEquals(Files.getResourceAsText("mock_text_declaration_result.txt"), result.msg)
     }
@@ -23,7 +23,7 @@ class RegularFormatterTest {
     @Test
     fun declarationInitializationTest() {
         val formatter = RegularFormatter(setup(Files.getResourceAsFile("mock_text_declaration_initialization.txt")!!), FormatterConfig())
-        val result = formatter.consume(formatter.readNode()) as ConsumerResponseSuccess
+        val result = formatter.consume() as ConsumerResponseSuccess
 
         assertEquals(Files.getResourceAsText("mock_text_declaration_initialization_result.txt"), result.msg)
     }
@@ -31,7 +31,7 @@ class RegularFormatterTest {
     @Test
     fun declarationInitializationOperation() {
         val formatter = RegularFormatter(setup(Files.getResourceAsFile("mock_text_declaration_initialization_operation.txt")!!), FormatterConfig())
-        val result = formatter.consume(formatter.readNode()) as ConsumerResponseSuccess
+        val result = formatter.consume() as ConsumerResponseSuccess
 
         assertEquals(Files.getResourceAsText("mock_text_declaration_initialization_operation_result.txt"), result.msg)
     }
@@ -39,7 +39,7 @@ class RegularFormatterTest {
     @Test
     fun methodCallTest() {
         val formatter = RegularFormatter(setup(Files.getResourceAsFile("mock_text_print.txt")!!), FormatterConfig())
-        val result = formatter.consume(formatter.readNode()) as ConsumerResponseSuccess
+        val result = formatter.consume() as ConsumerResponseSuccess
 
         assertEquals(Files.getResourceAsText("mock_text_print_result.txt"), result.msg)
     }

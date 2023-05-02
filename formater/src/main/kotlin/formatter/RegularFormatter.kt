@@ -27,7 +27,8 @@ class RegularFormatter(private val astNodeProvider: ASTNodeProvider, private val
     private val LEFT_PARENTHESIS = "("
     private val RIGHT_PARENTHESIS = ")"
 
-    override fun consume(node: ASTNode): ConsumerResponse {
+    override fun consume(): ConsumerResponse {
+        val node: ASTNode = readNode()
         return when (node) {
             is Declaration -> ConsumerResponseSuccess(formatDeclaration(node) + SEMI_COLON)
             is DeclarationInitialization -> ConsumerResponseSuccess(formatInitialization(node) + SEMI_COLON)
