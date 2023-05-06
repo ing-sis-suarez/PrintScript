@@ -1,4 +1,4 @@
-package ast.node
+package node
 
 import token.Token
 

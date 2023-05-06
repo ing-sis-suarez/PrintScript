@@ -1,5 +1,5 @@
 import lexer.Lexer
-import main.kotlin.token_provider.TokenProvider
+import provider.TokenProvider
 import token.Token
 import java.io.File
 import java.util.Scanner
@@ -7,7 +7,7 @@ import java.util.Scanner
 class FileTokenProvider(
     src: File,
     private val lexer: Lexer
-): TokenProvider {
+) : TokenProvider {
 
     private val scanner = Scanner(src)
     private var currentLine = scanner.nextLine()
@@ -17,7 +17,8 @@ class FileTokenProvider(
     override fun readToken(): Token? {
         try {
             if (currentCharIndex >= currentLine.length) setNextLine()
-        }catch (e: NoMoreTokensException) {
+            if (currentLine.isBlank()) return readToken()
+        } catch (e: NoMoreTokensException) {
             return null
         }
         val result = lexer.lex(currentLine, currentCharIndex, currentLineNumber)
@@ -30,7 +31,9 @@ class FileTokenProvider(
             currentLine = scanner.nextLine()
             currentLineNumber++
             currentCharIndex = 0
-        } else throw NoMoreTokensException("No more tokens to read")
+        } else {
+            throw NoMoreTokensException("No more tokens to read")
+        }
     }
 
     private class NoMoreTokensException(message: String) : Exception(message)

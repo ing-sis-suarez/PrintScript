@@ -1,10 +1,9 @@
 package astBuilders
 
-import ast.node.DeclarationInitialization
 import astBuilders.ASTBuilder.Companion.takeWhiteSpacesCommentsAndSemiColon
+import node.DeclarationInitialization
 import token.Token
 import token.TokenType
-
 
 class DeclarationInitializationASTBuilder : ASTBuilder<DeclarationInitialization> {
 

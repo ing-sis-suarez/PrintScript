@@ -1,11 +1,8 @@
 package provider
 
-import main.kotlin.token_provider.TokenProvider
-import node.*
 import parser.Parser
 import token.Token
 import token.TokenType
-
 class ASTNodeProviderImpl(
     private val tokenProvider: TokenProvider,
     private val parser: Parser
@@ -15,12 +12,11 @@ class ASTNodeProviderImpl(
         val tokenList = mutableListOf<Token>()
         while (true) {
             val token = tokenProvider.readToken() ?: return handleNullToken(tokenList)
-            if (token.type == TokenType.SEMICOLON)
+            if (token.type == TokenType.SEMICOLON) {
                 return ASTNProviderResponseSuccess(parser.parse(tokenList))
+            }
             tokenList.add(token)
         }
-
-
     }
 
     private fun handleNullToken(tokenList: MutableList<Token>): ASTNProviderResponse {

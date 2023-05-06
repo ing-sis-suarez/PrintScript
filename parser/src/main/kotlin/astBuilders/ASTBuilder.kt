@@ -1,8 +1,8 @@
 package astBuilders
 
-import ast.node.ASTNode
 import exceptions.MalformedStructureException
 import exceptions.UnexpectedTokenException
+import node.ASTNode
 import token.Token
 import token.TokenType
 
@@ -16,10 +16,10 @@ interface ASTBuilder<out T : ASTNode> {
         fun takeWhiteSpacesCommentsAndSemiColon(tokens: List<Token>): List<Token> {
             return tokens.filter { token ->
                 !(
-                        token.type == TokenType.WHITE_SPACE ||
-                                token.type == TokenType.COMMENT ||
-                                token.type == TokenType.SEMICOLON
-                        )
+                    token.type == TokenType.WHITE_SPACE ||
+                        token.type == TokenType.COMMENT ||
+                        token.type == TokenType.SEMICOLON
+                    )
             }
         }
 

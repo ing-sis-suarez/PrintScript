@@ -26,5 +26,5 @@ dependencies {
     implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     implementation project(':token')
     implementation project(':utilities')
-    implementation project(':token_provider')
+    implementation project(':astn')
 }

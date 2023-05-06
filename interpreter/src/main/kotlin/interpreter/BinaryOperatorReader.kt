@@ -1,6 +1,6 @@
 package interpreter
 
-import ast.node.BinaryTokenNode
+import node.BinaryTokenNode
 import token.Token
 import token.TokenType
 
@@ -8,80 +8,69 @@ class BinaryOperatorReader(private val variables: MutableMap<String, Pair<String
     private fun isLeaf(binary: BinaryTokenNode): Boolean {
         return binary.left == null && binary.right == null
     }
-    private fun getValue(token: Token): Any {
+    private fun getValue(token: Token): Pair<String, String> {
         return when (token.type) {
-            TokenType.NUMBER_LITERAL -> token.actualValue().toDouble()
-            TokenType.STRING_LITERAL -> token.actualValue()
+            TokenType.NUMBER_LITERAL -> Pair("Number", token.actualValue())
+            TokenType.STRING_LITERAL -> Pair("String", token.actualValue())
             TokenType.IDENTIFIER -> {
                 if (variables.containsKey(token.actualValue()) && variables[token.actualValue()]!!.second != null) {
                     return if (variables[token.actualValue()]!!.first == "String") {
-                        variables[token.actualValue()]!!.second!!
+                        Pair("String", variables[token.actualValue()]!!.second!!)
                     } else {
-                        variables[token.actualValue()]!!.second!!.toDouble()
+                        Pair("Number", variables[token.actualValue()]!!.second!!)
                     }
                 } else {
-                    return InterpreterFailResponse("Variable not initialized")
+                    return Pair("Error", "Variable not initialized")
                 }
             }
-            else -> { return InterpreterFailResponse("unexpected exception") }
+            else -> { return Pair("Error", "Unexpected exception") }
         }
     }
-    fun evaluate(binary: BinaryTokenNode): Any {
+    fun evaluate(binary: BinaryTokenNode): Pair<String, String> {
         if (isLeaf(binary)) {
             return getValue(binary.token)
         }
         val leftValue = evaluate(binary.left!!)
         val rightValue = evaluate(binary.right!!)
         return when {
-            leftValue is String || rightValue is String -> {
-                if (binary.token.type == TokenType.OPERATOR_PLUS){
-                    operationString(leftValue.toString(), rightValue.toString(), binary.token.type)
-                }else{
-                    InterpreterFailResponse("${binary.token.type} is invalid with Number operations in line ${binary.token.location.row} ${binary.token.location.column}")
-                }            }
-            leftValue is Double && rightValue is Double -> {
-                if (binary.token.type == TokenType.OPERATOR_PLUS || binary.token.type == TokenType.OPERATOR_MINUS  || binary.token.type == TokenType.OPERATOR_TIMES || binary.token.type == TokenType.OPERATOR_DIVIDE){
-                    operation(leftValue, rightValue, binary.token.type)
-                }else{
-                    InterpreterFailResponse("${binary.token.type} is invalid with Number operations in line ${binary.token.location.row} ${binary.token.location.column}")
+            leftValue.first == "Error" -> {
+                return leftValue
+            }
+            rightValue.first == "Error" -> {
+                return rightValue
+            }
+            leftValue.first == "String" || rightValue.first == "String" -> {
+                if (binary.token.type == TokenType.OPERATOR_PLUS) {
+                    operationString(leftValue.second, rightValue.second, binary.token.type)
+                } else {
+                    Pair("Error", "${binary.token.type} is invalid with Number operations in line ${binary.token.location.row} ${binary.token.location.column}")
                 }
             }
-            else -> {return InterpreterFailResponse("unexpected exception")}
+            leftValue.first == "Number" && rightValue.first == "Number" -> {
+                if (binary.token.type == TokenType.OPERATOR_PLUS || binary.token.type == TokenType.OPERATOR_MINUS || binary.token.type == TokenType.OPERATOR_TIMES || binary.token.type == TokenType.OPERATOR_DIVIDE) {
+                    operation(leftValue.second.toDouble(), rightValue.second.toDouble(), binary.token.type)
+                } else {
+                    Pair("Error", "${binary.token.type} is invalid with Number operations in line ${binary.token.location.row} ${binary.token.location.column}")
+                }
+            }
+            else -> {
+                Pair("Error", "Unexpected expression")
+            }
         }
     }
-    private fun operation(left: Double, right: Double, op: TokenType): Double {
+    private fun operation(left: Double, right: Double, op: TokenType): Pair<String, String> {
         return when (op) {
-            TokenType.OPERATOR_PLUS -> left + right
-            TokenType.OPERATOR_MINUS -> left - right
-            TokenType.OPERATOR_TIMES -> left * right
-            TokenType.OPERATOR_DIVIDE -> left / right
+            TokenType.OPERATOR_PLUS -> Pair("Number", (left + right).toString())
+            TokenType.OPERATOR_MINUS -> Pair("Number", (left - right).toString())
+            TokenType.OPERATOR_TIMES -> Pair("Number", (left * right).toString())
+            TokenType.OPERATOR_DIVIDE -> Pair("Number", (left / right).toString())
             else -> throw Exception("unexpected")
         }
     }
-    private fun operationString(left: String, right: String, op: TokenType): String {
+    private fun operationString(left: String, right: String, op: TokenType): Pair<String, String> {
         return when (op) {
-            TokenType.OPERATOR_PLUS -> left + right
+            TokenType.OPERATOR_PLUS -> Pair("String", (left + right))
             else -> throw Exception("unexpected")
         }
-    }
-    fun getValueType(value: BinaryTokenNode, variables: Map<String, Pair<String, String?>>): String {
-        var valueType = "Number"
-        fun dfs(value: BinaryTokenNode) {
-            if (isLeaf(value)) {
-                if (value.token.type == TokenType.IDENTIFIER && variables.containsKey(value.token.actualValue()) && variables[value.token.actualValue()]!!.second!! == "String") {
-                    valueType = "String"
-                    return
-                }
-                if (value.token.type == TokenType.STRING_LITERAL) {
-                    valueType = "String"
-                    return
-                }
-            } else {
-                dfs(value.left!!)
-                dfs(value.right!!)
-            }
-        }
-        dfs(value)
-        return valueType
     }
 }

@@ -1,5 +1,6 @@
-import ast.node.ASTNode
+import consumer.ConsumerResponse
+import node.ASTNode
 
 interface Analyzer {
-    fun analyze(astNode: ASTNode)
+    fun analyze(astNode: ASTNode): ConsumerResponse
 }

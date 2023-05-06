@@ -14,8 +14,6 @@ dependencies {
     implementation project(':token')
     implementation project(':astn')
     implementation project(':utilities')
-    implementation project(':astn_provider')
-    implementation project(':token_provider')
 }
 
 test {

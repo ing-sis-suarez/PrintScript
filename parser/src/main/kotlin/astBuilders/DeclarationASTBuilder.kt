@@ -1,12 +1,11 @@
 package astBuilders
 
-import ast.node.Declaration
 import astBuilders.ASTBuilder.Companion.checkLength
 import astBuilders.ASTBuilder.Companion.checkTokenType
 import astBuilders.ASTBuilder.Companion.takeWhiteSpacesCommentsAndSemiColon
+import node.Declaration
 import token.Token
 import token.TokenType
-
 
 class DeclarationASTBuilder : ASTBuilder<Declaration> {
     override fun isApplicable(statement: List<Token>): Boolean {

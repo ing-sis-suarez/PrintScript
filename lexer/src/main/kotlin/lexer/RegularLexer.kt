@@ -3,7 +3,6 @@ package lexer
 import token.Location
 import token.Token
 import token.TokenType
-import java.io.File
 import java.util.*
 
 class RegularLexer(private val tokenReaderList: List<Pair<TokenVerifierFunc, StringToTokenFunc>>) : Lexer {

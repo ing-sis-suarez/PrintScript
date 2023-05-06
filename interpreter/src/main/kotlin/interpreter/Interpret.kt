@@ -1,68 +1,55 @@
 package interpreter
 
-import ast.node.Assignation
-import ast.node.Declaration
-import ast.node.DeclarationInitialization
-import ast.node.MethodCall
-import node.ASTNProviderResponseError
-import node.ASTNProviderResponseSuccess
-import node.ASTNodeProvider
+import consumer.*
+import node.*
+import provider.ASTNProviderResponseError
+import provider.ASTNProviderResponseSuccess
+import provider.ASTNodeProvider
 import token.Token
 import token.TokenType
 import java.util.HashMap
 
-class Interpret(private val astProvider: ASTNodeProvider) : Interpreter {
+class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumer {
     private val variables: MutableMap<String, Pair<String, String?>> = HashMap()
     private val binaryOperatorReader: BinaryOperatorReader = BinaryOperatorReader(variables)
-    private fun evaluateDeclaration(declarator: Declaration): InterpreterResponse {
+    private fun evaluateDeclaration(declarator: Declaration): ConsumerResponse {
         variables[declarator.identifier.actualValue()] = Pair(getStringType(declarator.type), null)
-        return InterpreterSuccessResponse(null)
+        return ConsumerResponseSuccess(null)
     }
-    private fun evaluateDeclarationInitalization(declarationInitalization: DeclarationInitialization): InterpreterResponse {
-        if (getStringType(declarationInitalization.declaration.type) != binaryOperatorReader.getValueType(declarationInitalization.value.tree, variables)) {
-            return InterpreterFailResponse("Invalid Assignation in line ${declarationInitalization.declaration.identifier.location.row} ${declarationInitalization.declaration.identifier.location.column}")
-        }
+    private fun evaluateDeclarationInitalization(declarationInitalization: DeclarationInitialization): ConsumerResponse {
         val value = binaryOperatorReader.evaluate(declarationInitalization.value.tree)
-        return if (value is InterpreterFailResponse){
-            value
-        }else{
-            variables[declarationInitalization.declaration.identifier.actualValue()] = Pair(
-                getStringType(declarationInitalization.declaration.type),
-                value.toString()
-            )
-            InterpreterSuccessResponse(null)
+        if (value.first == "Error") {
+            return ConsumerResponseError(value.second)
         }
-    }
-    private fun evaluateAssignation(assignation: Assignation): InterpreterResponse {
-        if (variables.containsKey(assignation.identifier.actualValue())) {
-            if (variables[assignation.identifier.actualValue()]!!.first != binaryOperatorReader.getValueType(assignation.value.tree, variables)) {
-                return InterpreterFailResponse("Invalid Assignation in line ${assignation.identifier.location.row} ${assignation.identifier.location.column}")
-            }
-            val value = binaryOperatorReader.evaluate(assignation.value.tree)
-            return if (value is InterpreterFailResponse){
-                value
-            }else{
-                variables.replace(
-                    assignation.identifier.actualValue(),
-                    Pair(
-                        variables[assignation.identifier.actualValue()]!!.first,
-                        value.toString()
-                    )
-                )
-                InterpreterSuccessResponse(null)
-            }
-
-
+        return if (getStringType(declarationInitalization.declaration.type) != value.first) {
+            ConsumerResponseError("Invalid Assignation in line ${declarationInitalization.declaration.identifier.location.row} ${declarationInitalization.declaration.identifier.location.column}")
         } else {
-            return InterpreterFailResponse("Variable ${assignation.identifier.actualValue()} not found in line ${assignation.identifier.location.row} ${assignation.identifier.location.column}")
+            variables[declarationInitalization.declaration.identifier.actualValue()] = value
+            ConsumerResponseSuccess(null)
         }
     }
-    private fun evaluateMethodCall(methodCall: MethodCall): InterpreterResponse {
+    private fun evaluateAssignation(assignation: Assignation): ConsumerResponse {
+        if (variables.containsKey(assignation.identifier.actualValue())) {
+            val value = binaryOperatorReader.evaluate(assignation.value.tree)
+            if (value.first == "Error") {
+                return ConsumerResponseError(value.second)
+            }
+            return if (variables[assignation.identifier.actualValue()]!!.first != value.first) {
+                ConsumerResponseError("Invalid Assignation in line ${assignation.identifier.location.row} ${assignation.identifier.location.column}")
+            } else {
+                variables.replace(assignation.identifier.actualValue(), value)
+                ConsumerResponseSuccess(null)
+            }
+        } else {
+            return ConsumerResponseError("Variable ${assignation.identifier.actualValue()} not found in line ${assignation.identifier.location.row} ${assignation.identifier.location.column}")
+        }
+    }
+    private fun evaluateMethodCall(methodCall: MethodCall): ConsumerResponse {
         val value = binaryOperatorReader.evaluate(methodCall.arguments.tree)
-        return if (value is InterpreterFailResponse){
-            value
-        }else{
-            InterpreterSuccessResponse(value.toString().replace(".0", ""))
+        return if (value.first == "Error") {
+            ConsumerResponseError(value.second)
+        } else {
+            ConsumerResponseSuccess(value.second.replace(".0", ""))
         }
     }
     private fun getStringType(token: Token): String {
@@ -76,23 +63,23 @@ class Interpret(private val astProvider: ASTNodeProvider) : Interpreter {
         }
     }
 
-    override fun interpret(): InterpreterResponse {
+    override fun consume(): ConsumerResponse {
         val ast = astProvider.readASTNode()
-        if (ast is ASTNProviderResponseSuccess){
+        if (ast is ASTNProviderResponseSuccess) {
             return when (ast.astNode) {
                 is Declaration -> evaluateDeclaration(ast.astNode as Declaration)
                 is DeclarationInitialization -> evaluateDeclarationInitalization(ast.astNode as DeclarationInitialization)
                 is Assignation -> evaluateAssignation(ast.astNode as Assignation)
                 is MethodCall -> evaluateMethodCall(ast.astNode as MethodCall)
                 else -> {
-                    return InterpreterFailResponse("Invalid AST")
+                    return ConsumerResponseError("Invalid AST")
                 }
             }
         }
-        return if (ast is ASTNProviderResponseError){
-            InterpreterFailResponse(ast.error)
-        }else{
-            InterpreterEndResponse()
+        return if (ast is ASTNProviderResponseError) {
+            ConsumerResponseError(ast.error)
+        } else {
+            ConsumerResponseEnd()
         }
     }
 }

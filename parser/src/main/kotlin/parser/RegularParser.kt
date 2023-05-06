@@ -1,12 +1,12 @@
 package parser
 
-import ast.node.ASTNode
 import astBuilders.ASTBuilder
 import astBuilders.AssignationASTBuilder
 import astBuilders.DeclarationASTBuilder
 import astBuilders.DeclarationInitializationASTBuilder
 import astBuilders.MethodCallASTBuilder
 import exceptions.MalformedStructureException
+import node.ASTNode
 import token.Token
 import token.TokenType
 

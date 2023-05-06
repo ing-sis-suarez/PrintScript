@@ -1,6 +1,6 @@
-package node
+package provider
 
-import ast.node.ASTNode
+import node.ASTNode
 
 interface ASTNodeProvider {
 

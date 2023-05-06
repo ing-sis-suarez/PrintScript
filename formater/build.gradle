@@ -21,6 +21,7 @@ test {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
     implementation project(':astn')
     implementation project(':token')
     implementation project(':lexer')
