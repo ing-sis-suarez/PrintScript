@@ -15,15 +15,15 @@ class TokenReadersProvider {
         { _, location -> Token(TokenType.WHITE_SPACE, location, "", 1) }
     )
     private val letKeyWordReader: TokenReader = Pair(
-        { string, startIndex -> isThisString(string, startIndex, "let") },
+        { string, startIndex -> isThisKeyword(string, startIndex, "let") },
         { _, location -> Token(TokenType.LET_KEYWORD, location, "", 3) }
     )
     private val numberKeyWordReader: TokenReader = Pair(
-        { string, startIndex -> isThisString(string, startIndex, "number") },
+        { string, startIndex -> isThisKeyword(string, startIndex, "number") },
         { _, location -> Token(TokenType.NUMBER_KEYWORD, location, "", 6) }
     )
     private val stringKeyWordReader: TokenReader = Pair(
-        { string, startIndex -> isThisString(string, startIndex, "string") },
+        { string, startIndex -> isThisKeyword(string, startIndex, "string") },
         { _, location -> Token(TokenType.STRING_KEYWORD, location, "", 6) }
     )
     private val doubleDotsReader: TokenReader = Pair(
@@ -156,10 +156,20 @@ class TokenReadersProvider {
         return line.length
     }
 
-    private fun isThisString(string: String, startIndex: Int, target: String) =
-        (checkIfStringEvaluatedFits(string, startIndex, target.length) && string.substring(startIndex, startIndex + target.length) == target)
 
-    private fun checkIfStringEvaluatedFits(string: String, index: Int, stringEvaluatedLength: Int) = string.length >= index + stringEvaluatedLength
+    private fun isThisKeyword(string: String, startIndex: Int, target: String): Boolean {
+        return  checkIfStringEvaluatedFits(string, startIndex, target.length + 1) &&
+                !string[startIndex + target.length].isLetterOrDigit() &&
+                (string.substring(startIndex, startIndex + target.length) == target)
+    }
+    private fun isThisString(string: String, startIndex: Int, target: String): Boolean {
+        return checkIfStringEvaluatedFits(string, startIndex, target.length) &&
+                (string.substring(startIndex, startIndex + target.length) == target)
+    }
+
+    private fun checkIfStringEvaluatedFits(string: String, index: Int, stringEvaluatedLength: Int): Boolean{
+        return string.length >= index + stringEvaluatedLength
+    }
 }
 
 typealias TokenVerifierFunc = (line: String, startIndex: Int) -> Boolean

@@ -11,4 +11,9 @@ repositories {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation("com.github.ajalt.clikt:clikt:3.5.2")
+    implementation project(':token_provider')
+    implementation project(':astn_provider')
+    implementation project(':lexer')
+    implementation project(':parser')
+    implementation project(':interpreter')
 }

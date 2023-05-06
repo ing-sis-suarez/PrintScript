@@ -27,18 +27,6 @@ class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>) : Par
         throw MalformedStructureException("Could not recognize syntax")
     }
 
-    private fun breakIntoStatements(tokens: List<Token>): List<List<Token>> {
-        var lastIndex = 0
-        val statements: MutableList<List<Token>> = mutableListOf()
-        for (i in tokens.indices) {
-            if (tokens[i].type == TokenType.SEMICOLON) {
-                statements.add(tokens.subList(lastIndex, i))
-                lastIndex = i + 1
-            }
-        }
-        return statements
-    }
-
     companion object {
         fun createDefaultParser(): RegularParser {
             return RegularParser(
