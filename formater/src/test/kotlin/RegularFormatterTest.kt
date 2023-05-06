@@ -4,6 +4,7 @@ import formatter.RegularFormatter
 import lexer.RegularLexer
 import lexer.TokenReadersProvider
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import parser.RegularParser
 import provider.ASTNodeProviderImpl
@@ -31,9 +32,10 @@ class RegularFormatterTest {
     @Test
     fun declarationInitializationOperation() {
         val formatter = RegularFormatter(setup(Files.getResourceAsFile("mock_text_declaration_initialization_operation.txt")!!), FormatterConfig())
-        val result = formatter.consume() as ConsumerResponseSuccess
+        val result = formatter.consume()
+        assertTrue(result is ConsumerResponseSuccess, "Result is not ConsumerResponseSuccess")
 
-        assertEquals(Files.getResourceAsText("mock_text_declaration_initialization_operation_result.txt"), result.msg)
+        assertEquals(Files.getResourceAsText("mock_text_declaration_initialization_operation_result.txt"), (result as ConsumerResponseSuccess).msg)
     }
 
     @Test

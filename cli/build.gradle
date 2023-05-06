@@ -8,12 +8,25 @@ repositories {
     mavenCentral()
 }
 
+test {
+    description = 'Runs CLI tests.'
+    group = 'verification'
+
+    useJUnitPlatform()
+    testLogging {
+        events "passed"
+    }
+}
+
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     implementation("com.github.ajalt.clikt:clikt:3.5.2")
-    implementation project(':token_provider')
-    implementation project(':astn_provider')
+    implementation project(':astn')
     implementation project(':lexer')
     implementation project(':parser')
     implementation project(':interpreter')
+    implementation project(':token')
+    implementation project(':utilities')
 }
