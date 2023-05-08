@@ -156,18 +156,17 @@ class TokenReadersProvider {
         return line.length
     }
 
-
     private fun isThisKeyword(string: String, startIndex: Int, target: String): Boolean {
-        return  checkIfStringEvaluatedFits(string, startIndex, target.length + 1) &&
-                !string[startIndex + target.length].isLetterOrDigit() &&
-                (string.substring(startIndex, startIndex + target.length) == target)
+        return checkIfStringEvaluatedFits(string, startIndex, target.length + 1) &&
+            !string[startIndex + target.length].isLetterOrDigit() &&
+            (string.substring(startIndex, startIndex + target.length) == target)
     }
     private fun isThisString(string: String, startIndex: Int, target: String): Boolean {
         return checkIfStringEvaluatedFits(string, startIndex, target.length) &&
-                (string.substring(startIndex, startIndex + target.length) == target)
+            (string.substring(startIndex, startIndex + target.length) == target)
     }
 
-    private fun checkIfStringEvaluatedFits(string: String, index: Int, stringEvaluatedLength: Int): Boolean{
+    private fun checkIfStringEvaluatedFits(string: String, index: Int, stringEvaluatedLength: Int): Boolean {
         return string.length >= index + stringEvaluatedLength
     }
 }

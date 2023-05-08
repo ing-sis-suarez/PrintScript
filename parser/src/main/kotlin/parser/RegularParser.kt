@@ -8,7 +8,6 @@ import astBuilders.MethodCallASTBuilder
 import exceptions.MalformedStructureException
 import node.ASTNode
 import token.Token
-import token.TokenType
 
 class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>) : Parser {
 

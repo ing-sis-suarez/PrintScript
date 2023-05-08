@@ -27,6 +27,8 @@ dependencies {
     implementation project(':lexer')
     implementation project(':parser')
     implementation project(':interpreter')
+    implementation project(':static_code_analyzer')
+    implementation project(':formater')
     implementation project(':token')
     implementation project(':utilities')
 }

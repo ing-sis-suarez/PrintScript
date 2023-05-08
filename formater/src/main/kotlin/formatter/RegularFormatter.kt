@@ -2,6 +2,7 @@ package formatter
 
 import consumer.ASTNodeConsumer
 import consumer.ConsumerResponse
+import consumer.ConsumerResponseEnd
 import consumer.ConsumerResponseError
 import consumer.ConsumerResponseSuccess
 import node.ASTNode
@@ -11,6 +12,7 @@ import node.DeclarationInitialization
 import node.MethodCall
 import node.Value
 import provider.ASTNProviderResponse
+import provider.ASTNProviderResponseEnd
 import provider.ASTNProviderResponseError
 import provider.ASTNProviderResponseSuccess
 import provider.ASTNodeProvider
@@ -28,21 +30,21 @@ class RegularFormatter(private val astNodeProvider: ASTNodeProvider, private val
     private val RIGHT_PARENTHESIS = ")"
 
     override fun consume(): ConsumerResponse {
-        val node: ASTNode = readNode()
+        return when (val astRes: ASTNProviderResponse = astNodeProvider.readASTNode()) {
+            is ASTNProviderResponseSuccess -> { getResponse(astRes.astNode) }
+            is ASTNProviderResponseEnd -> { ConsumerResponseEnd() }
+            is ASTNProviderResponseError -> { ConsumerResponseError(astRes.error) }
+            else -> { throw Exception("Unknown exception") }
+        }
+    }
+
+    private fun getResponse(node: ASTNode): ConsumerResponse {
         return when (node) {
             is Declaration -> ConsumerResponseSuccess(formatDeclaration(node) + SEMI_COLON)
             is DeclarationInitialization -> ConsumerResponseSuccess(formatInitialization(node) + SEMI_COLON)
             is Assignation -> ConsumerResponseSuccess(formatAssignation(node) + SEMI_COLON)
             is MethodCall -> ConsumerResponseSuccess(formatMethodCall(node) + SEMI_COLON)
             else -> ConsumerResponseError("Could not recognize syntax")
-        }
-    }
-
-    fun readNode(): ASTNode {
-        return when (val response: ASTNProviderResponse = astNodeProvider.readASTNode()) {
-            is ASTNProviderResponseSuccess -> response.astNode
-            is ASTNProviderResponseError -> throw Exception(response.error)
-            else -> throw Exception("Success finish")
         }
     }
 

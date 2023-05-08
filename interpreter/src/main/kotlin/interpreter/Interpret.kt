@@ -1,7 +1,14 @@
 package interpreter
 
-import consumer.*
-import node.*
+import consumer.ASTNodeConsumer
+import consumer.ConsumerResponse
+import consumer.ConsumerResponseEnd
+import consumer.ConsumerResponseError
+import consumer.ConsumerResponseSuccess
+import node.Assignation
+import node.Declaration
+import node.DeclarationInitialization
+import node.MethodCall
 import provider.ASTNProviderResponseError
 import provider.ASTNProviderResponseSuccess
 import provider.ASTNodeProvider
