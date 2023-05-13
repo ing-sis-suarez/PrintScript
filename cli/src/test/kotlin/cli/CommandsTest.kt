@@ -8,7 +8,7 @@ class CommandsTest {
     fun testInterpret() {
         val pathToFile = Files.getResourceAsFile("mock_text_declaration_initialization.txt")!!
         val pathToprint = Files.getResourceAsFile("mock_text_declaration_initialization_file.txt")!!
-        main(arrayOf("run", pathToFile.absolutePath, pathToprint.absolutePath, "1.0"))
+        main(arrayOf("run", pathToFile.absolutePath, "1.0", pathToprint.absolutePath))
         assertEquals(
             Files.getResourceAsText("mock_text_declaration_initialization_result_interpreter.txt"),
             Files.getResourceAsText("mock_text_declaration_initialization_file.txt")

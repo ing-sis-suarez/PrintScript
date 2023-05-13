@@ -26,5 +26,17 @@ tasks.register('copyPreCommitHook', Copy) {
     fileMode 0775
 }
 
+tasks.register('configureJar') {
+    dependsOn jar
+    doLast {
+        jar {
+            manifest {
+                attributes 'Main-Class': 'cli.CommandsKt'
+            }
+        }
+    }
+}
+
+build.dependsOn configureJar
 
 build.dependsOn copyPreCommitHook

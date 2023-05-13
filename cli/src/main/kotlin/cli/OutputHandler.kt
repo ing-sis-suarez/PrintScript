@@ -1,18 +1,20 @@
+package cli
+
 import java.io.File
 import java.io.FileWriter
 
-interface OutputHandlers {
+interface OutputHandler {
     fun print(msg: String)
 }
 
-data class Printer(val path: String?) : OutputHandlers {
-    private val handler: OutputHandlers = selectHandler()
+data class Printer(val path: String?) : OutputHandler {
+    private val handler: OutputHandler = selectHandler()
 
     override fun print(msg: String) {
         handler.print(msg)
     }
 
-    private fun selectHandler(): OutputHandlers {
+    private fun selectHandler(): OutputHandler {
         return if (path.equals("")) {
             ConsoleOutputHandler(path)
         } else {
@@ -20,7 +22,7 @@ data class Printer(val path: String?) : OutputHandlers {
         }
     }
 }
-data class FileOutputHandler(val path: String) : OutputHandlers {
+data class FileOutputHandler(val path: String) : OutputHandler {
     init {
         clearFileContent()
     }
@@ -41,7 +43,7 @@ data class FileOutputHandler(val path: String) : OutputHandlers {
         }
     }
 }
-data class ConsoleOutputHandler(val path: String?) : OutputHandlers {
+data class ConsoleOutputHandler(val path: String?) : OutputHandler {
     override fun print(msg: String) {
         println(msg)
     }

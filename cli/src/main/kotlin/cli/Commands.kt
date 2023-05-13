@@ -1,8 +1,8 @@
 package cli
 
 import FileTokenProvider
-import Printer
 import StaticCodeAnalyzer
+import cli.PrintScript.Companion.runConsumer
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.arguments.argument
@@ -23,13 +23,36 @@ import java.io.File
 
 class PrintScript : CliktCommand() {
     override fun run() = Unit
+
+    companion object {
+        fun runConsumer(consumer: ASTNodeConsumer, resultFile: String) {
+            val handler: OutputHandler = Printer(resultFile)
+            var result = consumer.consume()
+            while (result !is ConsumerResponseEnd) {
+                when (result) {
+                    is ConsumerResponseSuccess -> {
+                        if (result.msg != null) {
+                            handler.print(result.msg!!)
+                        }
+                    }
+
+                    is ConsumerResponseError -> {
+                        handler.print(result.error)
+                        return
+                    }
+                }
+                result = consumer.consume()
+            }
+        }
+    }
 }
 
 val supportedVersions = listOf("1.0")
+
 class Run : CliktCommand("Runs the program") {
     private val originalFile by argument("--initalFile", help = "The file to run")
-    private val resultFile by argument("--outputFile", help = "the file to print").default("")
     private val version by argument(help = "The version of the program")
+    private val resultFile by argument("--outputFile", help = "the file to print").default("")
 
     override fun run() {
         if (version !in supportedVersions) {
@@ -38,30 +61,12 @@ class Run : CliktCommand("Runs the program") {
         }
         val realFile = File(originalFile)
         if (!realFile.exists()) {
-            echo("File does not exist")
+            echo("Origin file does not exist")
             return
         }
-        val interpreter: ASTNodeConsumer = initializeInterpreter(version, realFile)
-        runConsumer(interpreter)
-    }
 
-    private fun runConsumer(consumer: ASTNodeConsumer) {
-        val handler = Printer(resultFile)
-        var result = consumer.consume()
-        while (result !is ConsumerResponseEnd) {
-            when (result) {
-                is ConsumerResponseSuccess -> {
-                    if (result.msg != null) {
-                        handler.print(result.msg!!)
-                    }
-                }
-                is ConsumerResponseError -> {
-                    handler.print(result.error)
-                    return
-                }
-            }
-            result = consumer.consume()
-        }
+        val interpreter: ASTNodeConsumer = initializeInterpreter(version, realFile)
+        runConsumer(interpreter, resultFile)
     }
 
     private fun initializeInterpreter(version: String, file: File): ASTNodeConsumer {
@@ -79,27 +84,9 @@ class Format : CliktCommand("Formats the program") {
             echo("File does not exist")
             return
         }
-        val formater: ASTNodeConsumer = initializeFormater(version, realFile)
-        runConsumer(formater)
-    }
 
-    private fun runConsumer(consumer: ASTNodeConsumer) {
-        val handler = Printer(resultFile)
-        var result = consumer.consume()
-        while (result !is ConsumerResponseEnd) {
-            when (result) {
-                is ConsumerResponseSuccess -> {
-                    if (result.msg != null) {
-                        handler.print(result.msg!!)
-                    }
-                }
-                is ConsumerResponseError -> {
-                    handler.print(result.error)
-                    return
-                }
-            }
-            result = consumer.consume()
-        }
+        val formater: ASTNodeConsumer = initializeFormater(version, realFile)
+        runConsumer(formater, resultFile)
     }
 
     private fun initializeFormater(version: String, file: File): ASTNodeConsumer {
@@ -127,20 +114,7 @@ class Analyze : CliktCommand("Analyzes the program") {
         }
         val jsonFile = File(configFile)
         val sCA: ASTNodeConsumer = initializeSCA(version, realFile, jsonFile)
-        runConsumer(sCA)
-    }
-
-    private fun runConsumer(consumer: ASTNodeConsumer) {
-        val handler = Printer(resultFile)
-        var result = consumer.consume()
-        while (result !is ConsumerResponseEnd) {
-            when (result) {
-                is ConsumerResponseError -> {
-                    handler.print(result.error)
-                }
-            }
-            result = consumer.consume()
-        }
+        runConsumer(sCA, resultFile)
     }
 
     private fun initializeSCA(version: String, file: File, config: File): ASTNodeConsumer {
@@ -159,6 +133,7 @@ class Config {
         return ASTNodeProviderImpl(FileTokenProvider(file, lexer), RegularParser.createDefaultParser())
     }
 }
+
 fun main(args: Array<String>) = PrintScript()
     .subcommands(Run(), Format(), Analyze())
     .main(args)
