@@ -30,7 +30,7 @@ data class FileOutputHandler(val path: String) : OutputHandlers {
             toPrintFile.createNewFile()
         }
         val writer = FileWriter(toPrintFile, true)
-        writer.appendLine(msg)
+        writer.append(msg + System.lineSeparator())
         writer.close()
     }
 

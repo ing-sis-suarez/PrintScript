@@ -14,21 +14,30 @@ class SCATest {
 
     @Test
     fun camelCaseTest() {
-        val sca: ASTNodeConsumer = StaticCodeAnalyzer(readtxt("camelCase.json"), setup(Files.getResourceAsFile("mock_text_declaration_Snake_Case.txt")!!))
+        val sca: ASTNodeConsumer = StaticCodeAnalyzer(
+            readtxt("camelCase.json"),
+            setup(Files.getResourceAsFile("mock_text_declaration_Snake_Case.txt")!!)
+        )
         val result = sca.consume()
         Assertions.assertEquals(result, ConsumerResponseError("Invalid typing format in row 1 4"))
     }
 
     @Test
     fun snakeCaseTest() {
-        val sca: ASTNodeConsumer = StaticCodeAnalyzer(readtxt("snakeCase.json"), setup(Files.getResourceAsFile("mock_text_declaration_Camel_Case.txt")!!))
+        val sca: ASTNodeConsumer = StaticCodeAnalyzer(
+            readtxt("snakeCase.json"),
+            setup(Files.getResourceAsFile("mock_text_declaration_Camel_Case.txt")!!)
+        )
         val result = sca.consume()
         Assertions.assertEquals(result, ConsumerResponseError("Invalid typing format in row 1 4"))
     }
 
     @Test
     fun methodNoExpresionTest() {
-        val sca: ASTNodeConsumer = StaticCodeAnalyzer(readtxt("methodNoExpresion.json"), setup(Files.getResourceAsFile("mock_text_declaration_Method_No_Expresion.txt")!!))
+        val sca: ASTNodeConsumer = StaticCodeAnalyzer(
+            readtxt("methodNoExpresion.json"),
+            setup(Files.getResourceAsFile("mock_text_declaration_Method_No_Expresion.txt")!!)
+        )
         val result = sca.consume()
         Assertions.assertEquals(result, ConsumerResponseSuccess(null))
     }
