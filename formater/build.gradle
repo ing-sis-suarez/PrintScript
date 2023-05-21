@@ -1,5 +1,6 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.8.10'
+    id 'jacoco'
 }
 
 version 'unspecified'
@@ -9,12 +10,23 @@ repositories {
 }
 
 test {
-    description = 'Runs formatter tests.'
+    description = 'Runs interpreter tests.'
     group = 'verification'
 
     useJUnitPlatform()
     testLogging {
         events "passed"
+    }
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
 }
 
