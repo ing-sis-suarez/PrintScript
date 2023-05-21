@@ -13,8 +13,8 @@ repositories {
 publishing {
     publications{
         maven(MavenPublication){
-            groupId = 'printscript.lexer'
-            artifactId = 'library'
+            groupId = 'printscript'
+            artifactId = 'lexer'
             version = '1.0'
         }
     }
