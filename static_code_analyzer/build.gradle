@@ -6,7 +6,6 @@ plugins {
 version 'unspecified'
 
 repositories {
-    mavenCentral()
 }
 
 publishing {

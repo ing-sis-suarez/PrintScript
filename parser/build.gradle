@@ -6,7 +6,7 @@ plugins {
 version 'unspecified'
 
 repositories {
-    mavenCentral()
+    version = '1.0-SNAPSHOT'
 }
 
 publishing {
