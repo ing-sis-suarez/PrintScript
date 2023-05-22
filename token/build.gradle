@@ -1,11 +1,12 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.8.10'
+    id 'maven-publish'
 }
 
 version 'unspecified'
 
 repositories {
-    version = '1.0-SNAPSHOT'
+
 }
 
 publishing {
