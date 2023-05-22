@@ -13,7 +13,7 @@ publishing {
         maven(MavenPublication){
             groupId = 'printscript'
             artifactId = 'token'
-            version = '1.0'
+            version = '1.0-SNAPSHOT'
         }
     }
     repositories {
