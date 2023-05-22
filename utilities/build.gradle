@@ -12,7 +12,7 @@ publishing {
     publications{
         maven(MavenPublication){
             groupId = 'printscript'
-            artifactId = 'token'
+            artifactId = 'utilities'
             version = '1.0'
         }
     }

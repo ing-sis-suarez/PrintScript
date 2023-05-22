@@ -9,6 +9,26 @@ repositories {
     mavenCentral()
 }
 
+publishing {
+    publications{
+        maven(MavenPublication){
+            groupId = 'printscript'
+            artifactId = 'interpreter'
+            version = '1.0'
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/jorgesuarezv/printscript"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
 test {
     description = 'Runs interpreter tests.'
     group = 'verification'
