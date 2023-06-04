@@ -49,7 +49,6 @@ jacocoTestReport {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     implementation project(':utilities')

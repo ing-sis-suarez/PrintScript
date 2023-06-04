@@ -33,7 +33,7 @@ class ValueASTBuilder : ASTBuilder<Value> {
         for (token in statement) {
             state = when (state) {
                 SyntaxState.START -> when (token.type) {
-                    TokenType.NUMBER_LITERAL, TokenType.IDENTIFIER, TokenType.STRING_LITERAL -> SyntaxState.OPERAND
+                    TokenType.NUMBER_LITERAL, TokenType.IDENTIFIER, TokenType.STRING_LITERAL, TokenType.BOOLEAN_LITERAL -> SyntaxState.OPERAND
                     TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
                     TokenType.OPERATOR_MINUS, TokenType.OPERATOR_PLUS -> SyntaxState.MINUS_OPERATOR_OR_OPERAND
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
@@ -46,7 +46,7 @@ class ValueASTBuilder : ASTBuilder<Value> {
                 }
 
                 SyntaxState.LEFT_PARENTHESIS -> when (token.type) {
-                    TokenType.NUMBER_LITERAL, TokenType.IDENTIFIER, TokenType.STRING_LITERAL -> SyntaxState.OPERAND
+                    TokenType.NUMBER_LITERAL, TokenType.IDENTIFIER, TokenType.STRING_LITERAL, TokenType.BOOLEAN_LITERAL -> SyntaxState.OPERAND
                     TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
                     TokenType.OPERATOR_MINUS -> SyntaxState.MINUS_OPERATOR_OR_OPERAND
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
@@ -121,7 +121,7 @@ class ValueASTBuilder : ASTBuilder<Value> {
     }
 
     private fun isValue(node: BinaryTokenNode): Boolean {
-        return node.token.type == TokenType.NUMBER_LITERAL || node.token.type == TokenType.STRING_LITERAL || node.token.type == TokenType.IDENTIFIER
+        return node.token.type == TokenType.NUMBER_LITERAL || node.token.type == TokenType.STRING_LITERAL || node.token.type == TokenType.IDENTIFIER || node.token.type == TokenType.BOOLEAN_LITERAL
     }
 
     private fun isLeftParenthesis(node: BinaryTokenNode): Boolean {

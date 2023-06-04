@@ -18,6 +18,18 @@ class TokenReadersProvider {
         { string, startIndex -> isThisKeyword(string, startIndex, "let") },
         { _, location -> Token(TokenType.LET_KEYWORD, location, "", 3) }
     )
+    private val constKeyWordReader: TokenReader = Pair(
+        { string, startIndex -> isThisKeyword(string, startIndex, "const") },
+        { _, location -> Token(TokenType.CONST_KEYWORD, location, "", 5) }
+    )
+    private val ifKeyWordReader: TokenReader = Pair(
+        { string, startIndex -> isThisKeyword(string, startIndex, "if") },
+        { _, location -> Token(TokenType.IF_KEYWORD, location, "", 2) }
+    )
+    private val elseKeyWordReader: TokenReader = Pair(
+        { string, startIndex -> isThisKeyword(string, startIndex, "else") },
+        { _, location -> Token(TokenType.ELSE_KEYWORD, location, "", 4) }
+    )
     private val numberKeyWordReader: TokenReader = Pair(
         { string, startIndex -> isThisKeyword(string, startIndex, "number") },
         { _, location -> Token(TokenType.NUMBER_KEYWORD, location, "", 6) }
@@ -25,6 +37,10 @@ class TokenReadersProvider {
     private val stringKeyWordReader: TokenReader = Pair(
         { string, startIndex -> isThisKeyword(string, startIndex, "string") },
         { _, location -> Token(TokenType.STRING_KEYWORD, location, "", 6) }
+    )
+    private val booleanKeyWordReader: TokenReader = Pair(
+        { string, startIndex -> isThisKeyword(string, startIndex, "boolean") },
+        { _, location -> Token(TokenType.BOOLEAN_KEYWORD, location, "", 7) }
     )
     private val doubleDotsReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, ":") },
@@ -58,6 +74,14 @@ class TokenReadersProvider {
         { string, startIndex -> isThisString(string, startIndex, ")") },
         { _, location -> Token(TokenType.RIGHT_PARENTHESIS, location, "", 1) }
     )
+    private val leftBraceReader: TokenReader = Pair(
+        { string, startIndex -> isThisString(string, startIndex, "{") },
+        { _, location -> Token(TokenType.LEFT_BRACE, location, "", 1) }
+    )
+    private val rightBraceReader: TokenReader = Pair(
+        { string, startIndex -> isThisString(string, startIndex, "}") },
+        { _, location -> Token(TokenType.RIGHT_BRACE, location, "", 1) }
+    )
     private val equalsReader: TokenReader = Pair(
         { string, startIndex -> isThisString(string, startIndex, "=") },
         { _, location -> Token(TokenType.ASIGNATION_EQUALS, location, "", 1) }
@@ -65,6 +89,10 @@ class TokenReadersProvider {
     private val numberLiteralReader: TokenReader = Pair(
         { string, startIndex -> string[startIndex].isDigit() },
         { string, location -> Token(TokenType.NUMBER_LITERAL, location, cutNumberFromLine(string, location), cutNumberFromLine(string, location).length) }
+    )
+    private val booleanLiteralReader: TokenReader = Pair(
+        { string, startIndex -> isThisString(string, startIndex, "true") || isThisString(string, startIndex, "false") },
+        { string, location -> Token(TokenType.BOOLEAN_LITERAL, location, cutIdentifierFromLine(string, location), cutIdentifierFromLine(string, location).length) }
     )
     private val identifierReader: TokenReader = Pair(
         { string, startIndex -> string[startIndex].isLetter() },
@@ -90,9 +118,9 @@ class TokenReadersProvider {
     }
 
     private val printScriptTokenList: MutableList<Pair<TokenVerifierFunc, StringToTokenFunc>> = mutableListOf(
-        commentReader, whiteSpaceReader, letKeyWordReader, numberKeyWordReader, stringKeyWordReader,
-        doubleDotsReader, semiColonReader, plusReader, minusReader, divisionReader, timesReader,
-        leftParenthesisReader, rightParenthesisReader, equalsReader, numberLiteralReader, identifierReader,
+        commentReader, whiteSpaceReader, letKeyWordReader, constKeyWordReader, ifKeyWordReader, elseKeyWordReader, numberKeyWordReader,
+        stringKeyWordReader, booleanKeyWordReader, doubleDotsReader, semiColonReader, plusReader, minusReader, divisionReader, timesReader,
+        leftParenthesisReader, rightParenthesisReader, leftBraceReader, rightBraceReader, equalsReader, numberLiteralReader, booleanLiteralReader, identifierReader,
         quotationMarksStringReader, apostropheStringReader
     )
 

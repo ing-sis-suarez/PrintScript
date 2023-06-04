@@ -21,9 +21,9 @@ class DeclarationASTBuilder : ASTBuilder<Declaration> {
 
     private fun checkDeclaration(statement: List<Token>) {
         checkLength(statement, 4, "declaration")
-        checkTokenType(statement[0], "Let", listOf(TokenType.LET_KEYWORD))
+        checkTokenType(statement[0], "Let or const", listOf(TokenType.LET_KEYWORD, TokenType.CONST_KEYWORD))
         checkTokenType(statement[1], "Identifier", listOf(TokenType.IDENTIFIER))
         checkTokenType(statement[2], "Double dots", listOf(TokenType.DOUBLE_DOTS))
-        checkTokenType(statement[3], "Type", listOf(TokenType.NUMBER_KEYWORD, TokenType.STRING_KEYWORD))
+        checkTokenType(statement[3], "Type", listOf(TokenType.NUMBER_KEYWORD, TokenType.STRING_KEYWORD, TokenType.BOOLEAN_KEYWORD))
     }
 }

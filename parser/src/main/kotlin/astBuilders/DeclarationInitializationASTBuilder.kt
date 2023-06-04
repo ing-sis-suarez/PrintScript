@@ -19,6 +19,7 @@ class DeclarationInitializationASTBuilder : ASTBuilder<DeclarationInitialization
         val parsedStatements = takeWhiteSpacesCommentsAndSemiColon(statement)
         val declaration = declarationBuilder.buildAST(parsedStatements.subList(0, 4))
         val value = valueBuilder.buildAST(parsedStatements.subList(5, parsedStatements.size))
-        return DeclarationInitialization(declaration, value)
+        val isConst = parsedStatements[0].type == TokenType.CONST_KEYWORD
+        return DeclarationInitialization(declaration, value, isConst)
     }
 }

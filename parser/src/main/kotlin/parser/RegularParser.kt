@@ -2,6 +2,7 @@ package parser
 
 import astBuilders.ASTBuilder
 import astBuilders.AssignationASTBuilder
+import astBuilders.ConditionASTBuilder
 import astBuilders.DeclarationASTBuilder
 import astBuilders.DeclarationInitializationASTBuilder
 import astBuilders.MethodCallASTBuilder
@@ -33,7 +34,8 @@ class RegularParser(private val astBuilderList: List<ASTBuilder<ASTNode>>) : Par
                     DeclarationInitializationASTBuilder(),
                     MethodCallASTBuilder(),
                     AssignationASTBuilder(),
-                    DeclarationASTBuilder()
+                    DeclarationASTBuilder(),
+                    ConditionASTBuilder()
                 )
             )
         }
