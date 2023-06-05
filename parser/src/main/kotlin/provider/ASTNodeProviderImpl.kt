@@ -32,7 +32,9 @@ class ASTNodeProviderImpl(
                 return ASTNProviderResponseEnd()
             }
             if (token.type == TokenType.LEFT_BRACE) {
+                tokenList.add(token)
                 readASTBlock(tokenList)
+                continue
             }
             tokenList.add(token)
         }
