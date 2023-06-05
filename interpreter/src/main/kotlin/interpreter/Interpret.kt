@@ -24,7 +24,7 @@ class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInter
     private val variables: MutableMap<String, Pair<String, String?>> = HashMap()
     private val mutable: MutableMap<String, Boolean> = HashMap()
     private var onHold: ASTNode? = null
-    private val conditionASTN: Queue<ASTNode> = LinkedList()
+    private val conditionASTN: Stack<ASTNode> = Stack()
     private var nextElse: Boolean? = null
     private val binaryOperatorReader: BinaryOperatorReader = BinaryOperatorReader(variables)
     private fun evaluateDeclaration(declarator: Declaration): ConsumerResponse {
@@ -80,7 +80,7 @@ class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInter
             } else {
                 when (value.second) {
                     "true" -> {
-                        conditionASTN.addAll(condition.ifAction)
+                        conditionASTN.addAll(condition.ifAction.reversed())
                         nextElse = false
                         val first = conditionASTN.peek()
                         if (first is Condition && first.condition == null) return ConsumerResponseError("Invalid else Operation")
@@ -127,7 +127,7 @@ class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInter
 
     override fun consume(): ConsumerResponse {
         if (!conditionASTN.isEmpty()) {
-            return readASTN(conditionASTN.poll())
+            return readASTN(conditionASTN.pop())
         }
         val ast = astProvider.readASTNode()
         if (ast is ASTNProviderResponseSuccess) {
