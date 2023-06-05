@@ -44,12 +44,12 @@ class ConditionASTBuilder : ASTBuilder<Condition> {
                 tokenList.clear()
                 continue
             }
-            if (token.type == TokenType.LEFT_BRACE){
+            if (token.type == TokenType.LEFT_BRACE) {
                 braceCount += 1
             }
-            if (token.type == TokenType.RIGHT_BRACE){
+            if (token.type == TokenType.RIGHT_BRACE) {
                 braceCount -= 1
-                if (braceCount == 0){
+                if (braceCount == 0) {
                     tokenList.add(token)
                     astnList.add(parser.parse(tokenList))
                     tokenList.clear()
@@ -67,8 +67,9 @@ class ConditionASTBuilder : ASTBuilder<Condition> {
     fun takeWhiteSpacesComments(tokens: List<Token>): List<Token> {
         return tokens.filter { token ->
             !(
-                    token.type == TokenType.WHITE_SPACE ||
-                            token.type == TokenType.COMMENT)
+                token.type == TokenType.WHITE_SPACE ||
+                    token.type == TokenType.COMMENT
+                )
         }
     }
 }
