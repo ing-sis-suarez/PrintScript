@@ -8,8 +8,10 @@ import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.default
 import consumer.ASTNodeConsumer
+import consumer.ASTNodeConsumerInterpreter
 import consumer.ConsumerResponseEnd
 import consumer.ConsumerResponseError
+import consumer.ConsumerResponseImput
 import consumer.ConsumerResponseSuccess
 import formatter.RegularFormatter
 import interpreter.Interpret
@@ -65,12 +67,36 @@ class Run : CliktCommand("Runs the program") {
             return
         }
 
-        val interpreter: ASTNodeConsumer = initializeInterpreter(version, realFile)
-        runConsumer(interpreter, resultFile)
+        val interpreter: ASTNodeConsumerInterpreter = initializeInterpreter(version, realFile)
+        runConsumerInterpreter(interpreter, resultFile)
     }
 
-    private fun initializeInterpreter(version: String, file: File): ASTNodeConsumer {
+    private fun initializeInterpreter(version: String, file: File): ASTNodeConsumerInterpreter {
         return Interpret(Config().generateASTNprovider(version, file))
+    }
+
+    fun runConsumerInterpreter(consumer: ASTNodeConsumerInterpreter, resultFile: String) {
+        val handler: OutputHandler = Printer(resultFile)
+        var result = consumer.consume()
+        while (result !is ConsumerResponseEnd) {
+            when (result) {
+                is ConsumerResponseSuccess -> {
+                    if (result.msg != null) {
+                        handler.print(result.msg!!)
+                    }
+                }
+
+                is ConsumerResponseError -> {
+                    handler.print(result.error)
+                    return
+                }
+
+                is ConsumerResponseImput -> {
+                    println(result.msg)
+                }
+            }
+            result = consumer.consume()
+        }
     }
 }
 
