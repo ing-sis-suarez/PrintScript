@@ -6,13 +6,19 @@ import consumer.ConsumerResponseEnd
 import consumer.ConsumerResponseError
 import consumer.ConsumerResponseImput
 import consumer.ConsumerResponseSuccess
-import node.*
+import node.ASTNode
+import node.Assignation
+import node.Condition
+import node.Declaration
+import node.DeclarationInitialization
+import node.MethodCall
+import node.Value
 import provider.ASTNProviderResponseError
 import provider.ASTNProviderResponseSuccess
 import provider.ASTNodeProvider
 import token.Token
 import token.TokenType
-import java.util.*
+import java.util.Stack
 
 class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInterpreter {
     private val variableManager = VariableManager()
