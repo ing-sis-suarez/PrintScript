@@ -33,6 +33,28 @@ class InterpreterTest {
         Assertions.assertEquals(result, ConsumerResponseSuccess(Files.getResourceAsText("mock_text_declaration_initialization_operation_result.txt").toString()))
     }
 
+    @Test
+    fun declarationinitializationOperationOperationStringTest() {
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_declaration_initialization_operation.txt")!!))
+        var result = interpret.consume()
+        while (result is ConsumerResponseSuccess && result.msg == null) {
+            result = interpret.consume()
+        }
+
+        Assertions.assertEquals(result, ConsumerResponseSuccess(Files.getResourceAsText("mock_text_declaration_initialization_operation_result.txt").toString()))
+    }
+
+    @Test
+    fun declarationinAssignationTest() {
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_declaration_assignation.txt")!!))
+        var result = interpret.consume()
+        while (result is ConsumerResponseSuccess && result.msg == null) {
+            result = interpret.consume()
+        }
+
+        Assertions.assertEquals(result, ConsumerResponseSuccess(Files.getResourceAsText("mock_text_declaration_assignation_result.txt").toString()))
+    }
+
     private fun setup(src: File): ASTNodeProvider {
         val tokenMap = TokenReadersProvider().getTokenMap("1.0")
         val tokenProvider = FileTokenProvider(src, RegularLexer(tokenMap!!))

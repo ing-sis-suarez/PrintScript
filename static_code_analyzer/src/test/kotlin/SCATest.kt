@@ -14,8 +14,9 @@ class SCATest {
 
     @Test
     fun camelCaseTest() {
+        val jsonReader = SCAJsonReader("camelCase.json")
         val sca: ASTNodeConsumer = StaticCodeAnalyzer(
-            readtxt("camelCase.json"),
+            jsonReader.readJson(),
             setup(Files.getResourceAsFile("mock_text_declaration_Snake_Case.txt")!!)
         )
         val result = sca.consume()
@@ -24,8 +25,9 @@ class SCATest {
 
     @Test
     fun snakeCaseTest() {
+        val jsonReader = SCAJsonReader("snakeCase.json")
         val sca: ASTNodeConsumer = StaticCodeAnalyzer(
-            readtxt("snakeCase.json"),
+            jsonReader.readJson(),
             setup(Files.getResourceAsFile("mock_text_declaration_Camel_Case.txt")!!)
         )
         val result = sca.consume()
@@ -34,21 +36,29 @@ class SCATest {
 
     @Test
     fun methodNoExpresionTest() {
+        val jsonReader = SCAJsonReader("methodNoExpresion.json")
         val sca: ASTNodeConsumer = StaticCodeAnalyzer(
-            readtxt("methodNoExpresion.json"),
+            jsonReader.readJson(),
             setup(Files.getResourceAsFile("mock_text_declaration_Method_No_Expresion.txt")!!)
         )
         val result = sca.consume()
         Assertions.assertEquals(result, ConsumerResponseSuccess(null))
     }
 
+    @Test
+    fun inputNoExpresionTest() {
+        val jsonReader = SCAJsonReader("inputNoExpresion.json")
+        val sca: ASTNodeConsumer = StaticCodeAnalyzer(
+            jsonReader.readJson(),
+            setup(Files.getResourceAsFile("mock_text_declaration_Input_No_Expresion.txt")!!)
+        )
+        val result = sca.consume()
+        Assertions.assertEquals(result, ConsumerResponseError("Invalid expression in row 1 23"))
+    }
+
     private fun setup(src: File): ASTNodeProvider {
         val tokenMap = TokenReadersProvider().getTokenMap("1.0")
         val tokenProvider = FileTokenProvider(src, RegularLexer(tokenMap!!))
         return ASTNodeProviderImpl(tokenProvider, RegularParser.createDefaultParser())
-    }
-
-    private fun readtxt(fileName: String): String {
-        return Files.getResourceAsText(fileName).toString()
     }
 }

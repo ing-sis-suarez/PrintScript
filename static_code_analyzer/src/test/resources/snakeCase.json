@@ -1,5 +1,7 @@
 {
   "CamelCaseFormat": false,
   "SnakeCaseFormat": true,
-  "MethodNoExpresion": true
+  "MethodNoExpresion": true,
+  "InputNoExpresion": false
+
 }
