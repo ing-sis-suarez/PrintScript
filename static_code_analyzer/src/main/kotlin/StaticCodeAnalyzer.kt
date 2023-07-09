@@ -1,8 +1,6 @@
 import Analyzers.CamelCaseFormat
 import Analyzers.InputNoExpresion
 import Analyzers.MethodNoExpresion
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import consumer.ASTNodeConsumer
 import consumer.ConsumerResponse
 import consumer.ConsumerResponseEnd

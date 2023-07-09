@@ -112,14 +112,14 @@ class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInter
     }
 
     override fun consume(): ConsumerResponse {
-        if (onHold != null){
+        if (onHold != null) {
             val astNode = onHold
             onHold = null
             return readASTN(astNode!!)
         }
         if (!conditionASTN.isEmpty()) {
             return readASTN(conditionASTN.pop())
-        }else{
+        } else {
             variableManager.setInCondition(false)
         }
         val ast = astProvider.readASTNode()
@@ -146,7 +146,7 @@ class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInter
                 is Condition -> evaluateCondition(ast)
                 is Value -> throw Exception("Invalid AST")
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             ConsumerResponseError(e.message!!)
         }
     }
