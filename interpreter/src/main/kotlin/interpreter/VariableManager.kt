@@ -1,73 +1,73 @@
 package interpreter
 
-class VariableManager{
+class VariableManager {
     private val variables: MutableMap<String, Variable> = HashMap()
     private val mutableVariable: MutableMap<String, Boolean> = HashMap()
     private val conditionVariables: MutableMap<String, Variable> = HashMap()
     private val mutableConditionVariable: MutableMap<String, Boolean> = HashMap()
     private var inCondition: Boolean = false
 
-    fun add (name: String, value: Variable, isMutable: Boolean) {
-        if (!variables.containsKey(name)){
-            if (inCondition){
-                if (!conditionVariables.containsKey(name)){
+    fun add(name: String, value: Variable, isMutable: Boolean) {
+        if (!variables.containsKey(name)) {
+            if (inCondition) {
+                if (!conditionVariables.containsKey(name)) {
                     conditionVariables[name] = value
                     mutableConditionVariable[name] = isMutable
                 }
-            }else{
+            } else {
                 variables[name] = value
                 mutableVariable[name] = isMutable
             }
         }
     }
 
-    fun replace (name: String, value: Variable){
-        if (variables.containsKey(name)){
+    fun replace(name: String, value: Variable) {
+        if (variables.containsKey(name)) {
             variables.replace(name, value)
             return
         }
-        if (conditionVariables.containsKey(name)){
+        if (conditionVariables.containsKey(name)) {
             conditionVariables.replace(name, value)
             return
-        }else{
+        } else {
             throw Exception("$name not found")
         }
     }
 
-    fun get(name: String): Variable{
-        if (variables.containsKey(name)){
+    fun get(name: String): Variable {
+        if (variables.containsKey(name)) {
             return variables[name]!!
         }
-        if (conditionVariables.containsKey(name)){
+        if (conditionVariables.containsKey(name)) {
             return conditionVariables[name]!!
-        }else{
+        } else {
             throw Exception("$name not found")
         }
     }
 
     fun contains(name: String): Boolean {
-        return if (inCondition){
+        return if (inCondition) {
             conditionVariables.contains(name)
-        }else{
+        } else {
             variables.containsKey(name)
         }
     }
 
-    fun isMutable(name: String): Boolean{
-        if(mutableVariable.contains(name)){
+    fun isMutable(name: String): Boolean {
+        if (mutableVariable.contains(name)) {
             return mutableVariable[name]!!
         }
-        if (mutableConditionVariable.contains(name)){
-            return mutableConditionVariable[name]!!
-        }else{
-            return false
+        return if (mutableConditionVariable.contains(name)) {
+            mutableConditionVariable[name]!!
+        } else {
+            false
         }
     }
 
-    fun setInCondition(condition: Boolean){
-        inCondition = if (condition){
+    fun setInCondition(condition: Boolean) {
+        inCondition = if (condition) {
             true
-        }else{
+        } else {
             conditionVariables.clear()
             mutableConditionVariable.clear()
             false
@@ -75,16 +75,16 @@ class VariableManager{
     }
 }
 
-class Variable(private val value: String?, private val type: ValueType){
-    fun getValue(): String?{
+class Variable(private val value: String?, private val type: ValueType) {
+    fun getValue(): String? {
         return value
     }
-    fun getType(): ValueType{
+    fun getType(): ValueType {
         return type
     }
 }
 
-enum class ValueType{
+enum class ValueType {
     NUMBER,
     STRING,
     BOOLEAN,
