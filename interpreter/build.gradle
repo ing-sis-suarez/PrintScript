@@ -54,8 +54,8 @@ jacocoTestReport {
 dependencies {
     implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     implementation project(':utilities')
-    implementation project(':lexer')
-    implementation project(':parser')
+    implementation project(':lexer') // todo test impl
+    implementation project(':parser') // todo test impl
     implementation project(':token')
     implementation project(':astn')
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")

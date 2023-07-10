@@ -16,7 +16,7 @@ publishing {
     publications{
         maven(MavenPublication){
             groupId = 'printscript'
-            artifactId = 'formater'
+            artifactId = 'cli'
             version = '1.0-SNAPSHOT'
         }
     }
@@ -45,13 +45,10 @@ test {
 application {
     // Define the main class for the application.
     mainClass = 'cli.CommandsKt'
-}
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'cli.PrintScriptKt'
+    run {
+        standardInput = System.in
     }
-    from(sourceSets.main.output)
 }
 
 dependencies {

@@ -48,13 +48,13 @@ class ConditionASTBuilder : ASTBuilder<Condition> {
                 braceCount += 1
             }
             if (token.type == TokenType.RIGHT_BRACE) {
-                braceCount -= 1
                 if (braceCount == 0) {
                     tokenList.add(token)
                     astnList.add(parser.parse(tokenList))
                     tokenList.clear()
                     continue
                 }
+                braceCount -= 1
             }
             tokenList.add(token)
         }

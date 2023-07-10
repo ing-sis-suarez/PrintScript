@@ -1,3 +1,2 @@
-let people_algo: number;
-people_algo = 10 + 11;
+let people_algo: number = 21;
 println(people_algo);

@@ -5,6 +5,7 @@ import consumer.ConsumerResponse
 import consumer.ConsumerResponseError
 import consumer.ConsumerResponseSuccess
 import node.ASTNode
+import node.BinaryOperator
 import node.MethodCall
 import node.Value
 import token.Location
@@ -18,10 +19,10 @@ class MethodNoExpresion : Analyzer {
     }
 
     private fun analyze(value: Value, location: Location): ConsumerResponse {
-        if (value.tree.right == null && value.tree.left == null) {
-            return ConsumerResponseSuccess(null)
+        return if (value.tree !is BinaryOperator) {
+            ConsumerResponseSuccess(null)
         } else {
-            return ConsumerResponseError("Invalid expression in row ${location.row} ${location.column}")
+            ConsumerResponseError("Invalid expression in row ${location.row} ${location.column}")
         }
     }
 }

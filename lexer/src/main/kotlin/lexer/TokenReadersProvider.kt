@@ -118,6 +118,12 @@ class TokenReadersProvider {
     }
 
     private val printScriptTokenList: MutableList<Pair<TokenVerifierFunc, StringToTokenFunc>> = mutableListOf(
+        commentReader, whiteSpaceReader, letKeyWordReader, numberKeyWordReader,
+        stringKeyWordReader, doubleDotsReader, semiColonReader, plusReader, minusReader, divisionReader, timesReader,
+        leftParenthesisReader, rightParenthesisReader, equalsReader, numberLiteralReader, identifierReader,
+        quotationMarksStringReader, apostropheStringReader
+    )
+    private val printScriptTokenListVersion2: MutableList<Pair<TokenVerifierFunc, StringToTokenFunc>> = mutableListOf(
         commentReader, whiteSpaceReader, letKeyWordReader, constKeyWordReader, ifKeyWordReader, elseKeyWordReader, numberKeyWordReader,
         stringKeyWordReader, booleanKeyWordReader, doubleDotsReader, semiColonReader, plusReader, minusReader, divisionReader, timesReader,
         leftParenthesisReader, rightParenthesisReader, leftBraceReader, rightBraceReader, equalsReader, numberLiteralReader, booleanLiteralReader, identifierReader,
@@ -125,7 +131,8 @@ class TokenReadersProvider {
     )
 
     private val tokenListMap: MutableMap<String, List<Pair<TokenVerifierFunc, StringToTokenFunc>>> = mutableMapOf(
-        Pair("1.0", printScriptTokenList)
+        Pair("1.0", printScriptTokenList),
+        Pair("1.1", printScriptTokenListVersion2)
     )
 
     fun getTokenMap(languageName: String): List<Pair<TokenVerifierFunc, StringToTokenFunc>>? {
