@@ -64,10 +64,10 @@ class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInter
         if (condition.condition != null) {
             val value = binaryOperatorReader.evaluate(condition.condition!!.tree)
             if (value.getType() == ValueType.INPUT) return imputOperation(condition, value.getValue()!!, ValueType.BOOLEAN)
-            return if (value.getType() != ValueType.BOOLEAN) {
+            if (value.getType() != ValueType.BOOLEAN) {
                 throw Exception("Invalid Assignation in condition in line")
             } else {
-                when (value.getValue()) {
+                return when (value.getValue()) {
                     "true" -> {
                         conditionASTN.addAll(condition.ifAction.reversed())
                         variableManager.setInCondition(true)
@@ -130,6 +130,9 @@ class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInter
         }
         val ast = astProvider.readASTNode()
         if (ast is ASTNProviderResponseSuccess) {
+            if (ast.astNode !is Condition) {
+                nextElse = null
+            }
             return readASTN(ast.astNode)
         }
         return if (ast is ASTNProviderResponseError) {
@@ -141,10 +144,7 @@ class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInter
 
     private fun readASTN(ast: ASTNode): ConsumerResponse {
         return try {
-            if (ast !is Condition) {
-                nextElse = null
-            }
-            when (ast) {
+            return when (ast) {
                 is Declaration -> evaluateDeclaration(ast)
                 is DeclarationInitialization -> evaluateDeclarationInitalization(ast)
                 is Assignation -> evaluateAssignation(ast)

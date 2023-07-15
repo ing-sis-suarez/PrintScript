@@ -101,6 +101,17 @@ class Run : CliktCommand("Runs the program") {
             }
             result = consumer.consume()
         }
+        deleteLastEmptyLine(resultFile)
+    }
+
+    fun deleteLastEmptyLine(filePath: String) {
+        val file = File(filePath)
+        if (!file.exists() || file.isDirectory) {
+            return
+        }
+        val lines = file.readLines()
+        val updatedLines = lines.dropLastWhile { it.isBlank() }
+        file.writeText(updatedLines.joinToString(System.lineSeparator()))
     }
 }
 

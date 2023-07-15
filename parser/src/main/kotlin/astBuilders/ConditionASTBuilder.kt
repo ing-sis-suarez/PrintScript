@@ -30,7 +30,7 @@ class ConditionASTBuilder : ASTBuilder<Condition> {
         if (parsedList[0].type == TokenType.IF_KEYWORD) {
             return Condition(valueBuilder.buildAST(parsedList.subList(2, 3)), astListBuilder(parsedList.subList(5, parsedList.size - 1)))
         }
-        return Condition(null, astListBuilder(parsedList.subList(2, statement.size - 1)))
+        return Condition(null, astListBuilder(parsedList.subList(2, parsedList.size - 1)))
     }
 
     private fun astListBuilder(list: List<Token>): MutableList<ASTNode> {
