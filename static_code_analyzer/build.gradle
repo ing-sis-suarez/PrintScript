@@ -18,7 +18,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/jorgesuarezv/printscript"
+            url = "https://maven.pkg.github.com/ing-sis-org/PrintScript"
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
@@ -49,7 +49,6 @@ jacocoTestReport {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     implementation project(':utilities')

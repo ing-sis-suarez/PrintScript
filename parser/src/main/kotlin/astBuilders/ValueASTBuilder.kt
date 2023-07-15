@@ -2,7 +2,13 @@ package astBuilders
 
 import astBuilders.ASTBuilder.Companion.takeWhiteSpacesCommentsAndSemiColon
 import exceptions.UnexpectedTokenException
+import node.BinaryOperator
 import node.BinaryTokenNode
+import node.BooleanOperator
+import node.IdentifierOperator
+import node.MethodCall
+import node.NumericOperator
+import node.StringOperator
 import node.Value
 import token.Location
 import token.Token
@@ -19,10 +25,11 @@ class ValueASTBuilder : ASTBuilder<Value> {
 
     override fun buildAST(statement: List<Token>): Value {
         val parsedStatements = takeWhiteSpacesCommentsAndSemiColon(statement)
+        val methods: MutableMap<Location, MethodCall> = HashMap()
         checkValueNode(parsedStatements)
-        val nodeList = parsedStatements.map { token -> BinaryTokenNode(token, null, null) }
-        val queue = processOperation(nodeList)
-        return Value(createTree(queue), statement)
+        val removedInput = findInput(parsedStatements, methods)
+        val queue = processOperation(removedInput)
+        return Value(createTree(queue, methods), statement)
         // 69 * 420 / ( 2 * 3 * 6 / 9 ) + 6
     }
 
@@ -33,7 +40,8 @@ class ValueASTBuilder : ASTBuilder<Value> {
         for (token in statement) {
             state = when (state) {
                 SyntaxState.START -> when (token.type) {
-                    TokenType.NUMBER_LITERAL, TokenType.IDENTIFIER, TokenType.STRING_LITERAL -> SyntaxState.OPERAND
+                    TokenType.IDENTIFIER -> if (token.actualValue() == "Input") SyntaxState.METHOD else SyntaxState.OPERAND
+                    TokenType.NUMBER_LITERAL, TokenType.STRING_LITERAL, TokenType.BOOLEAN_LITERAL -> SyntaxState.OPERAND
                     TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
                     TokenType.OPERATOR_MINUS, TokenType.OPERATOR_PLUS -> SyntaxState.MINUS_OPERATOR_OR_OPERAND
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
@@ -46,20 +54,23 @@ class ValueASTBuilder : ASTBuilder<Value> {
                 }
 
                 SyntaxState.LEFT_PARENTHESIS -> when (token.type) {
-                    TokenType.NUMBER_LITERAL, TokenType.IDENTIFIER, TokenType.STRING_LITERAL -> SyntaxState.OPERAND
+                    TokenType.IDENTIFIER -> if (token.actualValue() == "Input") SyntaxState.METHOD else SyntaxState.OPERAND
+                    TokenType.NUMBER_LITERAL, TokenType.STRING_LITERAL, TokenType.BOOLEAN_LITERAL -> SyntaxState.OPERAND
                     TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
                     TokenType.OPERATOR_MINUS -> SyntaxState.MINUS_OPERATOR_OR_OPERAND
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
                 }
 
                 SyntaxState.MINUS_OPERATOR_OR_OPERAND -> when (token.type) {
-                    TokenType.NUMBER_LITERAL, TokenType.IDENTIFIER, TokenType.STRING_LITERAL -> SyntaxState.OPERAND
+                    TokenType.IDENTIFIER -> if (token.actualValue() == "Input") SyntaxState.METHOD else SyntaxState.OPERAND
+                    TokenType.NUMBER_LITERAL, TokenType.STRING_LITERAL -> SyntaxState.OPERAND
                     TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
                 }
 
                 SyntaxState.OPERATOR -> when (token.type) {
-                    TokenType.NUMBER_LITERAL, TokenType.IDENTIFIER, TokenType.STRING_LITERAL -> SyntaxState.OPERAND
+                    TokenType.IDENTIFIER -> if (token.actualValue() == "Input") SyntaxState.METHOD else SyntaxState.OPERAND
+                    TokenType.NUMBER_LITERAL, TokenType.STRING_LITERAL -> SyntaxState.OPERAND
                     TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
                 }
@@ -69,9 +80,13 @@ class ValueASTBuilder : ASTBuilder<Value> {
                     TokenType.RIGHT_PARENTHESIS -> SyntaxState.RIGHT_PARENTHESIS
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
                 }
+
+                SyntaxState.METHOD -> when (token.type) {
+                    TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
+                    else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
+                }
             }
         }
-
         if (!(state == SyntaxState.OPERAND || state == SyntaxState.RIGHT_PARENTHESIS)) throw UnexpectedTokenException("Unexpected token at: ${statement[statement.size - 1].location.row}, ${statement[statement.size - 1].location.column}")
     }
 
@@ -81,7 +96,8 @@ class ValueASTBuilder : ASTBuilder<Value> {
         OPERATOR,
         LEFT_PARENTHESIS,
         OPERAND,
-        RIGHT_PARENTHESIS
+        RIGHT_PARENTHESIS,
+        METHOD
     }
 
     private fun checkcloseParenthesis(statement: List<Token>) {
@@ -94,9 +110,9 @@ class ValueASTBuilder : ASTBuilder<Value> {
         if (count != 0) throw UnexpectedTokenException("Unclosed parenthesis at: ${statement[statement.size - 1].location.row}")
     }
 
-    private fun processOperation(nodeList: List<BinaryTokenNode>): Queue<BinaryTokenNode> {
-        val stack: Stack<BinaryTokenNode> = Stack()
-        val queue: Queue<BinaryTokenNode> = LinkedList()
+    private fun processOperation(nodeList: List<Token>): Queue<Token> {
+        val stack: Stack<Token> = Stack()
+        val queue: Queue<Token> = LinkedList()
         for (node in nodeList) {
             if (isValue(node)) {
                 queue.add(node)
@@ -120,22 +136,22 @@ class ValueASTBuilder : ASTBuilder<Value> {
         return queue
     }
 
-    private fun isValue(node: BinaryTokenNode): Boolean {
-        return node.token.type == TokenType.NUMBER_LITERAL || node.token.type == TokenType.STRING_LITERAL || node.token.type == TokenType.IDENTIFIER
+    private fun isValue(token: Token): Boolean {
+        return token.type == TokenType.NUMBER_LITERAL || token.type == TokenType.STRING_LITERAL || token.type == TokenType.IDENTIFIER || token.type == TokenType.BOOLEAN_LITERAL
     }
 
-    private fun isLeftParenthesis(node: BinaryTokenNode): Boolean {
-        return node.token.type == TokenType.LEFT_PARENTHESIS
+    private fun isLeftParenthesis(token: Token): Boolean {
+        return token.type == TokenType.LEFT_PARENTHESIS
     }
 
-    private fun isOperator(node: BinaryTokenNode): Boolean {
-        return node.token.type == TokenType.OPERATOR_PLUS || node.token.type == TokenType.OPERATOR_DIVIDE ||
-            node.token.type == TokenType.OPERATOR_MINUS || node.token.type == TokenType.OPERATOR_TIMES
+    private fun isOperator(token: Token): Boolean {
+        return token.type == TokenType.OPERATOR_PLUS || token.type == TokenType.OPERATOR_DIVIDE ||
+            token.type == TokenType.OPERATOR_MINUS || token.type == TokenType.OPERATOR_TIMES
     }
 
     private fun hasLessPrecedence(
-        node: BinaryTokenNode,
-        otherNode: BinaryTokenNode
+        token: Token,
+        otherToken: Token
     ): Boolean {
         val precedence = listOf(
             TokenType.OPERATOR_MINUS,
@@ -143,16 +159,22 @@ class ValueASTBuilder : ASTBuilder<Value> {
             TokenType.OPERATOR_DIVIDE,
             TokenType.OPERATOR_TIMES
         )
-        return precedence.indexOf(node.token.type) < precedence.indexOf(otherNode.token.type) &&
-            !isLeftParenthesis(otherNode)
+        return precedence.indexOf(token.type) < precedence.indexOf(otherToken.type) &&
+            !isLeftParenthesis(otherToken)
     }
 
-    private fun createTree(queue: Queue<BinaryTokenNode>): BinaryTokenNode {
+    private fun createTree(queue: Queue<Token>, methods: MutableMap<Location, MethodCall>): BinaryTokenNode {
         val stack: Stack<BinaryTokenNode> = Stack()
         while (queue.size != 0) {
             val node = queue.remove()
             if (isValue(node)) {
-                stack.push(node)
+                if (node.type == TokenType.IDENTIFIER && node.actualValue() == "Input") {
+                    if (methods.containsKey(node.location)) {
+                        stack.push(methods[node.location])
+                    }
+                } else {
+                    stack.push(createValue(node))
+                }
             } else {
                 stack.push(createOperationTree(node, stack))
             }
@@ -161,18 +183,75 @@ class ValueASTBuilder : ASTBuilder<Value> {
     }
 
     private fun createOperationTree(
-        node: BinaryTokenNode,
+        node: Token,
         stack: Stack<BinaryTokenNode>
     ): BinaryTokenNode {
         val right = stack.pop()
-        return BinaryTokenNode(
-            node.token,
+        return BinaryOperator(
+            node,
             right,
-            if (stack.empty()) createZeroNode(right.token.location) else stack.pop()
+            if (stack.empty()) createZeroNode(node.location) else stack.pop()
         )
     }
 
     private fun createZeroNode(location: Location): BinaryTokenNode {
-        return BinaryTokenNode(Token(TokenType.NUMBER_LITERAL, location, "0", 1), null, null)
+        return NumericOperator(Token(TokenType.NUMBER_LITERAL, location, "0", 1))
+    }
+
+    private fun createValue(token: Token): BinaryTokenNode {
+        return when (token.type) {
+            TokenType.NUMBER_LITERAL -> NumericOperator(token)
+            TokenType.STRING_LITERAL -> StringOperator(token)
+            TokenType.BOOLEAN_LITERAL -> BooleanOperator(token)
+            TokenType.IDENTIFIER -> IdentifierOperator(token)
+            else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
+        }
+    }
+
+    private fun findInput(tokens: List<Token>, methods: MutableMap<Location, MethodCall>): List<Token> {
+        var parenthesis = 0
+        var isMethod = false
+        val methodTokens: MutableList<Token> = mutableListOf()
+        val toRemove: MutableList<Token> = mutableListOf()
+        val methodCall = MethodCallASTBuilder()
+        for (token in tokens) {
+            when (token.type) {
+                TokenType.IDENTIFIER -> {
+                    methodTokens.add(token)
+                    isMethod = true
+                }
+                TokenType.LEFT_PARENTHESIS -> {
+                    if (isMethod) {
+                        methodTokens.add(token)
+                        parenthesis++
+                    }
+                }
+                TokenType.RIGHT_PARENTHESIS -> {
+                    if (isMethod) {
+                        if (parenthesis == 1) {
+                            methodTokens.add(token)
+                            methods[methodTokens[0].location] = methodCall.buildAST(methodTokens)
+                            toRemove.addAll(ArrayList(methodTokens.subList(1, methodTokens.size)))
+                            methodTokens.clear()
+                            isMethod = false
+                            parenthesis = 0
+                        } else {
+                            methodTokens.add(token)
+                            parenthesis--
+                        }
+                    }
+                }
+                else -> {
+                    if (isMethod) {
+                        methodTokens.add(token)
+                    }
+                }
+            }
+        }
+        return removeInputs(tokens.toMutableList(), toRemove)
+    }
+
+    private fun removeInputs(tokens: MutableList<Token>, toRemove: MutableList<Token>): List<Token> {
+        return tokens.filter { elemento -> !toRemove.contains(elemento) }
     }
 }

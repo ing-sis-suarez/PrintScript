@@ -1,4 +1,4 @@
-import consumer.ASTNodeConsumer
+import consumer.ASTNodeConsumerInterpreter
 import consumer.ConsumerResponseSuccess
 import interpreter.Interpret
 import lexer.RegularLexer
@@ -13,7 +13,7 @@ import java.io.File
 class InterpreterTest {
     @Test
     fun declarationinitializationTest() {
-        val interpret: ASTNodeConsumer = Interpret(setup(Files.getResourceAsFile("mock_text_declaration_initialization.txt")!!))
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_declaration_initialization.txt")!!))
         var result = interpret.consume()
         while (result is ConsumerResponseSuccess && result.msg == null) {
             result = interpret.consume()
@@ -24,13 +24,35 @@ class InterpreterTest {
 
     @Test
     fun declarationinitializationOperationOperationTest() {
-        val interpret: ASTNodeConsumer = Interpret(setup(Files.getResourceAsFile("mock_text_declaration_initialization_operation.txt")!!))
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_declaration_initialization_operation.txt")!!))
         var result = interpret.consume()
         while (result is ConsumerResponseSuccess && result.msg == null) {
             result = interpret.consume()
         }
 
         Assertions.assertEquals(result, ConsumerResponseSuccess(Files.getResourceAsText("mock_text_declaration_initialization_operation_result.txt").toString()))
+    }
+
+    @Test
+    fun declarationinitializationOperationOperationStringTest() {
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_declaration_initialization_operation.txt")!!))
+        var result = interpret.consume()
+        while (result is ConsumerResponseSuccess && result.msg == null) {
+            result = interpret.consume()
+        }
+
+        Assertions.assertEquals(result, ConsumerResponseSuccess(Files.getResourceAsText("mock_text_declaration_initialization_operation_result.txt").toString()))
+    }
+
+    @Test
+    fun declarationinAssignationTest() {
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_declaration_assignation.txt")!!))
+        var result = interpret.consume()
+        while (result is ConsumerResponseSuccess && result.msg == null) {
+            result = interpret.consume()
+        }
+
+        Assertions.assertEquals(result, ConsumerResponseSuccess(Files.getResourceAsText("mock_text_declaration_assignation_result.txt").toString()))
     }
 
     private fun setup(src: File): ASTNodeProvider {
