@@ -1,1 +1,1 @@
-let test: number = 3 + Input("algo" + "mas");
+let test: number = 3 + readInput("algo" + "mas");

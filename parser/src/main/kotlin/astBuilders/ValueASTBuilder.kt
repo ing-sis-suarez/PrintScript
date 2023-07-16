@@ -40,7 +40,7 @@ class ValueASTBuilder : ASTBuilder<Value> {
         for (token in statement) {
             state = when (state) {
                 SyntaxState.START -> when (token.type) {
-                    TokenType.IDENTIFIER -> if (token.actualValue() == "Input") SyntaxState.METHOD else SyntaxState.OPERAND
+                    TokenType.IDENTIFIER -> if (token.actualValue() == "readInput") SyntaxState.METHOD else SyntaxState.OPERAND
                     TokenType.NUMBER_LITERAL, TokenType.STRING_LITERAL, TokenType.BOOLEAN_LITERAL -> SyntaxState.OPERAND
                     TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
                     TokenType.OPERATOR_MINUS, TokenType.OPERATOR_PLUS -> SyntaxState.MINUS_OPERATOR_OR_OPERAND
@@ -54,7 +54,7 @@ class ValueASTBuilder : ASTBuilder<Value> {
                 }
 
                 SyntaxState.LEFT_PARENTHESIS -> when (token.type) {
-                    TokenType.IDENTIFIER -> if (token.actualValue() == "Input") SyntaxState.METHOD else SyntaxState.OPERAND
+                    TokenType.IDENTIFIER -> if (token.actualValue() == "readInput") SyntaxState.METHOD else SyntaxState.OPERAND
                     TokenType.NUMBER_LITERAL, TokenType.STRING_LITERAL, TokenType.BOOLEAN_LITERAL -> SyntaxState.OPERAND
                     TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
                     TokenType.OPERATOR_MINUS -> SyntaxState.MINUS_OPERATOR_OR_OPERAND
@@ -62,14 +62,14 @@ class ValueASTBuilder : ASTBuilder<Value> {
                 }
 
                 SyntaxState.MINUS_OPERATOR_OR_OPERAND -> when (token.type) {
-                    TokenType.IDENTIFIER -> if (token.actualValue() == "Input") SyntaxState.METHOD else SyntaxState.OPERAND
+                    TokenType.IDENTIFIER -> if (token.actualValue() == "readInput") SyntaxState.METHOD else SyntaxState.OPERAND
                     TokenType.NUMBER_LITERAL, TokenType.STRING_LITERAL -> SyntaxState.OPERAND
                     TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
                 }
 
                 SyntaxState.OPERATOR -> when (token.type) {
-                    TokenType.IDENTIFIER -> if (token.actualValue() == "Input") SyntaxState.METHOD else SyntaxState.OPERAND
+                    TokenType.IDENTIFIER -> if (token.actualValue() == "readInput") SyntaxState.METHOD else SyntaxState.OPERAND
                     TokenType.NUMBER_LITERAL, TokenType.STRING_LITERAL -> SyntaxState.OPERAND
                     TokenType.LEFT_PARENTHESIS -> SyntaxState.LEFT_PARENTHESIS
                     else -> throw UnexpectedTokenException("Unexpected token at: ${token.location.row}, ${token.location.column}")
@@ -168,7 +168,7 @@ class ValueASTBuilder : ASTBuilder<Value> {
         while (queue.size != 0) {
             val node = queue.remove()
             if (isValue(node)) {
-                if (node.type == TokenType.IDENTIFIER && node.actualValue() == "Input") {
+                if (node.type == TokenType.IDENTIFIER && node.actualValue() == "readInput") {
                     if (methods.containsKey(node.location)) {
                         stack.push(methods[node.location])
                     }

@@ -20,7 +20,7 @@ class CommandsTest {
     fun testFormater() {
         val pathToFile = Files.getResourceAsFile("mock_text_declaration_initialization.txt")!!
         val pathToprint = Files.getResourceAsFile("mock_text_declaration_initialization_file.txt")!!
-        main(arrayOf("format", pathToFile.absolutePath, pathToprint.absolutePath, "1.0"))
+        main(arrayOf("format", pathToFile.absolutePath, pathToprint.absolutePath, "1.1"))
         assertEquals(
             Files.getResourceAsText("mock_text_declaration_initialization_result_Formater.txt"),
             Files.getResourceAsText("mock_text_declaration_initialization_file.txt")
@@ -31,7 +31,7 @@ class CommandsTest {
     fun testSCA() {
         val pathToFile = Files.getResourceAsFile("mock_text_declaration_initialization.txt")!!
         val pathToprint = Files.getResourceAsFile("mock_text_declaration_initialization_file.txt")!!
-        main(arrayOf("analyze", pathToFile.absolutePath, "1.0", pathToprint.absolutePath))
+        main(arrayOf("analyze", pathToFile.absolutePath, "1.1", pathToprint.absolutePath))
         assertEquals(
             Files.getResourceAsText("mock_text_declaration_initialization_result_SCA.txt"),
             Files.getResourceAsText("mock_text_declaration_initialization_file.txt")
