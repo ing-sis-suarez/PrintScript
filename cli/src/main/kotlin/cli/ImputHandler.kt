@@ -25,7 +25,6 @@ data class FileInput(val path: String) : InputHandler {
     val file = File(path)
     val reader = file.bufferedReader()
     override fun Input(msg: String): String {
-        println(msg)
         if (file.exists()) {
             val firstLine = reader.readLine()
             return firstLine ?: ""

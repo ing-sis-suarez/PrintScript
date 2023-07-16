@@ -95,6 +95,7 @@ class Run : CliktCommand("Runs the program") {
                 }
 
                 is ConsumerResponseImput -> {
+                    handler.print(result.msg)
                     val input: String = imputHandler.Input(result.msg)
                     consumer.getValue(input)
                 }
