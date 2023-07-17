@@ -1,0 +1,3 @@
+if(  true ) {
+let people:number = 5;}
+else {let person:number = 10;}
