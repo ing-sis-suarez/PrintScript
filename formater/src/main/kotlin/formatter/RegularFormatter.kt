@@ -72,15 +72,13 @@ class RegularFormatter(private val astNodeProvider: ASTNodeProvider, private val
     }
 
     private fun formatIf(node: Condition): String {
-        return IF_KEYWORD + LEFT_PARENTHESIS + formatValue(node.condition!!) + RIGHT_PARENTHESIS + getBlankSpaces(config.spacesBetweenTokens) + LEFT_BRACE + NEW_LINE +
-                formatConditionBody(node) +
-                RIGHT_BRACE
+        return IF_KEYWORD + LEFT_PARENTHESIS + formatValue(node.condition!!) + RIGHT_PARENTHESIS +
+            getBlankSpaces(config.spacesBetweenTokens) + LEFT_BRACE + NEW_LINE + formatConditionBody(node) + RIGHT_BRACE
     }
 
     private fun formatElse(node: Condition): String {
         return ELSE_KEYWORD + getBlankSpaces(config.spacesBetweenTokens) + LEFT_BRACE + NEW_LINE +
-                formatConditionBody(node) +
-                RIGHT_BRACE
+            formatConditionBody(node) + RIGHT_BRACE
     }
 
     private fun formatConditionBody(node: Condition): String {
@@ -105,8 +103,9 @@ class RegularFormatter(private val astNodeProvider: ASTNodeProvider, private val
             result.append(
                 if (isLeftParenthesisToken(token) || isNextToRightParenthesisToken(index, node.tokenList) || isLastToken(index, node.tokenList)) {
                     getStringValue(token)
+                } else {
+                    getStringValue(token) + getBlankSpaces(config.spacesBetweenTokens)
                 }
-                else getStringValue(token) + getBlankSpaces(config.spacesBetweenTokens)
             )
         }
         return result.toString()

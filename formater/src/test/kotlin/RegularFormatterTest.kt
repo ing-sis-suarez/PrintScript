@@ -52,8 +52,11 @@ class RegularFormatterTest {
         val result = StringBuilder()
         while (true) {
             val response = formatter.consume()
-            if (response is ConsumerResponseSuccess) result.append(response.msg)
-            else break
+            if (response is ConsumerResponseSuccess) {
+                result.append(response.msg)
+            } else {
+                break
+            }
         }
         assertEquals(Files.getResourceAsText("mock_text_condition_result.txt"), result.toString())
     }
