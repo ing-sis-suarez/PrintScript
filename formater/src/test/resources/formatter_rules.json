@@ -1,1 +1,5 @@
-{}
+{
+  "spacesBetweenTokens": 2,
+  "indentSize": 2,
+  "maxLineLength": 80
+}
