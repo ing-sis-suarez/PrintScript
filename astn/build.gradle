@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.8.10'
+    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
     id 'maven-publish'
 }
 
@@ -14,7 +14,7 @@ publishing {
         maven(MavenPublication){
             groupId = 'printscript'
             artifactId = 'astn'
-            version = '1.1-SNAPSHOT'
+            version = '1.1.1-SNAPSHOT'
         }
     }
     repositories {
