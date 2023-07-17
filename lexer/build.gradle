@@ -10,15 +10,6 @@ repositories {
 
 }
 
-java {
-    withSourcesJar()
-}
-
-task sourceJar(type: Jar) {
-    classifier 'sources'
-    from sourceSets.main.allSource
-}
-
 publishing {
     publications{
         gpr(MavenPublication) {
@@ -28,7 +19,6 @@ publishing {
             version = '1.1.3-SNAPSHOT'
 
             from(components.kotlin)
-            artifact tasks.sourceJar
         }
 
     }
