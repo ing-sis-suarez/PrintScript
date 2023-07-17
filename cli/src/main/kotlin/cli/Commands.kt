@@ -8,6 +8,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.default
+import config.FormatterConfig
 import consumer.ASTNodeConsumer
 import consumer.ASTNodeConsumerInterpreter
 import consumer.ConsumerResponseEnd
@@ -21,7 +22,6 @@ import lexer.RegularLexer
 import lexer.TokenReadersProvider
 import parser.RegularParser
 import provider.ASTNodeProviderImpl
-import rules.FormatterConfig
 import java.io.File
 
 class PrintScript : CliktCommand() {
