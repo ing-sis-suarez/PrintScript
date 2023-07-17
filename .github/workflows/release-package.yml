@@ -2,7 +2,7 @@ name: Release package
 
 on:
   push:
-    branches: [release]
+    branches: [test/publish-lexer-package]
 
 jobs:
 
