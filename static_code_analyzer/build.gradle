@@ -12,7 +12,7 @@ publishing {
         maven(MavenPublication){
             groupId = 'printscript'
             artifactId = 'sca'
-            version = '1.1-SNAPSHOT'
+            version = '1.1.1-SNAPSHOT'
         }
     }
     repositories {

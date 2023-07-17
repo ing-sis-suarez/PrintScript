@@ -196,6 +196,7 @@ class TokenReadersProvider {
             !string[startIndex + target.length].isLetterOrDigit() &&
             (string.substring(startIndex, startIndex + target.length) == target)
     }
+
     private fun isThisString(string: String, startIndex: Int, target: String): Boolean {
         return checkIfStringEvaluatedFits(string, startIndex, target.length) &&
             (string.substring(startIndex, startIndex + target.length) == target)
