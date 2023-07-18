@@ -1,0 +1,5 @@
+let a: boolean = false;
+if(a) {
+    let b: number = 1;
+}
+println(b);

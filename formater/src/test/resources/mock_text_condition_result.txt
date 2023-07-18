@@ -1,5 +1,5 @@
 if(true) {
-    let people: number = 5;
+    let people:number = 5;
 }else {
-    let person: number = 10;
+    let person:number = 10;
 }
