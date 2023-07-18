@@ -1,6 +1,7 @@
 package cli
 
 import FileTokenProvider
+import InputStreamTokenProvider
 import SCAJsonReader
 import StaticCodeAnalyzer
 import cli.PrintScript.Companion.runConsumer
@@ -23,6 +24,7 @@ import lexer.TokenReadersProvider
 import parser.RegularParser
 import provider.ASTNodeProviderImpl
 import java.io.File
+import java.io.InputStream
 
 class PrintScript : CliktCommand() {
     override fun run() = Unit
@@ -171,6 +173,12 @@ class Config {
         val tokenMap = TokenReadersProvider().getTokenMap(version) ?: throw IllegalArgumentException("Invalid version")
         val lexer: Lexer = RegularLexer(tokenMap)
         return ASTNodeProviderImpl(FileTokenProvider(file, lexer), RegularParser.createDefaultParser())
+    }
+
+    fun generateASTNproviderInputStream(version: String, file: InputStream): ASTNodeProviderImpl {
+        val tokenMap = TokenReadersProvider().getTokenMap(version) ?: throw IllegalArgumentException("Invalid version")
+        val lexer: Lexer = RegularLexer(tokenMap)
+        return ASTNodeProviderImpl(InputStreamTokenProvider(file, lexer), RegularParser.createDefaultParser())
     }
 }
 
