@@ -51,12 +51,12 @@ class RegularParserTest {
     }
 
     @Test
-    fun declarationInput(){
+    fun declarationInput() {
         runCorrectResultTest("assignation_input")
     }
 
     @Test
-    fun booleanOperation(){
+    fun booleanOperation() {
         runCorrectResultTest("operation_boolean")
     }
 
