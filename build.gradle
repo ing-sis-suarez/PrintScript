@@ -17,6 +17,10 @@ subprojects {
     dependencies {
         implementation "org.jetbrains.kotlin:kotlin-stdlib:1.1.60"
     }
+    ktlint {
+        outputToConsole = true
+        outputColorName = "RED"
+    }
     publishing {
         repositories {
             maven {
