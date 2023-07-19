@@ -22,13 +22,17 @@ class RegularFormatterTest {
         assertEquals(Files.getResourceAsText("mock_text_declaration_result.txt"), result.msg)
     }
 
-/*    @Test
-    fun declarationInitializationTest() {
-        val formatter = RegularFormatter(setup(Files.getResourceAsFile("mock_text_declaration_initialization.txt")!!), FormatterConfig())
-        val result = formatter.consume() as ConsumerResponseSuccess
-
-        assertEquals(Files.getResourceAsText("mock_text_declaration_initialization_result.txt"), result.msg)
-    }*/
+//    @Test
+//    fun declarationAssignationTest() {
+//        val formatter = RegularFormatter(setup(Files.getResourceAsFile("mock_text_declaration_assignation.txt")!!), FormatterConfig())
+//        var response = formatter.consume()
+//        val result = StringBuilder()
+//        while (response is ConsumerResponseSuccess) {
+//            result.append(response.msg)
+//            response = formatter.consume()
+//        }
+//        assertEquals(Files.getResourceAsText("mock_text_declaration_assignation_result.txt"), result.toString())
+//    }
 
     @Test
     fun declarationInitializationOperation() {

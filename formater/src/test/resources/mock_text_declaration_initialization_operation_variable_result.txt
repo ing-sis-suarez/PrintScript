@@ -1,1 +1,0 @@
-{morepeople=(Number, 5), people=(Number, 2)}

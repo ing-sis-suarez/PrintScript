@@ -1,4 +1,5 @@
 import consumer.ASTNodeConsumerInterpreter
+import consumer.ConsumerResponseError
 import consumer.ConsumerResponseSuccess
 import interpreter.Interpret
 import lexer.RegularLexer
@@ -55,8 +56,63 @@ class InterpreterTest {
         Assertions.assertEquals(result, ConsumerResponseSuccess(Files.getResourceAsText("mock_text_declaration_assignation_result.txt").toString()))
     }
 
+    @Test
+    fun ifConditionTest() {
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_if_condition.txt")!!))
+        var result = interpret.consume()
+        while (result is ConsumerResponseSuccess && result.msg == null) {
+            result = interpret.consume()
+        }
+
+        Assertions.assertEquals(result, ConsumerResponseSuccess(Files.getResourceAsText("mock_text_if_condition_result.txt").toString()))
+    }
+
+    @Test
+    fun elseConditionTest() {
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_if_condition.txt")!!))
+        var result = interpret.consume()
+        while (result is ConsumerResponseSuccess && result.msg == null) {
+            result = interpret.consume()
+        }
+
+        Assertions.assertEquals(result, ConsumerResponseSuccess(Files.getResourceAsText("mock_text_if_condition_result.txt").toString()))
+    }
+
+    @Test
+    fun ifConditionError() {
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_if_condition_error.txt")!!))
+        var result = interpret.consume()
+        while (result is ConsumerResponseSuccess && result.msg == null) {
+            result = interpret.consume()
+        }
+
+        Assertions.assertEquals(result, ConsumerResponseError(Files.getResourceAsText("mock_text_if_condition_error_result.txt").toString()))
+    }
+
+    @Test
+    fun constTest() {
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_const.txt")!!))
+        var result = interpret.consume()
+        while (result is ConsumerResponseSuccess && result.msg == null) {
+            result = interpret.consume()
+        }
+
+        Assertions.assertEquals(result, ConsumerResponseSuccess(Files.getResourceAsText("mock_text_const_result.txt").toString()))
+    }
+
+    @Test
+    fun constTestError() {
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_const_error.txt")!!))
+        var result = interpret.consume()
+        while (result is ConsumerResponseSuccess && result.msg == null) {
+            result = interpret.consume()
+        }
+
+        Assertions.assertEquals(result, ConsumerResponseError(Files.getResourceAsText("mock_text_const_error_result.txt").toString()))
+    }
+
     private fun setup(src: File): ASTNodeProvider {
-        val tokenMap = TokenReadersProvider().getTokenMap("1.0")
+        val tokenMap = TokenReadersProvider().getTokenMap("1.1")
         val tokenProvider = FileTokenProvider(src, RegularLexer(tokenMap!!))
         return ASTNodeProviderImpl(tokenProvider, RegularParser.createDefaultParser())
     }
