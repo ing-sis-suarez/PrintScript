@@ -21,6 +21,11 @@ class RegularParserTest {
     }
 
     @Test
+    fun declarationConstTest() {
+        runCorrectResultTest("declaration_const")
+    }
+
+    @Test
     fun methodCallTest() {
         runCorrectResultTest("methodCall")
     }
@@ -33,6 +38,26 @@ class RegularParserTest {
     @Test
     fun operationTest() {
         runCorrectResultTest("operation")
+    }
+
+    @Test
+    fun conditionTest() {
+        runCorrectResultTest("mock_text_if_condition")
+    }
+
+    @Test
+    fun conditionElseTest() {
+        runCorrectResultTest("mock_text_else_condition")
+    }
+
+    @Test
+    fun declarationInput(){
+        runCorrectResultTest("assignation_input")
+    }
+
+    @Test
+    fun booleanOperation(){
+        runCorrectResultTest("operation_boolean")
     }
 
     @Test

@@ -58,7 +58,7 @@ class Run : CliktCommand("Runs the program") {
     private val originalFile by argument("--initalFile", help = "The file to run")
     private val version by argument(help = "The version of the program")
     private val resultFile by argument("--outputFile", help = "the file to print").default("")
-    private val inputFile by argument("--imputFile", help = "the file to ask input").default("")
+    private val inputFile by argument("--inputFile", help = "the file to ask input").default("")
 
     override fun run() {
         if (version !in supportedVersions) {
@@ -149,15 +149,15 @@ class Analyze : CliktCommand("Analyzes the program") {
     private val originalFile by argument("--initalFile", help = "The file to run")
     private val version by argument(help = "The version of the program")
     private val resultFile by argument("--outputFile", help = "the file to print").default("")
-    private val configFile by argument("--configFile", help = "the configuration the analyzer").default("")
-
+    private val configFile by argument("--configFile", help = "the file to config sca").default("")
     override fun run() {
         val realFile = File(originalFile)
         if (!realFile.exists()) {
             echo("File does not exist")
             return
         }
-        val jsonFile = SCAJsonReader(configFile)
+        val file = File(configFile)
+        val jsonFile = SCAJsonReader(file)
         val sCA: ASTNodeConsumer = initializeSCA(version, realFile, jsonFile)
         runConsumer(sCA, resultFile)
     }

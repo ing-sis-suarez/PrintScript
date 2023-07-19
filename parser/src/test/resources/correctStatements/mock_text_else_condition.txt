@@ -1,0 +1,4 @@
+Token(type=ELSE_KEYWORD, location=Location(row=5, column=0), originalValue=, length=4)
+Token(type=WHITE_SPACE, location=Location(row=5, column=4), originalValue=, length=1)
+Token(type=LEFT_BRACE, location=Location(row=5, column=5), originalValue=, length=1)
+Token(type=RIGHT_BRACE, location=Location(row=7, column=0), originalValue=, length=1)
