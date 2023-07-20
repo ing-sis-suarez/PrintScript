@@ -52,9 +52,11 @@ class RegularFormatter(private val astNodeProvider: ASTNodeProvider, private val
 
     // let x:number = 4 + 5;
     private fun formatInitialization(node: DeclarationInitialization): String {
-        return LET_KEYWORD + getBlankSpaces(config.spacesBetweenTokens) +
-            getStringValue(node.declaration.identifier) + DOUBLE_DOTS + getStringValue(node.declaration.type) + getBlankSpaces(config.spacesBetweenTokens) +
-            EQUALS + getBlankSpaces(config.spacesBetweenTokens) + formatValue(node.value) + SEMI_COLON
+        val keyword = if (node.isConst) CONST_KEYWORD else LET_KEYWORD
+        return keyword + getBlankSpaces(config.spacesBetweenTokens) +
+            getStringValue(node.declaration.identifier) + DOUBLE_DOTS + getStringValue(node.declaration.type) +
+            getBlankSpaces(config.spacesBetweenTokens) + EQUALS + getBlankSpaces(config.spacesBetweenTokens) +
+            formatValue(node.value) + SEMI_COLON
     }
 
     // x = 5;
@@ -140,7 +142,6 @@ class RegularFormatter(private val astNodeProvider: ASTNodeProvider, private val
             TokenType.LEFT_PARENTHESIS -> "("
             TokenType.RIGHT_PARENTHESIS -> ")"
             TokenType.COMMENT -> "//"
-            TokenType.CONST_KEYWORD -> "const"
             else -> ""
         }
     }
@@ -154,6 +155,7 @@ class RegularFormatter(private val astNodeProvider: ASTNodeProvider, private val
         private const val IF_KEYWORD = "if"
         private const val SEMI_COLON = ";"
         private const val LET_KEYWORD = "let"
+        private const val CONST_KEYWORD = "const"
         private const val EQUALS = "="
         private const val DOUBLE_DOTS = ":"
         private const val LEFT_PARENTHESIS = "("

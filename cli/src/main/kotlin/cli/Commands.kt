@@ -14,7 +14,7 @@ import consumer.ASTNodeConsumer
 import consumer.ASTNodeConsumerInterpreter
 import consumer.ConsumerResponseEnd
 import consumer.ConsumerResponseError
-import consumer.ConsumerResponseImput
+import consumer.ConsumerResponseInput
 import consumer.ConsumerResponseSuccess
 import formatter.RegularFormatter
 import interpreter.Interpret
@@ -96,7 +96,7 @@ class Run : CliktCommand("Runs the program") {
                     return
                 }
 
-                is ConsumerResponseImput -> {
+                is ConsumerResponseInput -> {
                     handler.print(result.msg)
                     val input: String = imputHandler.Input(result.msg)
                     consumer.getValue(input)
