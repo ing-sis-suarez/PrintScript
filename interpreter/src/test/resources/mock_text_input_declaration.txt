@@ -1,0 +1,2 @@
+let algo: number = readInput("algo") + 5;
+println(algo);

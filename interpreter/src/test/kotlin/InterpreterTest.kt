@@ -1,5 +1,6 @@
 import consumer.ASTNodeConsumerInterpreter
 import consumer.ConsumerResponseError
+import consumer.ConsumerResponseInput
 import consumer.ConsumerResponseSuccess
 import interpreter.Interpret
 import lexer.RegularLexer
@@ -186,6 +187,34 @@ class InterpreterTest {
         }
 
         assertEquals(ConsumerResponseSuccess(Files.getResourceAsText("mock_text_method_call_result.txt").toString()), result)
+    }
+
+    @Test
+    fun methodCallInput() {
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_input.txt")!!))
+        var result = interpret.consume()
+        while ((result is ConsumerResponseSuccess && result.msg == null) || result is ConsumerResponseInput) {
+            if (result is ConsumerResponseInput){
+                interpret.getValue("algo")
+            }
+            result = interpret.consume()
+        }
+
+        assertEquals(ConsumerResponseSuccess(Files.getResourceAsText("mock_text_input_result.txt").toString()), result)
+    }
+
+    @Test
+    fun methodCallInputDeclaration() {
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_input_declaration.txt")!!))
+        var result = interpret.consume()
+        while ((result is ConsumerResponseSuccess && result.msg == null) || result is ConsumerResponseInput) {
+            if (result is ConsumerResponseInput){
+                interpret.getValue("20")
+            }
+            result = interpret.consume()
+        }
+
+        assertEquals(ConsumerResponseSuccess(Files.getResourceAsText("mock_text_input_declaration_result.txt").toString()), result)
     }
 
     private fun setup(src: File): ASTNodeProvider {
