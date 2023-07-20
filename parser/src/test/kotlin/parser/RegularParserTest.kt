@@ -12,7 +12,6 @@ import provider.ASTNodeProviderImpl
 import token.Location
 import token.Token
 import token.TokenType
-import java.io.File
 
 class RegularParserTest {
 
