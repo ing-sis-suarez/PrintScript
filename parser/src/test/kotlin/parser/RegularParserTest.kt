@@ -6,6 +6,7 @@ import exceptions.UnexpectedTokenException
 import lexer.RegularLexer
 import lexer.TokenReadersProvider
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import provider.ASTNodeProviderImpl
 import token.Location
@@ -139,8 +140,10 @@ class RegularParserTest {
         val tokenMap = TokenReadersProvider().getTokenMap("1.1")
         val lexer: RegularLexer? = tokenMap?.let { RegularLexer(it) }
         val ast = ASTNodeProviderImpl(FileTokenProvider(File("/home/brosoft/IdeaProjects/PrintScript/parser/src/test/resources/mock_text_assignation.txt"), lexer!!), RegularParser.createDefaultParser())
-        ast.readASTNode()
-        ast.readASTNode()
+        val astNode1 = ast.readASTNode()
+        assertNotNull(astNode1)
+        val astNode2 = ast.readASTNode()
+        assertNotNull(astNode2)
     }
 
     private fun <T : Exception> runIncorrectResultTest(
