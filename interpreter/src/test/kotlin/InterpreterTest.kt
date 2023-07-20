@@ -217,6 +217,34 @@ class InterpreterTest {
         assertEquals(ConsumerResponseSuccess(Files.getResourceAsText("mock_text_input_declaration_result.txt").toString()), result)
     }
 
+    @Test
+    fun stringOperationError1() {
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_string_operation.txt")!!))
+        var result = interpret.consume()
+        while ((result is ConsumerResponseSuccess && result.msg == null) || result is ConsumerResponseInput) {
+            if (result is ConsumerResponseInput) {
+                interpret.getValue("20")
+            }
+            result = interpret.consume()
+        }
+
+        assertEquals(ConsumerResponseError(Files.getResourceAsText("mock_text_string_operation_result.txt").toString()), result)
+    }
+
+    @Test
+    fun stringOperationError2() {
+        val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_string_operation2.txt")!!))
+        var result = interpret.consume()
+        while ((result is ConsumerResponseSuccess && result.msg == null) || result is ConsumerResponseInput) {
+            if (result is ConsumerResponseInput) {
+                interpret.getValue("20")
+            }
+            result = interpret.consume()
+        }
+
+        assertEquals(ConsumerResponseSuccess(Files.getResourceAsText("mock_text_string_operation2_result.txt").toString()), result)
+    }
+
     private fun setup(src: File): ASTNodeProvider {
         val tokenMap = TokenReadersProvider().getTokenMap("1.1")
         val tokenProvider = FileTokenProvider(src, RegularLexer(tokenMap!!))

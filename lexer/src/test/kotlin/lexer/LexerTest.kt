@@ -43,6 +43,12 @@ class LexerTest {
         val evaluatedText = printScriptEvaluateText(Files.getResourceAsFile("mock_text_if_condition.txt")!!)
         Assertions.assertEquals(Files.getResourceAsText("mock_text_if_condition_result.txt"), lexerResultsToString(evaluatedText))
     }
+
+    @Test
+    fun testInput() {
+        val evaluatedText = printScriptEvaluateText(Files.getResourceAsFile("mock_text_input.txt")!!)
+        Assertions.assertEquals(Files.getResourceAsText("mock_text_input_result.txt"), lexerResultsToString(evaluatedText))
+    }
 }
 
 private fun printScriptEvaluateText(file: File): List<Token> {

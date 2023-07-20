@@ -38,6 +38,7 @@ dependencies {
     implementation project(':token')
     implementation project(':astn')
     implementation project(':utilities')
+    implementation project(':lexer')
 }
 
 test {

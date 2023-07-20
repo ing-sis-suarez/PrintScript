@@ -1,12 +1,17 @@
 package parser
 
+import FileTokenProvider
 import exceptions.MalformedStructureException
 import exceptions.UnexpectedTokenException
+import lexer.RegularLexer
+import lexer.TokenReadersProvider
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import provider.ASTNodeProviderImpl
 import token.Location
 import token.Token
 import token.TokenType
+import java.io.File
 
 class RegularParserTest {
 
@@ -58,6 +63,16 @@ class RegularParserTest {
     @Test
     fun booleanOperation() {
         runCorrectResultTest("operation_boolean")
+    }
+
+    @Test
+    fun inputTest() {
+        runCorrectResultTest("mock_text_input")
+    }
+
+    @Test
+    fun minusTest() {
+        runCorrectResultTest("minus")
     }
 
     @Test
@@ -117,6 +132,15 @@ class RegularParserTest {
             MalformedStructureException::class.java,
             "Missing arguments at line: 0"
         )
+    }
+
+    @Test
+    fun providerTest() {
+        val tokenMap = TokenReadersProvider().getTokenMap("1.1")
+        val lexer: RegularLexer? = tokenMap?.let { RegularLexer(it) }
+        val ast = ASTNodeProviderImpl(FileTokenProvider(File("/home/brosoft/IdeaProjects/PrintScript/parser/src/test/resources/mock_text_assignation.txt"), lexer!!), RegularParser.createDefaultParser())
+        val node = ast.readASTNode()
+        val node2 = ast.readASTNode()
     }
 
     private fun <T : Exception> runIncorrectResultTest(
