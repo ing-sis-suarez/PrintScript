@@ -17,11 +17,10 @@ class BinaryOperatorReader(private val variables: VariableManager) {
     var inputType: ValueType? = null
     var msgInput: String? = null
 
-    private fun readImput(methodCall: MethodCall): Variable {
+    private fun readInput(methodCall: MethodCall): Variable {
         if (inputResults.containsKey(methodCall.identifier.location) && inputResults[methodCall.identifier.location]!!.getValue() != null) {
             if (inputResults[methodCall.identifier.location]!!.getValue() != null) {
-                val result = inputResults[methodCall.identifier.location]!!
-                return result
+                return inputResults[methodCall.identifier.location]!!
             } else { throw Exception("Invalid null value in line ${methodCall.identifier.location.row} ${methodCall.identifier.location.column}") }
         } else {
             inputLocation = methodCall.identifier.location
@@ -42,7 +41,7 @@ class BinaryOperatorReader(private val variables: VariableManager) {
             is BooleanOperator -> Variable(binary.value.actualValue(), ValueType.BOOLEAN)
             is IdentifierOperator -> identifier(binary.value)
             is BinaryOperator -> calculateOperation(binary)
-            is MethodCall -> readImput(binary)
+            is MethodCall -> readInput(binary)
         }
     }
     private fun calculateOperation(binaryOperator: BinaryOperator): Variable {

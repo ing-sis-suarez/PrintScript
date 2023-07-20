@@ -14,5 +14,5 @@ interface ConsumerResponse
 
 data class ConsumerResponseSuccess(val msg: String?) : ConsumerResponse
 data class ConsumerResponseError(val error: String) : ConsumerResponse
-data class ConsumerResponseImput(val msg: String) : ConsumerResponse
+data class ConsumerResponseInput(val msg: String) : ConsumerResponse
 class ConsumerResponseEnd : ConsumerResponse
