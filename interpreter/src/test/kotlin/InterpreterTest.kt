@@ -194,7 +194,7 @@ class InterpreterTest {
         val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_input.txt")!!))
         var result = interpret.consume()
         while ((result is ConsumerResponseSuccess && result.msg == null) || result is ConsumerResponseInput) {
-            if (result is ConsumerResponseInput){
+            if (result is ConsumerResponseInput) {
                 interpret.getValue("algo")
             }
             result = interpret.consume()
@@ -208,7 +208,7 @@ class InterpreterTest {
         val interpret: ASTNodeConsumerInterpreter = Interpret(setup(Files.getResourceAsFile("mock_text_input_declaration.txt")!!))
         var result = interpret.consume()
         while ((result is ConsumerResponseSuccess && result.msg == null) || result is ConsumerResponseInput) {
-            if (result is ConsumerResponseInput){
+            if (result is ConsumerResponseInput) {
                 interpret.getValue("20")
             }
             result = interpret.consume()

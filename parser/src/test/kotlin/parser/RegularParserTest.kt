@@ -119,8 +119,6 @@ class RegularParserTest {
         )
     }
 
-
-
     private fun <T : Exception> runIncorrectResultTest(
         fileName: String,
         exceptionType: Class<T>,
@@ -168,5 +166,4 @@ class RegularParserTest {
     private fun breakIntoLines(rawText: String): List<String> {
         return rawText.trim().split(System.lineSeparator())
     }
-
 }
