@@ -26,6 +26,6 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
     - name: Format files in project
-      run: ./gradlew ktlintFormat
+      run: ./gradlew ktlintCheck    
     - name: Build with Gradle
       run: ./gradlew build
