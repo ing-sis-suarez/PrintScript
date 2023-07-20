@@ -139,8 +139,8 @@ class RegularParserTest {
         val tokenMap = TokenReadersProvider().getTokenMap("1.1")
         val lexer: RegularLexer? = tokenMap?.let { RegularLexer(it) }
         val ast = ASTNodeProviderImpl(FileTokenProvider(File("/home/brosoft/IdeaProjects/PrintScript/parser/src/test/resources/mock_text_assignation.txt"), lexer!!), RegularParser.createDefaultParser())
-        val node = ast.readASTNode()
-        val node2 = ast.readASTNode()
+        ast.readASTNode()
+        ast.readASTNode()
     }
 
     private fun <T : Exception> runIncorrectResultTest(
