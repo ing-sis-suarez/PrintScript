@@ -17,11 +17,15 @@ subprojects {
     dependencies {
         implementation "org.jetbrains.kotlin:kotlin-stdlib:1.1.60"
     }
+    ktlint {
+        outputToConsole = true
+        outputColorName = "RED"
+    }
     publishing {
         repositories {
             maven {
                 name = "GitHubPackages"
-                url = "https://maven.pkg.github.com/ing-sis-org/PrintScript"
+                url = "https://maven.pkg.github.com/ing-sis-suarez/PrintScript"
                 credentials {
                     username = System.getenv("GITHUB_ACTOR")
                     password = System.getenv("GITHUB_TOKEN")

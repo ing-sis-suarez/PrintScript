@@ -1,0 +1,6 @@
+let algo: number = 20;
+if (true){
+    let algo: number = 21;
+}else{
+    println("algo")
+}

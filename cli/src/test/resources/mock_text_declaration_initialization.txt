@@ -1,2 +1,2 @@
-const name: number = 21;
+let name: number = 21;
 println(name);

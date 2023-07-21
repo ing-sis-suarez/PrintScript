@@ -4,7 +4,7 @@ import consumer.ASTNodeConsumerInterpreter
 import consumer.ConsumerResponse
 import consumer.ConsumerResponseEnd
 import consumer.ConsumerResponseError
-import consumer.ConsumerResponseImput
+import consumer.ConsumerResponseInput
 import consumer.ConsumerResponseSuccess
 import node.ASTNode
 import node.Assignation
@@ -30,13 +30,13 @@ class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInter
         variableManager.add(declarator.identifier.actualValue(), Variable(null, getStringType(declarator.type)), true)
         return ConsumerResponseSuccess(null)
     }
-    private fun evaluateDeclarationInitalization(declarationInitalization: DeclarationInitialization): ConsumerResponse {
-        val value = binaryOperatorReader.evaluate(declarationInitalization.value.tree)
-        if (value.getType() == ValueType.INPUT) return imputOperation(declarationInitalization, value.getValue()!!, getStringType(declarationInitalization.declaration.type))
-        return if (getStringType(declarationInitalization.declaration.type) != value.getType()) {
-            throw Exception("Invalid Assignation in line ${declarationInitalization.declaration.identifier.location.row} ${declarationInitalization.declaration.identifier.location.column}")
+    private fun evaluateDeclarationInitialization(declarationInitialization: DeclarationInitialization): ConsumerResponse {
+        val value = binaryOperatorReader.evaluate(declarationInitialization.value.tree)
+        if (value.getType() == ValueType.INPUT) return inputOperation(declarationInitialization, value.getValue()!!, getStringType(declarationInitialization.declaration.type))
+        return if (getStringType(declarationInitialization.declaration.type) != value.getType()) {
+            throw Exception("Invalid Assignation in line ${declarationInitialization.declaration.identifier.location.row} ${declarationInitialization.declaration.identifier.location.column}")
         } else {
-            variableManager.add(declarationInitalization.declaration.identifier.actualValue(), value, !declarationInitalization.isConst)
+            variableManager.add(declarationInitialization.declaration.identifier.actualValue(), value, !declarationInitialization.isConst)
             ConsumerResponseSuccess(null)
         }
     }
@@ -44,7 +44,7 @@ class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInter
         if (variableManager.contains(assignation.identifier.actualValue())) {
             if (!variableManager.isMutable(assignation.identifier.actualValue())) throw Exception("Invalid Assignation in line ${assignation.identifier.location.row} ${assignation.identifier.location.column}")
             val value = binaryOperatorReader.evaluate(assignation.value.tree)
-            if (value.getType() == ValueType.INPUT) return imputOperation(assignation, value.getValue()!!, variableManager.get(assignation.identifier.actualValue()).getType())
+            if (value.getType() == ValueType.INPUT) return inputOperation(assignation, value.getValue()!!, variableManager.get(assignation.identifier.actualValue()).getType())
             return if (variableManager.get(assignation.identifier.actualValue()).getType() != value.getType()) {
                 throw Exception("Invalid Assignation in line ${assignation.identifier.location.row} ${assignation.identifier.location.column}")
             } else {
@@ -57,13 +57,13 @@ class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInter
     }
     private fun evaluateMethodCall(methodCall: MethodCall): ConsumerResponse {
         val value = binaryOperatorReader.evaluate(methodCall.arguments.tree)
-        if (value.getType() == ValueType.INPUT) return imputOperation(methodCall, value.getValue()!!, ValueType.STRING)
+        if (value.getType() == ValueType.INPUT) return inputOperation(methodCall, value.getValue()!!, ValueType.STRING)
         return ConsumerResponseSuccess(value.getValue()!!.replace(".0", ""))
     }
     private fun evaluateCondition(condition: Condition): ConsumerResponse {
         if (condition.condition != null) {
             val value = binaryOperatorReader.evaluate(condition.condition!!.tree)
-            if (value.getType() == ValueType.INPUT) return imputOperation(condition, value.getValue()!!, ValueType.BOOLEAN)
+            if (value.getType() == ValueType.INPUT) return inputOperation(condition, value.getValue()!!, ValueType.BOOLEAN)
             if (value.getType() != ValueType.BOOLEAN) {
                 throw Exception("Invalid Assignation in condition in line")
             } else {
@@ -111,10 +111,10 @@ class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInter
         }
     }
 
-    private fun imputOperation(ast: ASTNode, msg: String, type: ValueType): ConsumerResponseImput {
+    private fun inputOperation(ast: ASTNode, msg: String, type: ValueType): ConsumerResponseInput {
         onHold = ast
         binaryOperatorReader.setType(type)
-        return ConsumerResponseImput(msg)
+        return ConsumerResponseInput(msg)
     }
 
     override fun consume(): ConsumerResponse {
@@ -146,7 +146,7 @@ class Interpret(private val astProvider: ASTNodeProvider) : ASTNodeConsumerInter
         return try {
             return when (ast) {
                 is Declaration -> evaluateDeclaration(ast)
-                is DeclarationInitialization -> evaluateDeclarationInitalization(ast)
+                is DeclarationInitialization -> evaluateDeclarationInitialization(ast)
                 is Assignation -> evaluateAssignation(ast)
                 is MethodCall -> evaluateMethodCall(ast)
                 is Condition -> evaluateCondition(ast)

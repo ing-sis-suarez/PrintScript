@@ -1,0 +1,9 @@
+let a: boolean = true;
+if(a) {
+    let b: number;
+    b = 25;
+    println("true");
+}
+else {
+    println("false");
+}

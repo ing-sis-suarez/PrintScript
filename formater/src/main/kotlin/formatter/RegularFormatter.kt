@@ -35,10 +35,10 @@ class RegularFormatter(private val astNodeProvider: ASTNodeProvider, private val
 
     private fun getResponse(node: ASTNode): ConsumerResponse {
         return when (node) {
-            is Declaration -> ConsumerResponseSuccess(formatDeclaration(node) + SEMI_COLON)
-            is DeclarationInitialization -> ConsumerResponseSuccess(formatInitialization(node) + SEMI_COLON)
-            is Assignation -> ConsumerResponseSuccess(formatAssignation(node) + SEMI_COLON)
-            is MethodCall -> ConsumerResponseSuccess(formatMethodCall(node) + SEMI_COLON)
+            is Declaration -> ConsumerResponseSuccess(formatDeclaration(node))
+            is DeclarationInitialization -> ConsumerResponseSuccess(formatInitialization(node))
+            is Assignation -> ConsumerResponseSuccess(formatAssignation(node))
+            is MethodCall -> ConsumerResponseSuccess(formatMethodCall(node))
             is Condition -> ConsumerResponseSuccess(formatCondition(node))
             else -> ConsumerResponseError("Could not recognize syntax")
         }
@@ -47,19 +47,22 @@ class RegularFormatter(private val astNodeProvider: ASTNodeProvider, private val
     // let x:number;
     private fun formatDeclaration(node: Declaration): String {
         return LET_KEYWORD + getBlankSpaces(config.spacesBetweenTokens) +
-            getStringValue(node.identifier) + DOUBLE_DOTS + getBlankSpaces(config.spacesBetweenTokens) + getStringValue(node.type)
+            getStringValue(node.identifier) + DOUBLE_DOTS + getStringValue(node.type) + SEMI_COLON
     }
 
-    // let x:number = 4 + 5
+    // let x:number = 4 + 5;
     private fun formatInitialization(node: DeclarationInitialization): String {
-        return formatDeclaration(node.declaration) + getBlankSpaces(config.spacesBetweenTokens) +
-            EQUALS + getBlankSpaces(config.spacesBetweenTokens) + formatValue(node.value)
+        val keyword = if (node.isConst) CONST_KEYWORD else LET_KEYWORD
+        return keyword + getBlankSpaces(config.spacesBetweenTokens) +
+            getStringValue(node.declaration.identifier) + DOUBLE_DOTS + getStringValue(node.declaration.type) +
+            getBlankSpaces(config.spacesBetweenTokens) + EQUALS + getBlankSpaces(config.spacesBetweenTokens) +
+            formatValue(node.value) + SEMI_COLON
     }
 
     // x = 5;
     private fun formatAssignation(node: Assignation): String {
         return getStringValue(node.identifier) + getBlankSpaces(config.spacesBetweenTokens) +
-            EQUALS + getBlankSpaces(config.spacesBetweenTokens) + formatValue(node.value)
+            EQUALS + getBlankSpaces(config.spacesBetweenTokens) + formatValue(node.value) + SEMI_COLON
     }
 
     /*
@@ -92,7 +95,7 @@ class RegularFormatter(private val astNodeProvider: ASTNodeProvider, private val
 
     // println("hello world");
     private fun formatMethodCall(node: MethodCall): String {
-        return getStringValue(node.identifier) + LEFT_PARENTHESIS + formatValue(node.arguments) + RIGHT_PARENTHESIS
+        return getStringValue(node.identifier) + LEFT_PARENTHESIS + formatValue(node.arguments) + RIGHT_PARENTHESIS + SEMI_COLON
     }
 
     // (9 + 8) * 7
@@ -152,6 +155,7 @@ class RegularFormatter(private val astNodeProvider: ASTNodeProvider, private val
         private const val IF_KEYWORD = "if"
         private const val SEMI_COLON = ";"
         private const val LET_KEYWORD = "let"
+        private const val CONST_KEYWORD = "const"
         private const val EQUALS = "="
         private const val DOUBLE_DOTS = ":"
         private const val LEFT_PARENTHESIS = "("

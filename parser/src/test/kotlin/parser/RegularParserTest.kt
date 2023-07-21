@@ -1,9 +1,14 @@
 package parser
 
+import FileTokenProvider
 import exceptions.MalformedStructureException
 import exceptions.UnexpectedTokenException
+import lexer.RegularLexer
+import lexer.TokenReadersProvider
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
+import provider.ASTNodeProviderImpl
 import token.Location
 import token.Token
 import token.TokenType
@@ -21,6 +26,11 @@ class RegularParserTest {
     }
 
     @Test
+    fun declarationConstTest() {
+        runCorrectResultTest("declaration_const")
+    }
+
+    @Test
     fun methodCallTest() {
         runCorrectResultTest("methodCall")
     }
@@ -33,6 +43,36 @@ class RegularParserTest {
     @Test
     fun operationTest() {
         runCorrectResultTest("operation")
+    }
+
+    @Test
+    fun conditionTest() {
+        runCorrectResultTest("mock_text_if_condition")
+    }
+
+    @Test
+    fun conditionElseTest() {
+        runCorrectResultTest("mock_text_else_condition")
+    }
+
+    @Test
+    fun declarationInput() {
+        runCorrectResultTest("assignation_input")
+    }
+
+    @Test
+    fun booleanOperation() {
+        runCorrectResultTest("operation_boolean")
+    }
+
+    @Test
+    fun inputTest() {
+        runCorrectResultTest("mock_text_input")
+    }
+
+    @Test
+    fun minusTest() {
+        runCorrectResultTest("minus")
     }
 
     @Test
@@ -92,6 +132,17 @@ class RegularParserTest {
             MalformedStructureException::class.java,
             "Missing arguments at line: 0"
         )
+    }
+
+    @Test
+    fun providerTest() {
+        val tokenMap = TokenReadersProvider().getTokenMap("1.1")
+        val lexer: RegularLexer? = tokenMap?.let { RegularLexer(it) }
+        val ast = ASTNodeProviderImpl(FileTokenProvider(Files.getResourceAsFile("mock_text_assignation.txt")!!, lexer!!), RegularParser.createDefaultParser())
+        val astNode1 = ast.readASTNode()
+        assertNotNull(astNode1)
+        val astNode2 = ast.readASTNode()
+        assertNotNull(astNode2)
     }
 
     private fun <T : Exception> runIncorrectResultTest(

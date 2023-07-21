@@ -37,10 +37,22 @@ class LexerTest {
         val evaluatedText = printScriptEvaluateText(Files.getResourceAsFile("mock_text_with_unclosed_string.txt")!!)
         Assertions.assertEquals(Files.getResourceAsText("mock_text_with_unclosed_string_result.txt"), lexerResultsToString(evaluatedText))
     }
+
+    @Test
+    fun testCondition() {
+        val evaluatedText = printScriptEvaluateText(Files.getResourceAsFile("mock_text_if_condition.txt")!!)
+        Assertions.assertEquals(Files.getResourceAsText("mock_text_if_condition_result.txt"), lexerResultsToString(evaluatedText))
+    }
+
+    @Test
+    fun testInput() {
+        val evaluatedText = printScriptEvaluateText(Files.getResourceAsFile("mock_text_input.txt")!!)
+        Assertions.assertEquals(Files.getResourceAsText("mock_text_input_result.txt"), lexerResultsToString(evaluatedText))
+    }
 }
 
 private fun printScriptEvaluateText(file: File): List<Token> {
-    val lexer: Lexer = RegularLexer(TokenReadersProvider().getTokenMap("1.0")!!)
+    val lexer: Lexer = RegularLexer(TokenReadersProvider().getTokenMap("1.1")!!)
     val tokenProvider = FileTokenProvider(file, lexer)
     val tokenList = mutableListOf<Token>()
     while (true) {

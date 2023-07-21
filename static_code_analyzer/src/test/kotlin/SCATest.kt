@@ -14,7 +14,7 @@ class SCATest {
 
     @Test
     fun camelCaseTest() {
-        val jsonReader = SCAJsonReader("camelCase.json")
+        val jsonReader = SCAJsonReader(File(""))
         val sca: ASTNodeConsumer = StaticCodeAnalyzer(
             jsonReader.readJson(),
             setup(Files.getResourceAsFile("mock_text_declaration_Snake_Case.txt")!!)
@@ -24,8 +24,19 @@ class SCATest {
     }
 
     @Test
+    fun camelCaseSuccesTest() {
+        val jsonReader = SCAJsonReader(File(""))
+        val sca: ASTNodeConsumer = StaticCodeAnalyzer(
+            jsonReader.readJson(),
+            setup(Files.getResourceAsFile("mock_text_declaration_Camel_Case.txt")!!)
+        )
+        val result = sca.consume()
+        Assertions.assertEquals(result, ConsumerResponseSuccess(null))
+    }
+
+    @Test
     fun snakeCaseTest() {
-        val jsonReader = SCAJsonReader("snakeCase.json")
+        val jsonReader = SCAJsonReader(Files.getResourceAsFile("snakeCase.json")!!)
         val sca: ASTNodeConsumer = StaticCodeAnalyzer(
             jsonReader.readJson(),
             setup(Files.getResourceAsFile("mock_text_declaration_Camel_Case.txt")!!)
@@ -35,8 +46,19 @@ class SCATest {
     }
 
     @Test
+    fun snakeCaseSuccesTest() {
+        val jsonReader = SCAJsonReader(Files.getResourceAsFile("snakeCase.json")!!)
+        val sca: ASTNodeConsumer = StaticCodeAnalyzer(
+            jsonReader.readJson(),
+            setup(Files.getResourceAsFile("mock_text_declaration_Snake_Case.txt")!!)
+        )
+        val result = sca.consume()
+        Assertions.assertEquals(result, ConsumerResponseSuccess(null))
+    }
+
+    @Test
     fun methodNoExpresionTest() {
-        val jsonReader = SCAJsonReader("methodNoExpresion.json")
+        val jsonReader = SCAJsonReader(Files.getResourceAsFile("methodNoExpresion.json")!!)
         val sca: ASTNodeConsumer = StaticCodeAnalyzer(
             jsonReader.readJson(),
             setup(Files.getResourceAsFile("mock_text_declaration_Method_No_Expresion.txt")!!)
@@ -46,14 +68,38 @@ class SCATest {
     }
 
     @Test
+    fun methodNoExpresionErrorTest() {
+        val jsonReader = SCAJsonReader(Files.getResourceAsFile("methodNoExpresion.json")!!)
+        val sca: ASTNodeConsumer = StaticCodeAnalyzer(
+            jsonReader.readJson(),
+            setup(Files.getResourceAsFile("mock_text_declaration_Method_No_Expresion_Error.txt")!!)
+        )
+        val result = sca.consume()
+        Assertions.assertEquals(result, ConsumerResponseError("Invalid expression in row 1 0"))
+    }
+
+    @Test
     fun inputNoExpresionTest() {
-        val jsonReader = SCAJsonReader("inputNoExpresion.json")
+        val file = Files.getResourceAsFile("inputNoExpresion.json")!!
+        val jsonReader = SCAJsonReader(file)
         val sca: ASTNodeConsumer = StaticCodeAnalyzer(
             jsonReader.readJson(),
             setup(Files.getResourceAsFile("mock_text_declaration_Input_No_Expresion.txt")!!)
         )
         val result = sca.consume()
         Assertions.assertEquals(result, ConsumerResponseError("Invalid expression in row 1 23"))
+    }
+
+    @Test
+    fun inputNoExpresionMethodTest() {
+        val file = Files.getResourceAsFile("inputNoExpresion.json")!!
+        val jsonReader = SCAJsonReader(file)
+        val sca: ASTNodeConsumer = StaticCodeAnalyzer(
+            jsonReader.readJson(),
+            setup(Files.getResourceAsFile("mock_text_declaration_Input_No_Expresion_Method.txt")!!)
+        )
+        val result = sca.consume()
+        Assertions.assertEquals(result, ConsumerResponseSuccess(null))
     }
 
     private fun setup(src: File): ASTNodeProvider {

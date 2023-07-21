@@ -1,0 +1,6 @@
+let x:string = "hello";
+if (x) {
+    let var: number = 2;
+    var = 5;
+    println("error");
+}
